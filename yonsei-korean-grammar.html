@@ -177,7 +177,6 @@ footer {
   font-size: 0.85rem; border-top: 1px solid var(--rule);
 }
 footer .illust { margin-bottom: 8px; }
-#audio-player { display: none; }
 @media (max-width: 640px) {
   .unit { padding: 16px 12px; }
   .grammar-table { font-size: 0.76rem; }
@@ -188,9 +187,229 @@ footer .illust { margin-bottom: 8px; }
   header .header-inner { flex-direction: column; align-items: flex-start; }
 }
 </style>
+<script>
+// Quiz engine
+const quizStates = {};
+const quizDataStore = {};
+
+function initQuizData(unitId, data) {
+    quizDataStore[unitId] = data;
+}
+
+function getQuizData(unitId) {
+    return quizDataStore[unitId] || [];
+}
+
+function toggleQuiz(unitId) {
+    const area = document.getElementById('quiz-' + unitId);
+    if (area.classList.contains('active')) {
+        area.classList.remove('active');
+    } else {
+        area.classList.add('active');
+        if (!quizStates[unitId]) {
+            resetQuiz(unitId);
+        }
+    }
+}
+
+function setQuizMode(unitId, mode, btn) {
+    if (!quizStates[unitId]) return;
+    quizStates[unitId].currentMode = mode;
+    const parent = btn.parentElement;
+    parent.querySelectorAll('button').forEach(b => b.classList.remove('active-mode'));
+    btn.classList.add('active-mode');
+    quizStates[unitId].currentIndex = 0;
+    quizStates[unitId].score = 0;
+    quizStates[unitId].total = 0;
+    quizStates[unitId].results = [];
+    showNextQuestion(unitId);
+    updateScore(unitId);
+}
+
+function resetQuiz(unitId) {
+    const data = getQuizData(unitId);
+    const shuffled = [...data].sort(() => Math.random() - 0.5);
+    quizStates[unitId] = {
+        items: shuffled,
+        currentIndex: 0,
+        score: 0,
+        total: 0,
+        results: [],
+        currentMode: 'ko-zh',
+        hintUsed: false
+    };
+    document.getElementById('quiz-feedback-' + unitId).textContent = '';
+    document.getElementById('quiz-feedback-' + unitId).className = 'quiz-feedback';
+    document.getElementById('quiz-result-' + unitId).innerHTML = '';
+    document.getElementById('quiz-input-' + unitId).value = '';
+    document.getElementById('quiz-input-' + unitId).disabled = false;
+    const area = document.getElementById('quiz-' + unitId);
+    const modeBtns = area.querySelectorAll('.quiz-mode-toggle button');
+    modeBtns.forEach(b => b.classList.remove('active-mode'));
+    if (modeBtns.length > 0) modeBtns[0].classList.add('active-mode');
+    showNextQuestion(unitId);
+    updateScore(unitId);
+}
+
+function showNextQuestion(unitId) {
+    const state = quizStates[unitId];
+    if (!state) return;
+    const idx = state.currentIndex;
+    const items = state.items;
+    const questionEl = document.getElementById('quiz-question-' + unitId);
+    const progressEl = document.getElementById('quiz-progress-' + unitId);
+    const inputEl = document.getElementById('quiz-input-' + unitId);
+    const feedbackEl = document.getElementById('quiz-feedback-' + unitId);
+
+    if (idx >= items.length) {
+        questionEl.textContent = '完成!';
+        progressEl.textContent = '';
+        inputEl.style.display = 'none';
+        feedbackEl.textContent = '';
+        feedbackEl.className = 'quiz-feedback';
+        showResults(unitId);
+        return;
+    }
+
+    const item = items[idx];
+    if (state.currentMode === 'ko-zh') {
+        questionEl.textContent = item.ko;
+    } else {
+        questionEl.textContent = item.zh + ' (' + item.usage.split('。')[0] + ')';
+    }
+
+    progressEl.textContent = '第 ' + (idx + 1) + '/' + items.length + ' 题';
+    inputEl.style.display = '';
+    inputEl.value = '';
+    inputEl.disabled = false;
+    inputEl.focus();
+    feedbackEl.textContent = '';
+    feedbackEl.className = 'quiz-feedback';
+    state.hintUsed = false;
+}
+
+function showHint(unitId) {
+    const state = quizStates[unitId];
+    if (!state || state.currentIndex >= state.items.length) return;
+    const item = state.items[state.currentIndex];
+    const feedbackEl = document.getElementById('quiz-feedback-' + unitId);
+    if (state.currentMode === 'ko-zh') {
+        feedbackEl.textContent = '提示: ' + item.zh;
+    } else {
+        feedbackEl.textContent = '提示: ' + item.ko;
+    }
+    feedbackEl.className = 'quiz-feedback';
+    state.hintUsed = true;
+}
+
+function checkAnswer(unitId) {
+    const state = quizStates[unitId];
+    if (!state || state.currentIndex >= state.items.length) return;
+
+    const item = state.items[state.currentIndex];
+    const inputEl = document.getElementById('quiz-input-' + unitId);
+    const feedbackEl = document.getElementById('quiz-feedback-' + unitId);
+    const userAnswer = inputEl.value.trim();
+
+    if (!userAnswer) return;
+
+    let correct = false;
+    if (state.currentMode === 'ko-zh') {
+        correct = userAnswer === item.zh || userAnswer.includes(item.zh);
+    } else {
+        correct = userAnswer === item.ko;
+    }
+
+    state.total++;
+    if (correct) {
+        state.score++;
+        feedbackEl.textContent = '正确!';
+        feedbackEl.className = 'quiz-feedback correct';
+    } else {
+        const correctAnswer = state.currentMode === 'ko-zh' ? item.zh : item.ko;
+        feedbackEl.textContent = '错误! 正确答案: ' + correctAnswer;
+        feedbackEl.className = 'quiz-feedback incorrect';
+    }
+
+    state.results.push({
+        question: state.currentMode === 'ko-zh' ? item.ko : item.zh,
+        correctAnswer: state.currentMode === 'ko-zh' ? item.zh : item.ko,
+        userAnswer: userAnswer,
+        correct: correct,
+        mode: state.currentMode
+    });
+
+    updateScore(unitId);
+    inputEl.disabled = true;
+
+    setTimeout(() => {
+        state.currentIndex++;
+        showNextQuestion(unitId);
+    }, 1500);
+}
+
+function skipQuestion(unitId) {
+    const state = quizStates[unitId];
+    if (!state || state.currentIndex >= state.items.length) return;
+
+    const item = state.items[state.currentIndex];
+    state.results.push({
+        question: state.currentMode === 'ko-zh' ? item.ko : item.zh,
+        correctAnswer: state.currentMode === 'ko-zh' ? item.zh : item.ko,
+        userAnswer: '(跳过)',
+        correct: false,
+        mode: state.currentMode
+    });
+    state.total++;
+
+    state.currentIndex++;
+    showNextQuestion(unitId);
+    updateScore(unitId);
+}
+
+function updateScore(unitId) {
+    const state = quizStates[unitId];
+    if (!state) return;
+    const scoreEl = document.getElementById('quiz-score-' + unitId);
+    if (state.total > 0) {
+        scoreEl.textContent = '得分: ' + state.score + '/' + state.total;
+    } else {
+        scoreEl.textContent = '';
+    }
+}
+
+function showResults(unitId) {
+    const state = quizStates[unitId];
+    if (!state) return;
+    const resultEl = document.getElementById('quiz-result-' + unitId);
+    let html = '<h4>测试结果</h4><ul>';
+    state.results.forEach((r, i) => {
+        const icon = r.correct ? '&#x2705;' : '&#x274C;';
+        html += '<li>' + icon + ' <span class="ko-word">' + r.question + '</span> → ' + r.correctAnswer;
+        if (!r.correct && r.userAnswer !== '(跳过)') {
+            html += ' <span style="color:var(--error);">(你的答案: ' + r.userAnswer + ')</span>';
+        }
+        html += '</li>';
+    });
+    html += '</ul>';
+    resultEl.innerHTML = html;
+}
+
+// Pronunciation
+let currentAudio = null;
+function playWord(word) {
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+    }
+    const audio = new Audio('https://dict.naver.com/dictvoice?service=kokr&speaker=mijin&text=' + encodeURIComponent(word));
+    currentAudio = audio;
+    audio.play().catch(e => console.log('Audio play failed:', e));
+    audio.onended = function() { currentAudio = null; };
+}
+</script>
 </head>
 <body>
-<audio id="audio-player" controls></audio>
 <header>
   <div class="header-inner">
     <img class="illust" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiTAJDqF3mxYSGwWNHrrEtgJnl4mgpiWjIsjK_Tm6MFKYtTFJOax__Iliga2o57tCBqWkB_pdsrCSnzWSChnfOLrQaFgsHs0mCYOFzZH40E5sZx9u3xjeeLO6tjQVrBWYjUfLQHQV8f_9FX/s1600/study_gogaku_woman5_korean.png" alt="" style="max-width:80px;margin:0;">
@@ -1929,229 +2148,6 @@ footer .illust { margin-bottom: 8px; }
 </footer>
 
 <script>
-const quizStates = {};
-const quizDataStore = {};
-
-function initQuizData(unitId, data) {
-    quizDataStore[unitId] = data;
-}
-
-function getQuizData(unitId) {
-    return quizDataStore[unitId] || [];
-}
-
-function toggleQuiz(unitId) {
-    const area = document.getElementById('quiz-' + unitId);
-    if (area.classList.contains('active')) {
-        area.classList.remove('active');
-    } else {
-        area.classList.add('active');
-        if (!quizStates[unitId]) {
-            resetQuiz(unitId);
-        }
-    }
-}
-
-function setQuizMode(unitId, mode, btn) {
-    if (!quizStates[unitId]) return;
-    quizStates[unitId].currentMode = mode;
-    // Update button styles
-    const parent = btn.parentElement;
-    parent.querySelectorAll('button').forEach(b => b.classList.remove('active-mode'));
-    btn.classList.add('active-mode');
-    // Reset and show next question
-    quizStates[unitId].currentIndex = 0;
-    quizStates[unitId].score = 0;
-    quizStates[unitId].total = 0;
-    quizStates[unitId].results = [];
-    showNextQuestion(unitId);
-    updateScore(unitId);
-}
-
-function resetQuiz(unitId) {
-    const data = getQuizData(unitId);
-    // Shuffle
-    const shuffled = [...data].sort(() => Math.random() - 0.5);
-    quizStates[unitId] = {
-        items: shuffled,
-        currentIndex: 0,
-        score: 0,
-        total: 0,
-        results: [],
-        currentMode: 'ko-zh',
-        hintUsed: false
-    };
-    document.getElementById('quiz-feedback-' + unitId).textContent = '';
-    document.getElementById('quiz-feedback-' + unitId).className = 'quiz-feedback';
-    document.getElementById('quiz-result-' + unitId).innerHTML = '';
-    document.getElementById('quiz-input-' + unitId).value = '';
-    document.getElementById('quiz-input-' + unitId).disabled = false;
-    // Reset mode buttons
-    const area = document.getElementById('quiz-' + unitId);
-    const modeBtns = area.querySelectorAll('.quiz-mode-toggle button');
-    modeBtns.forEach(b => b.classList.remove('active-mode'));
-    if (modeBtns.length > 0) modeBtns[0].classList.add('active-mode');
-    showNextQuestion(unitId);
-    updateScore(unitId);
-}
-
-function showNextQuestion(unitId) {
-    const state = quizStates[unitId];
-    if (!state) return;
-    const idx = state.currentIndex;
-    const items = state.items;
-    const questionEl = document.getElementById('quiz-question-' + unitId);
-    const progressEl = document.getElementById('quiz-progress-' + unitId);
-    const inputEl = document.getElementById('quiz-input-' + unitId);
-    const feedbackEl = document.getElementById('quiz-feedback-' + unitId);
-    
-    if (idx >= items.length) {
-        // Quiz complete
-        questionEl.textContent = '完成!';
-        progressEl.textContent = '';
-        inputEl.style.display = 'none';
-        document.getElementById('quiz-input-' + unitId).style.display = 'none';
-        feedbackEl.textContent = '';
-        feedbackEl.className = 'quiz-feedback';
-        showResults(unitId);
-        return;
-    }
-    
-    const item = items[idx];
-    if (state.currentMode === 'ko-zh') {
-        questionEl.textContent = item.ko;
-    } else {
-        questionEl.textContent = item.zh + ' (' + item.usage.split('。')[0] + ')';
-    }
-    
-    progressEl.textContent = '第 ' + (idx + 1) + '/' + items.length + ' 题';
-    inputEl.style.display = '';
-    inputEl.value = '';
-    inputEl.disabled = false;
-    inputEl.focus();
-    feedbackEl.textContent = '';
-    feedbackEl.className = 'quiz-feedback';
-    state.hintUsed = false;
-}
-
-function showHint(unitId) {
-    const state = quizStates[unitId];
-    if (!state || state.currentIndex >= state.items.length) return;
-    const item = state.items[state.currentIndex];
-    const feedbackEl = document.getElementById('quiz-feedback-' + unitId);
-    if (state.currentMode === 'ko-zh') {
-        feedbackEl.textContent = '提示: ' + item.zh;
-    } else {
-        feedbackEl.textContent = '提示: ' + item.ko;
-    }
-    feedbackEl.className = 'quiz-feedback';
-    state.hintUsed = true;
-}
-
-function checkAnswer(unitId) {
-    const state = quizStates[unitId];
-    if (!state || state.currentIndex >= state.items.length) return;
-    
-    const item = state.items[state.currentIndex];
-    const inputEl = document.getElementById('quiz-input-' + unitId);
-    const feedbackEl = document.getElementById('quiz-feedback-' + unitId);
-    const userAnswer = inputEl.value.trim();
-    
-    if (!userAnswer) return;
-    
-    let correct = false;
-    if (state.currentMode === 'ko-zh') {
-        // User types Chinese, answer is in zh
-        correct = userAnswer === item.zh || userAnswer.includes(item.zh);
-    } else {
-        // User types Korean, answer is ko
-        correct = userAnswer === item.ko;
-    }
-    
-    state.total++;
-    if (correct) {
-        state.score++;
-        feedbackEl.textContent = '正确!';
-        feedbackEl.className = 'quiz-feedback correct';
-    } else {
-        const correctAnswer = state.currentMode === 'ko-zh' ? item.zh : item.ko;
-        feedbackEl.textContent = '错误! 正确答案: ' + correctAnswer;
-        feedbackEl.className = 'quiz-feedback incorrect';
-    }
-    
-    state.results.push({
-        question: state.currentMode === 'ko-zh' ? item.ko : item.zh,
-        correctAnswer: state.currentMode === 'ko-zh' ? item.zh : item.ko,
-        userAnswer: userAnswer,
-        correct: correct,
-        mode: state.currentMode
-    });
-    
-    updateScore(unitId);
-    inputEl.disabled = true;
-    
-    // Auto advance after 1.5s
-    setTimeout(() => {
-        state.currentIndex++;
-        showNextQuestion(unitId);
-    }, 1500);
-}
-
-function skipQuestion(unitId) {
-    const state = quizStates[unitId];
-    if (!state || state.currentIndex >= state.items.length) return;
-    
-    const item = state.items[state.currentIndex];
-    state.results.push({
-        question: state.currentMode === 'ko-zh' ? item.ko : item.zh,
-        correctAnswer: state.currentMode === 'ko-zh' ? item.zh : item.ko,
-        userAnswer: '(跳过)',
-        correct: false,
-        mode: state.currentMode
-    });
-    state.total++;
-    
-    state.currentIndex++;
-    showNextQuestion(unitId);
-    updateScore(unitId);
-}
-
-function updateScore(unitId) {
-    const state = quizStates[unitId];
-    if (!state) return;
-    const scoreEl = document.getElementById('quiz-score-' + unitId);
-    if (state.total > 0) {
-        scoreEl.textContent = '得分: ' + state.score + '/' + state.total;
-    } else {
-        scoreEl.textContent = '';
-    }
-}
-
-function showResults(unitId) {
-    const state = quizStates[unitId];
-    if (!state) return;
-    const resultEl = document.getElementById('quiz-result-' + unitId);
-    let html = '<h4>测试结果</h4><ul>';
-    state.results.forEach((r, i) => {
-        const icon = r.correct ? '&#x2705;' : '&#x274C;';
-        html += '<li>' + icon + ' <span class="ko-word">' + r.question + '</span> → ' + r.correctAnswer;
-        if (!r.correct && r.userAnswer !== '(跳过)') {
-            html += ' <span style="color:var(--error);">(你的答案: ' + r.userAnswer + ')</span>';
-        }
-        html += '</li>';
-    });
-    html += '</ul>';
-    resultEl.innerHTML = html;
-}
-
-// Pronunciation
-function playWord(word) {
-    const audio = document.getElementById('audio-player');
-    const url = 'https://dict.naver.com/dictvoice?service=kokr&speaker=mijin&text=' + encodeURIComponent(word);
-    audio.src = url;
-    audio.play().catch(e => console.log('Audio play failed:', e));
-}
-
 // Navigation
 document.addEventListener('DOMContentLoaded', function() {
     // Nav buttons
