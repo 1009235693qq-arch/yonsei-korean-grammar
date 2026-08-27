@@ -395,17 +395,53 @@ function showResults(unitId) {
     resultEl.innerHTML = html;
 }
 
-// Pronunciation
-let currentAudio = null;
+// Pronunciation - Web Speech API + Google TTS fallback
+let koVoice = null;
+let voicesReady = false;
+
+// Preload Korean voice
+function loadVoices() {
+    return new Promise((resolve) => {
+        const voices = speechSynthesis.getVoices();
+        if (voices.length > 0) {
+            koVoice = voices.find(v => v.lang.startsWith('ko')) || null;
+            voicesReady = true;
+            resolve();
+            return;
+        }
+        speechSynthesis.onvoiceschanged = () => {
+            const v = speechSynthesis.getVoices();
+            koVoice = v.find(x => x.lang.startsWith('ko')) || null;
+            voicesReady = true;
+            resolve();
+        };
+    });
+}
+if ('speechSynthesis' in window) loadVoices();
+
 function playWord(word) {
-    if (currentAudio) {
-        currentAudio.pause();
-        currentAudio = null;
+    // Try Web Speech API first
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(word);
+        u.lang = 'ko-KR';
+        u.rate = 0.9;
+        u.pitch = 1;
+        if (koVoice) u.voice = koVoice;
+        // If voices not loaded yet, queue after load
+        if (!voicesReady) {
+            loadVoices().then(() => {
+                if (koVoice) u.voice = koVoice;
+                window.speechSynthesis.speak(u);
+            });
+        } else {
+            window.speechSynthesis.speak(u);
+        }
+        return;
     }
-    const audio = new Audio('https://dict.naver.com/dictvoice?service=kokr&speaker=mijin&text=' + encodeURIComponent(word));
-    currentAudio = audio;
-    audio.play().catch(e => console.log('Audio play failed:', e));
-    audio.onended = function() { currentAudio = null; };
+    // Fallback: Google Translate TTS
+    const audio = new Audio('https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ko&q=' + encodeURIComponent(word));
+    audio.play().catch(e => console.log('TTS fallback failed:', e));
 }
 </script>
 </head>
