@@ -262,7 +262,7 @@ function showNextQuestion(unitId) {
     const feedbackEl = document.getElementById('quiz-feedback-' + unitId);
 
     if (idx >= items.length) {
-        questionEl.textContent = '完成!';
+        questionEl.textContent = '🎉 全部完成!';
         progressEl.textContent = '';
         inputEl.style.display = 'none';
         feedbackEl.textContent = '';
@@ -275,7 +275,8 @@ function showNextQuestion(unitId) {
     if (state.currentMode === 'ko-zh') {
         questionEl.textContent = item.ko;
     } else {
-        questionEl.textContent = item.zh + ' (' + item.usage.split('。')[0] + ')';
+        // zh-ko mode: show Chinese meaning, optionally with usage hint
+        questionEl.textContent = item.zh + (item.usage ? ' (' + item.usage + ')' : '');
     }
 
     progressEl.textContent = '第 ' + (idx + 1) + '/' + items.length + ' 题';
@@ -315,19 +316,23 @@ function checkAnswer(unitId) {
 
     let correct = false;
     if (state.currentMode === 'ko-zh') {
-        correct = userAnswer === item.zh || userAnswer.includes(item.zh);
+        // Flexible Chinese matching: strip parentheses, trim
+        const expectedClean = item.zh.replace(/[（(].*?[）)]/g, '').trim();
+        const userClean = userAnswer.replace(/[（(].*?[）)]/g, '').trim();
+        correct = userClean === expectedClean || userAnswer === item.zh;
     } else {
+        // zh-ko mode: exact Korean match (case-insensitive for common variations)
         correct = userAnswer === item.ko;
     }
 
     state.total++;
     if (correct) {
         state.score++;
-        feedbackEl.textContent = '正确!';
+        feedbackEl.textContent = '✅ 正确!';
         feedbackEl.className = 'quiz-feedback correct';
     } else {
         const correctAnswer = state.currentMode === 'ko-zh' ? item.zh : item.ko;
-        feedbackEl.textContent = '错误! 正确答案: ' + correctAnswer;
+        feedbackEl.textContent = '❌ 错误! 正确答案: ' + correctAnswer;
         feedbackEl.className = 'quiz-feedback incorrect';
     }
 
@@ -395,60 +400,84 @@ function showResults(unitId) {
     resultEl.innerHTML = html;
 }
 
-// Pronunciation - Web Speech API + Google TTS fallback
-let koVoice = null;
-let voicesReady = false;
-
-// Preload Korean voice
-function loadVoices() {
-    return new Promise((resolve) => {
-        const voices = speechSynthesis.getVoices();
-        if (voices.length > 0) {
-            koVoice = voices.find(v => v.lang.startsWith('ko')) || null;
-            voicesReady = true;
-            resolve();
-            return;
-        }
-        speechSynthesis.onvoiceschanged = () => {
-            const v = speechSynthesis.getVoices();
-            koVoice = v.find(x => x.lang.startsWith('ko')) || null;
-            voicesReady = true;
-            resolve();
-        };
-    });
-}
-if ('speechSynthesis' in window) loadVoices();
+// Pronunciation - Multi-fallback TTS engine
+// Mobile-first approach: play audio directly from user gesture, then fallback
+let currentAudio = null;
 
 function playWord(word) {
-    // Try Web Speech API first
+    // Stop any currently playing audio
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+    }
+    // Also stop Web Speech API
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(word);
-        u.lang = 'ko-KR';
-        u.rate = 0.9;
-        u.pitch = 1;
-        if (koVoice) u.voice = koVoice;
-        // If voices not loaded yet, queue after load
-        if (!voicesReady) {
-            loadVoices().then(() => {
-                if (koVoice) u.voice = koVoice;
-                window.speechSynthesis.speak(u);
-            });
-        } else {
-            window.speechSynthesis.speak(u);
-        }
-        return;
     }
-    // Fallback: Google Translate TTS
-    const audio = new Audio('https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ko&q=' + encodeURIComponent(word));
-    audio.play().catch(e => console.log('TTS fallback failed:', e));
+
+    const encoded = encodeURIComponent(word);
+    
+    // Create audio element and play immediately (from user gesture context)
+    const audio = new Audio();
+    audio.preload = 'auto';
+    
+    // Try Youdao first (best quality for Korean)
+    audio.src = 'https://dict.youdao.com/dictvoice?audio=' + encoded + '&le=ko';
+    currentAudio = audio;
+    
+    audio.play().then(() => {
+        // Success! Audio is playing
+    }).catch(() => {
+        // Youdao failed, try Sogou
+        const audio2 = new Audio();
+        audio2.preload = 'auto';
+        audio2.src = 'https://fanyi.sogou.com/reventondc/synthesis?text=' + encoded + '&speed=1&lang=ko-KR&from=translateweb&speaker=6';
+        currentAudio = audio2;
+        audio2.play().catch(() => {
+            // Sogou failed, try Google
+            const audio3 = new Audio();
+            audio3.preload = 'auto';
+            audio3.src = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ko&q=' + encoded;
+            currentAudio = audio3;
+            audio3.play().catch(() => {
+                // All audio URLs failed, try Web Speech API
+                currentAudio = null;
+                tryWebSpeech(word);
+            });
+        });
+    });
+}
+
+function tryWebSpeech(word) {
+    if (!('speechSynthesis' in window)) return;
+    
+    const u = new SpeechSynthesisUtterance(word);
+    u.lang = 'ko-KR';
+    u.rate = 0.85;
+    u.pitch = 1;
+    u.volume = 1;
+    
+    const voices = speechSynthesis.getVoices();
+    const koVoice = voices.find(v => v.lang.startsWith('ko'));
+    if (koVoice) u.voice = koVoice;
+    
+    if (voices.length === 0) {
+        speechSynthesis.onvoiceschanged = () => {
+            const v2 = speechSynthesis.getVoices();
+            const kv = v2.find(v => v.lang.startsWith('ko'));
+            if (kv) u.voice = kv;
+            window.speechSynthesis.speak(u);
+        };
+    } else {
+        window.speechSynthesis.speak(u);
+    }
 }
 </script>
 </head>
 <body>
 <header>
   <div class="header-inner">
-    <img class="illust" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiTAJDqF3mxYSGwWNHrrEtgJnl4mgpiWjIsjK_Tm6MFKYtTFJOax__Iliga2o57tCBqWkB_pdsrCSnzWSChnfOLrQaFgsHs0mCYOFzZH40E5sZx9u3xjeeLO6tjQVrBWYjUfLQHQV8f_9FX/s1600/study_gogaku_woman5_korean.png" alt="" style="max-width:80px;margin:0;">
+    <img src="illusts/woman_korean_a.png" alt="韩语学习" style="width:80px;height:80px;border-radius:12px;object-fit:contain;">
     <h1>延世韩国语语法学习手册</h1>
   </div>
   <nav>
@@ -592,7 +621,7 @@ function playWord(word) {
 </div>
 <div class="quiz-progress" id="quiz-progress-unit1"></div>
 <div class="quiz-question" id="quiz-question-unit1"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit1" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit1')">
+<input type="text" class="quiz-input" id="quiz-input-unit1" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit1')">
 <div class="quiz-btns">
 <button class="btn-hint" onclick="showHint('unit1')">提示</button>
 <button class="btn-skip" onclick="skipQuestion('unit1')">跳过</button>
@@ -603,8 +632,9 @@ function playWord(word) {
 <div class="quiz-result" id="quiz-result-unit1"></div>
 <button class="btn-retry" onclick="resetQuiz('unit1')">重新开始</button>
 </div>
-<script>initQuizData('unit1', [{"ko": "선생님은 한국 사람입니다", "zh": "은/는", "usage": "主语助词，表示主语或话题。有收音(받침)用 -은，无收音用 -는。"}, {"ko": "이것은 책입니다", "zh": "은/는", "usage": "主语助词，表示主语或话题。有收音(받침)用 -은，无收音用 -는。"}, {"ko": "이것이 교과서입니까?", "zh": "입니까?", "usage": "表示「是…吗？」，正式疑问形。名词后直接加，句尾语调上升。"}, {"ko": "저는 학생입니다", "zh": "은/는", "usage": "主语助词，表示主语或话题。有收音(받침)用 -은，无收音用 -는。"}, {"ko": "저는 학생이 아닙니다", "zh": "이/가 아닙니다", "usage": "表示「不是…」。有收音用 -이 아닙니다，无收音用 -가 아닙니다。"}, {"ko": "중국에서 왔습니다", "zh": "에서", "usage": "表示「从…来」。与移动动词(오다/가다)搭配使用。"}, {"ko": "그분은 의사가 아닙니다", "zh": "이/가 아닙니다", "usage": "表示「不是…」。有收音用 -이 아닙니다，无收音用 -가 아닙니다。"}, {"ko": "학생입니까?", "zh": "입니까?", "usage": "表示「是…吗？」，正式疑问形。名词后直接加，句尾语调上升。"}, {"ko": "여기는 학교입니다", "zh": "입니다", "usage": "表示「是…」，正式陈述形。名词后直接加。所有名词通用。"}, {"ko": "학교에서 집에 갑니다", "zh": "에서", "usage": "表示「从…来」。与移动动词(오다/가다)搭配使用。"}]);</script>
+<script>initQuizData('unit1', [{"ko":"저","zh":"我(谦称)","usage":""},{"ko":"학생","zh":"学生","usage":""},{"ko":"선생님","zh":"老师","usage":""},{"ko":"한국","zh":"韩国","usage":""},{"ko":"중국","zh":"中国","usage":""},{"ko":"일본","zh":"日本","usage":""},{"ko":"미국","zh":"美国","usage":""},{"ko":"사람","zh":"人","usage":""},{"ko":"이름","zh":"名字","usage":""},{"ko":"처음","zh":"初次","usage":""},{"ko":"반갑다","zh":"高兴","usage":""},{"ko":"학교","zh":"学校","usage":""},{"ko":"교과서","zh":"教科书","usage":""},{"ko":"사전","zh":"词典","usage":""},{"ko":"네","zh":"是的","usage":""},{"ko":"아니요","zh":"不是","usage":""}]);</script>
 </div>
+<img src="illusts/woman_listening.png" alt="听力练习" class="illust">
 <div class="unit" id="unit2">
 <h2>Unit 2 职业 & 物品</h2>
 <div class="section-title">语法</div>
@@ -747,7 +777,7 @@ function playWord(word) {
 </div>
 <div class="quiz-progress" id="quiz-progress-unit2"></div>
 <div class="quiz-question" id="quiz-question-unit2"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit2" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit2')">
+<input type="text" class="quiz-input" id="quiz-input-unit2" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit2')">
 <div class="quiz-btns">
 <button class="btn-hint" onclick="showHint('unit2')">提示</button>
 <button class="btn-skip" onclick="skipQuestion('unit2')">跳过</button>
@@ -758,11 +788,11 @@ function playWord(word) {
 <div class="quiz-result" id="quiz-result-unit2"></div>
 <button class="btn-retry" onclick="resetQuiz('unit2')">重新开始</button>
 </div>
-<script>initQuizData('unit2', [{"ko": "저도 학생입니다", "zh": "도", "usage": "表示「也」。替代 은/는 或 이/가，附加于名词后。"}, {"ko": "이 책은 교과서입니다", "zh": "이/그/저", "usage": "指示词。이=近指(这个)，그=中指(那个)，저=远指(那个)。"}, {"ko": "날씨가 좋습니다", "zh": "이/가", "usage": "主语格助词，强调主语或新信息。有收音用 -이，无收音用 -가。"}, {"ko": "친구가 옵니다", "zh": "이/가", "usage": "主语格助词，强调主语或新信息。有收音用 -이，无收音用 -가。"}, {"ko": "그 사람은 누구입니까?", "zh": "이/그/저", "usage": "指示词。이=近指(这个)，그=中指(那个)，저=远指(那个)。"}, {"ko": "저는 의사가 아닙니다", "zh": "은/는...이/가 아닙니다", "usage": "表示「A不是B」。은/는标记主题，이/가 아닙니다否定。"}, {"ko": "친구도 옵니다", "zh": "도", "usage": "表示「也」。替代 은/는 或 이/가，附加于名词后。"}, {"ko": "한국어도 공부합니다", "zh": "도", "usage": "表示「也」。替代 은/는 或 이/가，附加于名词后。"}, {"ko": "이것은 사전이 아닙니다", "zh": "은/는...이/가 아닙니다", "usage": "表示「A不是B」。은/는标记主题，이/가 아닙니다否定。"}, {"ko": "그거는 제 책이 아닙니다", "zh": "은/는...이/가 아닙니다", "usage": "表示「A不是B」。은/는标记主题，이/가 아닙니다否定。"}]);</script>
+<script>initQuizData('unit2', [{"ko":"의사","zh":"医生","usage":""},{"ko":"변호사","zh":"律师","usage":""},{"ko":"회사원","zh":"公司职员","usage":""},{"ko":"가수","zh":"歌手","usage":""},{"ko":"요리사","zh":"厨师","usage":""},{"ko":"기자","zh":"记者","usage":""},{"ko":"책","zh":"书","usage":""},{"ko":"공책","zh":"笔记本","usage":""},{"ko":"가방","zh":"包","usage":""},{"ko":"볼펜","zh":"圆珠笔","usage":""},{"ko":"연필","zh":"铅笔","usage":""},{"ko":"지우개","zh":"橡皮","usage":""},{"ko":"의자","zh":"椅子","usage":""},{"ko":"책상","zh":"书桌","usage":""},{"ko":"시계","zh":"钟表","usage":""},{"ko":"휴대폰","zh":"手机","usage":""},{"ko":"안경","zh":"眼镜","usage":""},{"ko":"열쇠","zh":"钥匙","usage":""},{"ko":"돈","zh":"钱","usage":""},{"ko":"지갑","zh":"钱包","usage":""}]);</script>
 </div>
 <div class="illust-row">
-  <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgwsZOXdGwxCsXDak85njrvADLfsq2yorYX7wjJ7V2S3O-SG_UkuJ7E68fs43R1Bl0VaSSCBPfdGG9qsvZudjzeYwthEAoOW-tfTTlE_n2OHVvjB821BVfuME__j7jgK1nDYiMzkbBxmAh5/s400/bunbougu_enpitsu.png" alt="鉛筆" class="illust-small">
-  <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgnOQfLfhILjCYNS7aPxa-M65p2n1XhRty5dj6HiBIw5OudpVmgP93sgu_mYvTjeZpQzzBrx166lnB09hUmcZMuXMCG9F40jxAVhBzTWtfleUhfkR_JX1wv68QyzKn5ltkIksupr7_rIpo/s400/test100.png" alt="100点" class="illust-small">
+  <img src="illusts/woman_speaking.png" alt="口语练习" style="max-width:140px;border-radius:12px;">
+  <img src="illusts/man_listening.png" alt="听力练习" style="max-width:140px;border-radius:12px;">
 </div>
 <div class="unit" id="unit3">
 <h2>Unit 3 家人 & 数词 & 场所</h2>
@@ -930,7 +960,7 @@ function playWord(word) {
 </div>
 <div class="quiz-progress" id="quiz-progress-unit3"></div>
 <div class="quiz-question" id="quiz-question-unit3"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit3" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit3')">
+<input type="text" class="quiz-input" id="quiz-input-unit3" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit3')">
 <div class="quiz-btns">
 <button class="btn-hint" onclick="showHint('unit3')">提示</button>
 <button class="btn-skip" onclick="skipQuestion('unit3')">跳过</button>
@@ -941,9 +971,9 @@ function playWord(word) {
 <div class="quiz-result" id="quiz-result-unit3"></div>
 <button class="btn-retry" onclick="resetQuiz('unit3')">重新开始</button>
 </div>
-<script>initQuizData('unit3', [{"ko": "학교 옆에 식당이 있습니다", "zh": "位置名词", "usage": "앞(前), 뒤(后), 옆(旁), 위(上), 아래(下)。与 -에 搭配使用。"}, {"ko": "시간이 없습니다", "zh": "이/가 있다/없다", "usage": "表示「有/没有…」。있다=有/在，없다=没有/不在。"}, {"ko": "도서관에 책이 많습니다", "zh": "에(地点)", "usage": "地点助词，表示「在…」。与存在动词 있다/없다 或移动动词搭配。"}, {"ko": "학교에 갑니다", "zh": "에(地点)", "usage": "地点助词，表示「在…」。与存在动词 있다/없다 或移动动词搭配。"}, {"ko": "학생 세 명이 있습니다", "zh": "固有数词", "usage": "하나,둘,셋,넷,다섯,여섯,일곱,여덟,아홉,열。用于年龄、人数、时刻(小时)。"}, {"ko": "집에 있습니다", "zh": "에(地点)", "usage": "地点助词，表示「在…」。与存在动词 있다/없다 或移动动词搭配。"}, {"ko": "교실에 학생이 있습니다", "zh": "이/가 있다/없다", "usage": "表示「有/没有…」。있다=有/在，없다=没有/不在。"}, {"ko": "은행 앞에 있습니다", "zh": "位置名词", "usage": "앞(前), 뒤(后), 옆(旁), 위(上), 아래(下)。与 -에 搭配使用。"}, {"ko": "지우개가 있습니다", "zh": "이/가 있다/없다", "usage": "表示「有/没有…」。있다=有/在，없다=没有/不在。"}, {"ko": "책상 위에 있어요", "zh": "位置名词", "usage": "앞(前), 뒤(后), 옆(旁), 위(上), 아래(下)。与 -에 搭配使用。"}]);</script>
+<script>initQuizData('unit3', [{"ko":"가족","zh":"家人","usage":""},{"ko":"아버지","zh":"爸爸","usage":""},{"ko":"어머니","zh":"妈妈","usage":""},{"ko":"할아버지","zh":"爷爷","usage":""},{"ko":"할머니","zh":"奶奶","usage":""},{"ko":"오빠","zh":"哥哥(女用)","usage":""},{"ko":"형","zh":"哥哥(男用)","usage":""},{"ko":"언니","zh":"姐姐(女用)","usage":""},{"ko":"누나","zh":"姐姐(男用)","usage":""},{"ko":"동생","zh":"弟弟/妹妹","usage":""},{"ko":"하나","zh":"一","usage":""},{"ko":"둘","zh":"二","usage":""},{"ko":"셋","zh":"三","usage":""},{"ko":"넷","zh":"四","usage":""},{"ko":"다섯","zh":"五","usage":""},{"ko":"여섯","zh":"六","usage":""},{"ko":"일곱","zh":"七","usage":""},{"ko":"여덟","zh":"八","usage":""},{"ko":"아홉","zh":"九","usage":""},{"ko":"열","zh":"十","usage":""},{"ko":"집","zh":"家","usage":""},{"ko":"학교","zh":"学校","usage":""},{"ko":"회사","zh":"公司","usage":""},{"ko":"병원","zh":"医院","usage":""},{"ko":"도서관","zh":"图书馆","usage":""},{"ko":"식당","zh":"餐厅","usage":""},{"ko":"은행","zh":"银行","usage":""},{"ko":"우체국","zh":"邮局","usage":""},{"ko":"가게","zh":"商店","usage":""},{"ko":"공원","zh":"公园","usage":""}]);</script>
 </div>
-<img class="illust" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhwaARYyAMQpq5-zyXGtu4Eg-XCyxVVsu9wOG5E7GHmqqMbdyvSxr_LjyksdUxfqC1oEi3AHAJHVYWlD5uCfywtQeU_-v3JwFhoTDgOcnMglpBRbEL6pRX0vAxVi8ufTH26PQhGRrVpGdHY/s450/bunbougu_note.png" alt="ノート">
+<img src="illusts/woman_reading.png" alt="阅读学习" class="illust">
 <div class="unit" id="unit4">
 <h2>Unit 4 动作 & 教室物品</h2>
 <div class="section-title">语法</div>
@@ -1100,7 +1130,7 @@ function playWord(word) {
 </div>
 <div class="quiz-progress" id="quiz-progress-unit4"></div>
 <div class="quiz-question" id="quiz-question-unit4"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit4" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit4')">
+<input type="text" class="quiz-input" id="quiz-input-unit4" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit4')">
 <div class="quiz-btns">
 <button class="btn-hint" onclick="showHint('unit4')">提示</button>
 <button class="btn-skip" onclick="skipQuestion('unit4')">跳过</button>
@@ -1111,7 +1141,7 @@ function playWord(word) {
 <div class="quiz-result" id="quiz-result-unit4"></div>
 <button class="btn-retry" onclick="resetQuiz('unit4')">重新开始</button>
 </div>
-<script>initQuizData('unit4', [{"ko": "날씨가 좋습니다", "zh": "ㅂ/습니다(形容词)", "usage": "形容词正式陈述形。有收音用 -습니다，无收音用 -ㅂ니다。"}, {"ko": "학교가 큽니다", "zh": "ㅂ/습니다(形容词)", "usage": "形容词正式陈述形。有收音用 -습니다，无收音用 -ㅂ니다。"}, {"ko": "친구를 만나고 영화를 봤어요", "zh": "고", "usage": "连接两个动作，表示「…然后…」。动词词干后直接加。时态由最后动词决定。"}, {"ko": "책을 읽어요", "zh": "을/를", "usage": "宾语助词，表示动作对象。有收音用 -을，无收音用 -를。"}, {"ko": "밥을 먹고 학교에 갑니다", "zh": "고", "usage": "连接两个动作，表示「…然后…」。动词词干后直接加。时态由最后动词决定。"}, {"ko": "숙제를 하고 잤습니다", "zh": "고", "usage": "连接两个动作，表示「…然后…」。动词词干后直接加。时态由最后动词决定。"}, {"ko": "집에 갑니까?", "zh": "ㅂ/습니까?(动词)", "usage": "动词正式疑问形。有收音用 -습니까，无收音用 -ㅂ니까。"}, {"ko": "밥을 먹습니다", "zh": "ㅂ/습니다(动词)", "usage": "动词正式陈述形。有收音用 -습니다，无收音用 -ㅂ니다。"}, {"ko": "학교에 갑니다", "zh": "ㅂ/습니다(动词)", "usage": "动词正式陈述形。有收音用 -습니다，无收音用 -ㅂ니다。"}, {"ko": "무엇을 먹습니까?", "zh": "ㅂ/습니까?(动词)", "usage": "动词正式疑问形。有收音用 -습니까，无收音用 -ㅂ니까。"}]);</script>
+<script>initQuizData('unit4', [{"ko":"가다","zh":"去","usage":""},{"ko":"오다","zh":"来","usage":""},{"ko":"먹다","zh":"吃","usage":""},{"ko":"마시다","zh":"喝","usage":""},{"ko":"보다","zh":"看","usage":""},{"ko":"읽다","zh":"读","usage":""},{"ko":"쓰다","zh":"写","usage":""},{"ko":"듣다","zh":"听","usage":""},{"ko":"말하다","zh":"说","usage":""},{"ko":"공부하다","zh":"学习","usage":""},{"ko":"가르치다","zh":"教","usage":""},{"ko":"배우다","zh":"学","usage":""},{"ko":"만나다","zh":"见面","usage":""},{"ko":"전화하다","zh":"打电话","usage":""},{"ko":"일하다","zh":"工作","usage":""},{"ko":"쉬다","zh":"休息","usage":""},{"ko":"자다","zh":"睡觉","usage":""},{"ko":"일어나다","zh":"起床","usage":""},{"ko":"씻다","zh":"洗","usage":""},{"ko":"입다","zh":"穿","usage":""},{"ko":"칠판","zh":"黑板","usage":""},{"ko":"분필","zh":"粉笔","usage":""},{"ko":"컴퓨터","zh":"电脑","usage":""},{"ko":"창문","zh":"窗户","usage":""},{"ko":"문","zh":"门","usage":""},{"ko":"시험","zh":"考试","usage":""},{"ko":"숙제","zh":"作业","usage":""},{"ko":"질문","zh":"提问","usage":""}]);</script>
 </div>
 <div class="unit" id="unit5">
 <h2>Unit 5 食物 & 形容词</h2>
@@ -1275,7 +1305,7 @@ function playWord(word) {
 </div>
 <div class="quiz-progress" id="quiz-progress-unit5"></div>
 <div class="quiz-question" id="quiz-question-unit5"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit5" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit5')">
+<input type="text" class="quiz-input" id="quiz-input-unit5" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit5')">
 <div class="quiz-btns">
 <button class="btn-hint" onclick="showHint('unit5')">提示</button>
 <button class="btn-skip" onclick="skipQuestion('unit5')">跳过</button>
@@ -1286,11 +1316,12 @@ function playWord(word) {
 <div class="quiz-result" id="quiz-result-unit5"></div>
 <button class="btn-retry" onclick="resetQuiz('unit5')">重新开始</button>
 </div>
-<script>initQuizData('unit5', [{"ko": "이 음식은 안 매워요", "zh": "안", "usage": "短型否定，表示「不…」。放在动词/形容词前面。"}, {"ko": "숙제를 안 했어요", "zh": "안", "usage": "短型否定，表示「不…」。放在动词/形容词前面。"}, {"ko": "학교에 가요", "zh": "아/어/여요", "usage": "非正式礼貌体。元音ㅏ/ㅗ→아요，其他→어요，하다→여요(해요)。"}, {"ko": "작은 가방이에요", "zh": "ㄴ/은(形容词定语)", "usage": "形容词修饰名词。有收音用 -은，无收音用 -ㄴ。"}, {"ko": "한국어를 공부해요", "zh": "아/어/여요", "usage": "非正式礼貌体。元音ㅏ/ㅗ→아요，其他→어요，하다→여요(해요)。"}, {"ko": "좋은 책입니다", "zh": "ㄴ/은(形容词定语)", "usage": "形容词修饰名词。有收音用 -은，无收音用 -ㄴ。"}, {"ko": "동생하고 놀아요", "zh": "하고", "usage": "表示「和…一起」。名词后直接加，口语性强。"}, {"ko": "예쁜 꽃이에요", "zh": "ㄴ/은(形容词定语)", "usage": "形容词修饰名词。有收音用 -은，无收音用 -ㄴ。"}, {"ko": "오늘은 학교에 안 갑니다", "zh": "안", "usage": "短型否定，表示「不…」。放在动词/形容词前面。"}, {"ko": "선생님하고 이야기했어요", "zh": "하고", "usage": "表示「和…一起」。名词后直接加，口语性强。"}]);</script>
+<script>initQuizData('unit5', [{"ko":"밥","zh":"饭","usage":""},{"ko":"빵","zh":"面包","usage":""},{"ko":"고기","zh":"肉","usage":""},{"ko":"생선","zh":"鱼","usage":""},{"ko":"야채","zh":"蔬菜","usage":""},{"ko":"과일","zh":"水果","usage":""},{"ko":"사과","zh":"苹果","usage":""},{"ko":"바나나","zh":"香蕉","usage":""},{"ko":"딸기","zh":"草莓","usage":""},{"ko":"포도","zh":"葡萄","usage":""},{"ko":"물","zh":"水","usage":""},{"ko":"우유","zh":"牛奶","usage":""},{"ko":"주스","zh":"果汁","usage":""},{"ko":"커피","zh":"咖啡","usage":""},{"ko":"차","zh":"茶","usage":""},{"ko":"맛있다","zh":"好吃","usage":""},{"ko":"맛없다","zh":"不好吃","usage":""},{"ko":"달다","zh":"甜","usage":""},{"ko":"짜다","zh":"咸","usage":""},{"ko":"맵다","zh":"辣","usage":""},{"ko":"크다","zh":"大","usage":""},{"ko":"작다","zh":"小","usage":""},{"ko":"좋다","zh":"好","usage":""},{"ko":"나쁘다","zh":"坏","usage":""},{"ko":"예쁘다","zh":"漂亮","usage":""},{"ko":"재미있다","zh":"有趣","usage":""},{"ko":"비싸다","zh":"贵","usage":""},{"ko":"싸다","zh":"便宜","usage":""},{"ko":"가깝다","zh":"近","usage":""},{"ko":"멀다","zh":"远","usage":""}]);</script>
 </div>
-<img class="illust" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh5_OXuUbfE-xfQW7u6vWx2DMnjQmBJsqegM2CCNrIwA7WJcsIhBFbNy5fGrG391NNyt48cnNLixnbYmMq-GV2FTEmZ7F5nmXMXtDNw_fPUHHNiOyq30vkgu_gU8n6p5vkCFrz8xa2dhSDa/s400/study_school_jugyou_woman.png" alt="">
+<img src="illusts/man_reading.png" alt="阅读学习" class="illust">
 <div class="illust-row">
-  <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjIrMz-waT_nN7YOpjWuGv7L0CY7P9bTJHWSPDSepFfmKv1R5wH7f48WjxWY6kRmw85hM0fb4Wqp-xLVQO6B0r4OlgyHSFxtkOC7Gwtj_dZ1djegEerAh_eIOJ5puCGYXPAy8eetr8hUq8/s400/study_night_girl.png" alt="テスト勉強">
+  <img src="illusts/woman_writing.png" alt="写作练习" style="max-width:140px;border-radius:12px;">
+  <img src="illusts/man_korean_1.png" alt="韩语学习" style="max-width:140px;border-radius:12px;">
 </div>
 
 <div class="unit" id="unit6">
@@ -1455,7 +1486,7 @@ function playWord(word) {
 </div>
 <div class="quiz-progress" id="quiz-progress-unit6"></div>
 <div class="quiz-question" id="quiz-question-unit6"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit6" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit6')">
+<input type="text" class="quiz-input" id="quiz-input-unit6" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit6')">
 <div class="quiz-btns">
 <button class="btn-hint" onclick="showHint('unit6')">提示</button>
 <button class="btn-skip" onclick="skipQuestion('unit6')">跳过</button>
@@ -1466,7 +1497,7 @@ function playWord(word) {
 <div class="quiz-result" id="quiz-result-unit6"></div>
 <button class="btn-retry" onclick="resetQuiz('unit6')">重新开始</button>
 </div>
-<script>initQuizData('unit6', [{"ko": "날씨가 좋지 않아요", "zh": "지 않다", "usage": "长型否定。动词词干后加 -지 않다，比 안 更正式。"}, {"ko": "선생님이 오십니다", "zh": "(으)시", "usage": "敬语后缀，表尊敬。有收音用 -으시，无收音用 -시。用于动词/形容词词干。"}, {"ko": "어머니께서 편지를 보내셨어요", "zh": "께서", "usage": "敬语主语助词，替代 은/는/이/가，必须与敬语谓词搭配。"}, {"ko": "작년에 한국어를 공부했어요", "zh": "았/었/였", "usage": "过去时。ㅏ/ㅗ→았，其他→었，하다→였。"}, {"ko": "할아버지께서 주무십니다", "zh": "(으)시", "usage": "敬语后缀，表尊敬。有收音用 -으시，无收音用 -시。用于动词/形容词词干。"}, {"ko": "어제 영화를 봤습니다", "zh": "았/었/였", "usage": "过去时。ㅏ/ㅗ→았，其他→었，하다→였。"}, {"ko": "그 영화는 재미있지 않아요", "zh": "지 않다", "usage": "长型否定。动词词干后加 -지 않다，比 안 更正式。"}, {"ko": "선생님께서 말씀하십니다", "zh": "께서", "usage": "敬语主语助词，替代 은/는/이/가，必须与敬语谓词搭配。"}, {"ko": "오늘은 밥을 먹지 않습니다", "zh": "지 않다", "usage": "长型否定。动词词干后加 -지 않다，比 안 更正式。"}, {"ko": "어머니가 책을 읽으십니다", "zh": "(으)시", "usage": "敬语后缀，表尊敬。有收音用 -으시，无收音用 -시。用于动词/形容词词干。"}]);</script>
+<script>initQuizData('unit6', [{"ko":"할아버지","zh":"爷爷","usage":""},{"ko":"할머니","zh":"奶奶","usage":""},{"ko":"아버지","zh":"爸爸","usage":""},{"ko":"어머니","zh":"妈妈","usage":""},{"ko":"아들","zh":"儿子","usage":""},{"ko":"딸","zh":"女儿","usage":""},{"ko":"부모님","zh":"父母","usage":""},{"ko":"형제","zh":"兄弟","usage":""},{"ko":"자매","zh":"姐妹","usage":""},{"ko":"삼촌","zh":"叔叔","usage":""},{"ko":"이모","zh":"姨妈","usage":""},{"ko":"사촌","zh":"堂表亲","usage":""},{"ko":"드시다","zh":"吃(敬)","usage":""},{"ko":"주무시다","zh":"睡(敬)","usage":""},{"ko":"계시다","zh":"在(敬)","usage":""},{"ko":"말씀하시다","zh":"说(敬)","usage":""},{"ko":"생신","zh":"生日(敬)","usage":""},{"ko":"연세","zh":"年龄(敬)","usage":""},{"ko":"댁","zh":"家(敬)","usage":""},{"ko":"진지","zh":"饭(敬)","usage":""}]);</script>
 </div>
 <div class="unit" id="unit7">
 <h2>Unit 7 购物 & 食物 & 颜色</h2>
@@ -1625,7 +1656,7 @@ function playWord(word) {
 </div>
 <div class="quiz-progress" id="quiz-progress-unit7"></div>
 <div class="quiz-question" id="quiz-question-unit7"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit7" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit7')">
+<input type="text" class="quiz-input" id="quiz-input-unit7" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit7')">
 <div class="quiz-btns">
 <button class="btn-hint" onclick="showHint('unit7')">提示</button>
 <button class="btn-skip" onclick="skipQuestion('unit7')">跳过</button>
@@ -1636,9 +1667,9 @@ function playWord(word) {
 <div class="quiz-result" id="quiz-result-unit7"></div>
 <button class="btn-retry" onclick="resetQuiz('unit7')">重新开始</button>
 </div>
-<script>initQuizData('unit7', [{"ko": "영화를 볼까요?", "zh": "(으)ㄹ까요?", "usage": "建议或询问意见，「…吧？」。有收音用 -을까요，无收音用 -ㄹ까요。"}, {"ko": "한국어가 영어보다 어려워요", "zh": "보다", "usage": "比较，「比…更…」。放在比较对象后面。"}, {"ko": "친구를 만나고 싶습니다", "zh": "고 싶다", "usage": "表示「想做…」。动词词干后加 -고 싶다。"}, {"ko": "이것이 그것보다 좋아요", "zh": "보다", "usage": "比较，「比…更…」。放在比较对象后面。"}, {"ko": "어디로 갈까요?", "zh": "(으)ㄹ까요?", "usage": "建议或询问意见，「…吧？」。有收音用 -을까요，无收音用 -ㄹ까요。"}, {"ko": "이 가방이 비싸요", "zh": "이/가 Adj", "usage": "形容词作谓语。主语用 이/가 标记。"}, {"ko": "같이 먹을까요?", "zh": "(으)ㄹ까요?", "usage": "建议或询问意见，「…吧？」。有收音用 -을까요，无收音用 -ㄹ까요。"}, {"ko": "한국에 가고 싶어요", "zh": "고 싶다", "usage": "表示「想做…」。动词词干后加 -고 싶다。"}, {"ko": "이 음식이 맛있어요", "zh": "이/가 Adj", "usage": "形容词作谓语。主语用 이/가 标记。"}, {"ko": "비빔밥을 먹고 싶어요", "zh": "고 싶다", "usage": "表示「想做…」。动词词干后加 -고 싶다。"}]);</script>
+<script>initQuizData('unit7', [{"ko":"옷","zh":"衣服","usage":""},{"ko":"바지","zh":"裤子","usage":""},{"ko":"치마","zh":"裙子","usage":""},{"ko":"신발","zh":"鞋子","usage":""},{"ko":"모자","zh":"帽子","usage":""},{"ko":"양말","zh":"袜子","usage":""},{"ko":"가방","zh":"包","usage":""},{"ko":"시계","zh":"手表","usage":""},{"ko":"목걸이","zh":"项链","usage":""},{"ko":"귀걸이","zh":"耳环","usage":""},{"ko":"빨간색","zh":"红色","usage":""},{"ko":"파란색","zh":"蓝色","usage":""},{"ko":"노란색","zh":"黄色","usage":""},{"ko":"초록색","zh":"绿色","usage":""},{"ko":"검은색","zh":"黑色","usage":""},{"ko":"하얀색","zh":"白色","usage":""},{"ko":"주황색","zh":"橙色","usage":""},{"ko":"보라색","zh":"紫色","usage":""},{"ko":"분홍색","zh":"粉色","usage":""},{"ko":"회색","zh":"灰色","usage":""},{"ko":"김치","zh":"泡菜","usage":""},{"ko":"된장찌개","zh":"大酱汤","usage":""},{"ko":"불고기","zh":"烤肉","usage":""},{"ko":"냉면","zh":"冷面","usage":""},{"ko":"떡볶이","zh":"炒年糕","usage":""},{"ko":"김밥","zh":"紫菜包饭","usage":""},{"ko":"비빔밥","zh":"拌饭","usage":""},{"ko":"삼겹살","zh":"五花肉","usage":""}]);</script>
 </div>
-<img class="illust" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi-_RKLuh2E_FcnkXcxi85kSJ-2FV7sOK7sYdWkU5Fh-mENX6RmS_N4YDoAqkzdSmXzaxrbOCjbDIt097Vs7j7lZBDcHUDQNs-TBAwQSBs0flCJJuNpS2S-n5nVjylljCm8z5bTo-RWJfE/s400/study_woman_normal.png" alt="集中勉強">
+<img src="illusts/woman_korean_b.png" alt="韩语学习" class="illust">
 <div class="unit" id="unit8">
 <h2>Unit 8 交通 & 电话 & 方向</h2>
 <div class="section-title">语法</div>
@@ -1796,7 +1827,7 @@ function playWord(word) {
 </div>
 <div class="quiz-progress" id="quiz-progress-unit8"></div>
 <div class="quiz-question" id="quiz-question-unit8"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit8" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit8')">
+<input type="text" class="quiz-input" id="quiz-input-unit8" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit8')">
 <div class="quiz-btns">
 <button class="btn-hint" onclick="showHint('unit8')">提示</button>
 <button class="btn-skip" onclick="skipQuestion('unit8')">跳过</button>
@@ -1807,8 +1838,9 @@ function playWord(word) {
 <div class="quiz-result" id="quiz-result-unit8"></div>
 <button class="btn-retry" onclick="resetQuiz('unit8')">重新开始</button>
 </div>
-<script>initQuizData('unit8', [{"ko": "내일이면 방학이에요", "zh": "(으)면", "usage": "表示「如果…」。有收音用 -으면，无收音用 -면。"}, {"ko": "비가 오면 집에 있을 거예요", "zh": "(으)면", "usage": "表示「如果…」。有收音用 -으면，无收音用 -면。"}, {"ko": "한국으로 여행 가요", "zh": "(으)로", "usage": "表示方向或工具、方式。有收音(ㄹ除外)用 -으로，无收音或ㄹ收音用 -로。"}, {"ko": "시간이 있으면 전화하세요", "zh": "(으)면", "usage": "表示「如果…」。有收音用 -으면，无收音用 -면。"}, {"ko": "친구를 만나러 왔어요", "zh": "(으)러 가다/오다", "usage": "表示「去/来做…」。有收音用 -으러，无收音用 -러。"}, {"ko": "밥을 먹으러 갑니다", "zh": "(으)러 가다/오다", "usage": "表示「去/来做…」。有收音用 -으러，无收音用 -러。"}, {"ko": "책을 사러 서점에 가요", "zh": "(으)러 가다/오다", "usage": "表示「去/来做…」。有收音用 -으러，无收音用 -러。"}, {"ko": "한국어를 가르쳐 주세요", "zh": "아/어/여 주다", "usage": "为他人做某事。含有帮助、服务的语感。"}, {"ko": "연필로 쓰세요", "zh": "(으)로", "usage": "表示方向或工具、方式。有收音(ㄹ除外)用 -으로，无收音或ㄹ收音用 -로。"}, {"ko": "왼쪽으로 가세요", "zh": "(으)로", "usage": "表示方向或工具、方式。有收音(ㄹ除外)用 -으로，无收音或ㄹ收音用 -로。"}]);</script>
+<script>initQuizData('unit8', [{"ko":"버스","zh":"公交车","usage":""},{"ko":"지하철","zh":"地铁","usage":""},{"ko":"택시","zh":"出租车","usage":""},{"ko":"기차","zh":"火车","usage":""},{"ko":"비행기","zh":"飞机","usage":""},{"ko":"배","zh":"船","usage":""},{"ko":"자전거","zh":"自行车","usage":""},{"ko":"자동차","zh":"汽车","usage":""},{"ko":"정류장","zh":"公交站","usage":""},{"ko":"역","zh":"地铁站","usage":""},{"ko":"공항","zh":"机场","usage":""},{"ko":"표","zh":"票","usage":""},{"ko":"전화","zh":"电话","usage":""},{"ko":"전화번호","zh":"电话号码","usage":""},{"ko":"문자","zh":"短信","usage":""},{"ko":"메시지","zh":"消息","usage":""},{"ko":"이메일","zh":"电子邮件","usage":""},{"ko":"인터넷","zh":"网络","usage":""},{"ko":"사진","zh":"照片","usage":""},{"ko":"카메라","zh":"相机","usage":""},{"ko":"오른쪽","zh":"右边","usage":""},{"ko":"왼쪽","zh":"左边","usage":""},{"ko":"앞","zh":"前面","usage":""},{"ko":"뒤","zh":"后面","usage":""},{"ko":"옆","zh":"旁边","usage":""},{"ko":"위","zh":"上面","usage":""},{"ko":"아래","zh":"下面","usage":""},{"ko":"안","zh":"里面","usage":""}]);</script>
 </div>
+<img src="illusts/man_speaking.png" alt="口语练习" class="illust">
 <div class="unit" id="unit9">
 <h2>Unit 9 季节 & 天气 & 计划</h2>
 <div class="section-title">语法</div>
@@ -1961,7 +1993,7 @@ function playWord(word) {
 </div>
 <div class="quiz-progress" id="quiz-progress-unit9"></div>
 <div class="quiz-question" id="quiz-question-unit9"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit9" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit9')">
+<input type="text" class="quiz-input" id="quiz-input-unit9" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit9')">
 <div class="quiz-btns">
 <button class="btn-hint" onclick="showHint('unit9')">提示</button>
 <button class="btn-skip" onclick="skipQuestion('unit9')">跳过</button>
@@ -1972,8 +2004,9 @@ function playWord(word) {
 <div class="quiz-result" id="quiz-result-unit9"></div>
 <button class="btn-retry" onclick="resetQuiz('unit9')">重新开始</button>
 </div>
-<script>initQuizData('unit9', [{"ko": "주말에 여행을 할 거예요", "zh": "(으)ㄹ 거예요", "usage": "将来时，「会…/打算…」。有收音用 -을 거예요，无收音用 -ㄹ 거예요。"}, {"ko": "자기 전에 책을 읽어요", "zh": "기 전에", "usage": "表示「在…之前」。动词词干直接加 -기 전에。"}, {"ko": "밥을 먹은 후에 산책해요", "zh": "(으)ㄴ 후에", "usage": "表示「在…之后」。有收音用 -은 후에，无收音用 -ㄴ 후에。"}, {"ko": "내일은 날씨가 좋겠어요", "zh": "겠", "usage": "意向或推测。第一人称表意向，第三人称表推测。"}, {"ko": "제가 하겠습니다", "zh": "겠", "usage": "意向或推测。第一人称表意向，第三人称表推测。"}, {"ko": "맛있겠어요!", "zh": "겠", "usage": "意向或推测。第一人称表意向，第三人称表推测。"}, {"ko": "저녁에 공부할 거예요", "zh": "(으)ㄹ 거예요", "usage": "将来时，「会…/打算…」。有收音用 -을 거예요，无收音用 -ㄹ 거예요。"}, {"ko": "학교에 가기 전에 아침을 먹어요", "zh": "기 전에", "usage": "表示「在…之前」。动词词干直接加 -기 전에。"}, {"ko": "수업이 끝난 후에 만나요", "zh": "(으)ㄴ 후에", "usage": "表示「在…之后」。有收音用 -은 후에，无收音用 -ㄴ 후에。"}, {"ko": "내일 친구를 만날 거예요", "zh": "(으)ㄹ 거예요", "usage": "将来时，「会…/打算…」。有收音用 -을 거예요，无收音用 -ㄹ 거예요。"}]);</script>
+<script>initQuizData('unit9', [{"ko":"봄","zh":"春天","usage":""},{"ko":"여름","zh":"夏天","usage":""},{"ko":"가을","zh":"秋天","usage":""},{"ko":"겨울","zh":"冬天","usage":""},{"ko":"날씨","zh":"天气","usage":""},{"ko":"맑다","zh":"晴朗","usage":""},{"ko":"흐리다","zh":"阴天","usage":""},{"ko":"비","zh":"雨","usage":""},{"ko":"눈","zh":"雪","usage":""},{"ko":"바람","zh":"风","usage":""},{"ko":"춥다","zh":"冷","usage":""},{"ko":"덥다","zh":"热","usage":""},{"ko":"따뜻하다","zh":"温暖","usage":""},{"ko":"시원하다","zh":"凉爽","usage":""},{"ko":"계획","zh":"计划","usage":""},{"ko":"약속","zh":"约定","usage":""},{"ko":"여행","zh":"旅行","usage":""},{"ko":"휴가","zh":"休假","usage":""},{"ko":"주말","zh":"周末","usage":""},{"ko":"모레","zh":"后天","usage":""},{"ko":"다음 주","zh":"下周","usage":""},{"ko":"지난주","zh":"上周","usage":""}]);</script>
 </div>
+<img src="illusts/woman_speaking.png" alt="口语练习" class="illust">
 <div class="unit" id="unit10">
 <h2>Unit 10 爱好 & 运动</h2>
 <div class="section-title">语法</div>
@@ -2131,7 +2164,7 @@ function playWord(word) {
 </div>
 <div class="quiz-progress" id="quiz-progress-unit10"></div>
 <div class="quiz-question" id="quiz-question-unit10"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit10" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit10')">
+<input type="text" class="quiz-input" id="quiz-input-unit10" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit10')">
 <div class="quiz-btns">
 <button class="btn-hint" onclick="showHint('unit10')">提示</button>
 <button class="btn-skip" onclick="skipQuestion('unit10')">跳过</button>
@@ -2142,7 +2175,7 @@ function playWord(word) {
 <div class="quiz-result" id="quiz-result-unit10"></div>
 <button class="btn-retry" onclick="resetQuiz('unit10')">重新开始</button>
 </div>
-<script>initQuizData('unit10', [{"ko": "요리하는 것이 취미예요", "zh": "는 것", "usage": "动词名词化，「…这件事」。口语中常缩写为 -는 거。"}, {"ko": "한복을 입어 봤어요", "zh": "아/어/여 보다", "usage": "表示「试试看…」。强调尝试、体验。"}, {"ko": "영화를 보는 것을 좋아해요", "zh": "는 것", "usage": "动词名词化，「…这件事」。口语中常缩写为 -는 거。"}, {"ko": "한국에 가 보고 싶어요", "zh": "아/어/여 보다", "usage": "表示「试试看…」。强调尝试、体验。"}, {"ko": "한국어를 말할 수 있어요", "zh": "(으)ㄹ 수 있다/없다", "usage": "表示「能/不能…」。有收音用 -을 수，无收音用 -ㄹ 수。"}, {"ko": "친구하고 이야기하면서 걸었어요", "zh": "(으)면서", "usage": "表示「一边…一边…」。有收音用 -으면서，无收音用 -면서。"}, {"ko": "음악을 들으면서 공부해요", "zh": "(으)면서", "usage": "表示「一边…一边…」。有收音用 -으면서，无收音用 -면서。"}, {"ko": "밥을 먹으면서 TV를 봐요", "zh": "(으)면서", "usage": "表示「一边…一边…」。有收音用 -으면서，无收音用 -면서。"}, {"ko": "오늘은 만날 수 없어요", "zh": "(으)ㄹ 수 있다/없다", "usage": "表示「能/不能…」。有收音用 -을 수，无收音用 -ㄹ 수。"}, {"ko": "혼자 여행하는 것이 재미있어요", "zh": "는 것", "usage": "动词名词化，「…这件事」。口语中常缩写为 -는 거。"}]);</script>
+<script>initQuizData('unit10', [{"ko":"취미","zh":"爱好","usage":""},{"ko":"운동","zh":"运动","usage":""},{"ko":"수영","zh":"游泳","usage":""},{"ko":"축구","zh":"足球","usage":""},{"ko":"야구","zh":"棒球","usage":""},{"ko":"농구","zh":"篮球","usage":""},{"ko":"배구","zh":"排球","usage":""},{"ko":"탁구","zh":"乒乓球","usage":""},{"ko":"테니스","zh":"网球","usage":""},{"ko":"골프","zh":"高尔夫","usage":""},{"ko":"등산","zh":"登山","usage":""},{"ko":"낚시","zh":"钓鱼","usage":""},{"ko":"요리","zh":"烹饪","usage":""},{"ko":"사진","zh":"照片","usage":""},{"ko":"독서","zh":"读书","usage":""},{"ko":"음악","zh":"音乐","usage":""},{"ko":"영화","zh":"电影","usage":""},{"ko":"그림","zh":"画","usage":""},{"ko":"춤","zh":"舞蹈","usage":""},{"ko":"노래","zh":"歌曲","usage":""},{"ko":"악기","zh":"乐器","usage":""},{"ko":"피아노","zh":"钢琴","usage":""},{"ko":"기타","zh":"吉他","usage":""}]);</script>
 </div>
 <div class="unit">
 <h2>特殊音变总结</h2>
@@ -2179,8 +2212,11 @@ function playWord(word) {
 </div>
 </main>
 <footer>
-  <img class="illust" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjajaaUfv2mgXcRHaohkf1_-EBB6LMvBbhZ-M69ED8ADIDqJh9Kl2kSnLYKkBmcLPpo1ZVIUs3R5-zJBM4PcRwT9RDU31J5fEN5X4B5wuAA4n5KiS5-ArYOws7MwxCazdVmCBTbOg4lGxgPEqbx_vhsCmmlZrYpCTIjJDCjp5lepSA8QB1bMiZYITKexRSG/s400/genki_pose_schoolgirl.png" alt="">
-  <p>Illustrations: (c) Irasutoya | 延世韩国语语法学习手册</p>
+  <div class="illust-row">
+    <img src="illusts/woman_korean_a.png" alt="韩语学习" style="max-width:120px;border-radius:12px;">
+    <img src="illusts/man_korean_1.png" alt="韩语学习" style="max-width:120px;border-radius:12px;">
+  </div>
+  <p>延世韩国语语法学习手册</p>
 </footer>
 
 <script>
