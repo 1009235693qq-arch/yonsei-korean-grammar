@@ -6,2269 +6,1351 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>延世韩国语语法学习手册</title>
+<title>延世韩国语第一册 · 学习手册</title>
 <style>
 :root {
-  --bg: #ead5d0; --bg2: #ffffff; --ink: #3a3226; --muted: #9b8e8a;
-  --rule: #dcc8c8; --accent: #2c5aa0; --accent2: #5a9e6f;
-  --success: #5a9e6f; --error: #d46868;
+  --bg: #faf5f0;
+  --card-bg: #fffaf5;
+  --text: #3d3226;
+  --muted: #8c7b6b;
+  --accent: #4a7c96;
+  --accent-light: #e8f1f6;
+  --green: #2d7d5f;
+  --green-light: #eaf5f0;
+  --pink: #d4a5a5;
+  --pink-light: #fdf2f2;
+  --border: #e8d5c4;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --radius: 12px;
+  --font: 'Noto Sans CJK SC', 'WenQuanYi Micro Hei', system-ui, sans-serif;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'Noto Sans CJK SC', 'WenQuanYi Micro Hei', sans-serif;
-  background: var(--bg); color: var(--ink); line-height: 1.7;
-}
-header {
-  position: sticky; top: 0; z-index: 1000;
-  background: var(--bg2); border-bottom: 2px solid var(--accent);
-  padding: 16px 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-  border-radius: 0 0 20px 20px;
-}
-header .header-inner {
-  max-width: 960px; margin: 0 auto;
-  display: flex; flex-wrap: wrap; align-items: center; gap: 16px;
-}
-header h1 {
-  font-size: 1.4rem; color: var(--accent); letter-spacing: 0.5px;
-  white-space: nowrap;
-}
-nav { display: flex; flex-wrap: wrap; gap: 6px; max-width: 960px; margin: 10px auto 0; }
-.nav-btn {
-  background: var(--bg); border: 2px solid var(--rule); border-radius: 20px;
-  padding: 6px 14px; font-size: 0.78rem; cursor: pointer;
-  color: var(--ink); transition: all 0.2s; white-space: nowrap;
-  font-family: inherit;
-}
-.nav-btn:hover, .nav-btn.active {
-  background: var(--accent); color: #fff; border-color: var(--accent);
-}
-main { max-width: 960px; margin: 0 auto; padding: 24px 20px 60px; }
-.illust {
-  display: block; margin: 24px auto; max-width: 200px; border-radius: 12px;
-}
-.illust-row {
-  display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
-  margin: 24px 0;
-}
-.illust-row img { max-width: 140px; border-radius: 12px; }
-.illust-small { max-width: 80px !important; }
-.unit {
-  background: var(--bg2); border-radius: 16px; padding: 28px 24px;
-  margin-bottom: 32px; border: 1px solid var(--rule);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-  scroll-margin-top: 130px;
-}
-.unit h2 {
-  font-size: 1.35rem; color: var(--accent); border-bottom: 2px solid var(--accent2);
-  padding-bottom: 8px; margin-bottom: 20px;
-}
-.section-title {
-  font-size: 1.1rem; color: var(--accent2); margin: 20px 0 10px;
-  font-weight: 700;
-}
-.grammar-table {
-  width: 100%; border-collapse: collapse; margin-bottom: 20px;
-  font-size: 0.88rem; border-radius: 12px; overflow: hidden;
-}
-.grammar-table th {
-  background: var(--accent); color: #fff; padding: 12px 14px;
-  text-align: left; font-weight: 600;
-}
-.grammar-table td {
-  padding: 12px 14px; border-bottom: 1px solid var(--rule);
-  vertical-align: top;
-}
-.grammar-table tr:hover td { background: #f0e8f0; }
-.grammar-table td:first-child { font-weight: 700; color: var(--accent); white-space: nowrap; }
-.grammar-table td:nth-child(2) { color: var(--ink); }
-.grammar-table td:nth-child(3) { color: var(--ink); }
-.example-list { list-style: none; padding: 0; margin: 0; }
-.example-list li { margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
-.usage-detail { font-size: 0.82rem; color: var(--muted); margin-top: 4px; }
-.vocab-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 8px 16px; margin-bottom: 16px;
-}
-.vocab-item {
-  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
-  padding: 6px 0; border-bottom: 1px dotted var(--rule);
-}
-.ko-word { color: var(--accent2); font-weight: 700; font-size: 1.02rem; }
-.roman { color: var(--muted); font-size: 0.82rem; margin-left: 2px; }
-.meaning { color: var(--ink); font-size: 0.85rem; margin-left: 4px; }
-.pron-btn, .pron-btn-inline {
-  background: none; border: 2px solid var(--rule); border-radius: 50%;
-  width: 30px; height: 30px; cursor: pointer; font-size: 0.85rem;
-  display: inline-flex; align-items: center; justify-content: center;
-  transition: all 0.2s; flex-shrink: 0;
-}
-.pron-btn:hover, .pron-btn-inline:hover { background: #e0e8f8; border-color: var(--accent); }
-.pron-btn.playing, .pron-btn-inline.playing {
-  background: #e0e8f8; border-color: var(--accent);
-  animation: pulse 1s infinite;
-}
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(232,120,90,0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(232,120,90,0); }
-}
-.test-btn {
-  background: var(--accent2); color: #fff; border: none; border-radius: 12px;
-  padding: 7px 18px; font-size: 0.9rem; cursor: pointer; margin-left: 12px;
-  transition: background 0.2s; font-family: inherit;
-}
-.test-btn:hover { background: #4a8a5e; }
-.quiz-area {
-  display: none; margin-top: 16px; padding: 20px;
-  background: #fdf8f2; border-radius: 14px; border: 2px solid var(--rule);
-}
-.quiz-area.active { display: block; }
-.quiz-mode-toggle {
-  display: flex; gap: 6px; margin-bottom: 14px;
-}
-.quiz-mode-toggle button {
-  padding: 6px 16px; border: 2px solid var(--rule); border-radius: 20px;
-  font-size: 0.82rem; cursor: pointer; background: var(--bg);
-  color: var(--ink); transition: all 0.2s; font-family: inherit;
-}
-.quiz-mode-toggle button.active-mode {
-  background: var(--accent2); color: #fff; border-color: var(--accent2);
-}
-.quiz-question { font-size: 1.5rem; font-weight: 700; color: var(--accent2); margin-bottom: 12px; }
-.quiz-input {
-  width: 100%; max-width: 360px; padding: 10px 14px; border: 2px solid var(--rule);
-  border-radius: 12px; font-size: 1rem; margin-bottom: 10px;
-  background: #fff; font-family: inherit;
-}
-.quiz-input:focus { outline: none; border-color: var(--accent); }
-.quiz-btns { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
-.quiz-btns button {
-  padding: 8px 18px; border: none; border-radius: 12px; font-size: 0.9rem;
-  cursor: pointer; transition: background 0.2s; font-family: inherit;
-}
-.btn-hint { background: #f5e6c8; color: #5a4a30; }
-.btn-hint:hover { background: #ecd9a8; }
-.btn-skip { background: #e0dcd4; color: #5a5040; }
-.btn-skip:hover { background: #d0cbc0; }
-.btn-confirm { background: var(--accent); color: #fff; }
-.btn-confirm:hover { background: #d46a4a; }
-.btn-retry { background: var(--accent2); color: #fff; }
-.btn-retry:hover { background: #4a8a5e; }
-.quiz-feedback { font-weight: 600; margin: 6px 0; }
-.quiz-feedback.correct { color: var(--success); }
-.quiz-feedback.incorrect { color: var(--error); }
-.quiz-score { font-weight: 700; margin-bottom: 10px; font-size: 1rem; }
-.quiz-result { margin-top: 12px; }
-.quiz-result h4 { color: var(--accent); margin-bottom: 6px; }
-.quiz-result li { margin: 3px 0; }
-.quiz-result .ko-word { margin-right: 6px; }
-.quiz-progress { color: var(--muted); font-size: 0.85rem; margin-bottom: 8px; }
-.summary-table {
-  width: 100%; border-collapse: collapse; margin: 16px 0 24px;
-  font-size: 0.88rem; border-radius: 12px; overflow: hidden;
-}
-.summary-table th {
-  background: var(--accent); color: #fff; padding: 11px 12px;
-  text-align: left; font-weight: 600;
-}
-.summary-table td {
-  padding: 10px 12px; border-bottom: 1px solid var(--rule);
-  vertical-align: top;
-}
-.summary-table tr:hover td { background: #fef6f0; }
-footer {
-  text-align: center; padding: 24px; color: var(--muted);
-  font-size: 0.85rem; border-top: 1px solid var(--rule);
-}
-footer .illust { margin-bottom: 8px; }
-@media (max-width: 640px) {
-  .unit { padding: 16px 12px; }
-  .grammar-table { font-size: 0.76rem; }
-  .grammar-table th, .grammar-table td { padding: 8px 10px; }
-  .vocab-grid { grid-template-columns: 1fr; }
-  nav { gap: 3px; }
-  .nav-btn { padding: 4px 10px; font-size: 0.7rem; }
-  header .header-inner { flex-direction: column; align-items: flex-start; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.7; padding: 0; }
+.header { background: linear-gradient(135deg, #4a7c96 0%, #5a9ab5 100%); color: #fff; padding: 28px 20px 22px; text-align: center; position: relative; overflow: hidden; }
+.header::after { content: ''; position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); width: 120%; height: 40px; background: var(--bg); border-radius: 50%; }
+.header h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.5px; }
+.header p { font-size: 0.85rem; opacity: 0.9; margin-top: 4px; }
+.nav { display: flex; flex-wrap: wrap; gap: 6px; padding: 16px 12px; justify-content: center; max-width: 900px; margin: 0 auto; }
+.nav button { padding: 7px 15px; border-radius: 20px; border: 1.5px solid var(--accent); background: #fff; color: var(--accent); cursor: pointer; font-size: 0.82rem; font-family: var(--font); transition: all 0.2s; }
+.nav button:hover, .nav button.active { background: var(--accent); color: #fff; }
+
+.container { max-width: 900px; margin: 0 auto; padding: 0 14px 40px; }
+.unit { display: none; }
+.unit.active { display: block; }
+
+.unit-header { text-align: center; padding: 20px 0 10px; }
+.unit-header h2 { font-size: 1.35rem; color: var(--accent); }
+.unit-header .ko-title { font-size: 1.1rem; color: var(--pink); margin-top: 2px; }
+.unit-header img { max-width: 160px; margin: 10px auto; display: block; border-radius: 8px; }
+
+.section { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 18px; overflow: hidden; }
+.section-header { background: var(--accent-light); padding: 12px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); }
+.section-num { background: var(--accent); color: #fff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+.section-title { font-weight: 600; font-size: 0.95rem; }
+.section-task { font-size: 0.78rem; color: var(--muted); margin-left: auto; }
+
+.grammar-block { padding: 14px 16px; }
+.grammar-block h4 { color: var(--accent); font-size: 0.9rem; margin-bottom: 8px; }
+.grammar-item { background: var(--accent-light); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+.grammar-point { font-weight: 700; color: var(--accent); font-size: 1.05rem; display: inline-block; background: #fff; padding: 2px 10px; border-radius: 4px; margin-bottom: 6px; }
+.grammar-explain { font-size: 0.85rem; color: var(--text); margin-bottom: 8px; }
+.grammar-examples { list-style: none; }
+.grammar-examples li { font-size: 0.9rem; padding: 5px 0; display: flex; align-items: center; gap: 6px; border-bottom: 1px dotted var(--border); }
+.grammar-examples li:last-child { border-bottom: none; }
+
+.dialogue-block { padding: 14px 16px; background: var(--pink-light); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.dialogue-block h4 { color: var(--pink); font-size: 0.9rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.dialogue-line { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 0.9rem; }
+.dialogue-speaker { font-weight: 700; color: var(--pink); min-width: 55px; font-size: 0.8rem; }
+.dialogue-text { flex: 1; }
+.bilibili-link { display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; color: #fb7299; text-decoration: none; margin-left: 8px; padding: 3px 8px; background: #fff; border-radius: 12px; border: 1px solid #fb7299; transition: all 0.2s; }
+.bilibili-link:hover { background: #fb7299; color: #fff; }
+
+.vocab-mini { padding: 12px 16px; }
+.vocab-mini h4 { color: var(--green); font-size: 0.85rem; margin-bottom: 6px; }
+.vocab-mini-grid { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.vocab-mini-item { font-size: 0.82rem; display: flex; align-items: center; gap: 4px; }
+
+.speaker-btn { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid #ccc; background: #f8f8f8; cursor: pointer; font-size: 0.75rem; transition: all 0.2s; flex-shrink: 0; }
+.speaker-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+.speaker-btn.playing { background: var(--accent); color: #fff; animation: pulse 0.8s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+
+.vocab-full { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 16px; margin-top: 20px; }
+.vocab-full h3 { color: var(--green); font-size: 1rem; margin-bottom: 12px; text-align: center; }
+.vocab-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+.vocab-item { display: flex; align-items: center; gap: 4px; padding: 8px 10px; border-bottom: 1px dotted var(--border); font-size: 0.85rem; }
+.vocab-item .ko { color: var(--green); font-weight: 600; }
+.vocab-item .zh { color: var(--muted); margin-left: 4px; font-size: 0.78rem; }
+
+.footer { text-align: center; padding: 30px 20px; color: var(--muted); font-size: 0.78rem; }
+.footer img { max-width: 120px; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
+
+@media (max-width: 600px) {
+  .vocab-grid { grid-template-columns: repeat(2, 1fr); }
+  .nav button { padding: 5px 10px; font-size: 0.75rem; }
+  .header h1 { font-size: 1.2rem; }
 }
 </style>
-<script>
-// Quiz engine
-const quizStates = {};
-const quizDataStore = {};
-
-function initQuizData(unitId, data) {
-    quizDataStore[unitId] = data;
-}
-
-function getQuizData(unitId) {
-    return quizDataStore[unitId] || [];
-}
-
-function toggleQuiz(unitId) {
-    const area = document.getElementById('quiz-' + unitId);
-    if (area.classList.contains('active')) {
-        area.classList.remove('active');
-    } else {
-        area.classList.add('active');
-        if (!quizStates[unitId]) {
-            resetQuiz(unitId);
-        }
-    }
-}
-
-function setQuizMode(unitId, mode, btn) {
-    if (!quizStates[unitId]) return;
-    quizStates[unitId].currentMode = mode;
-    const parent = btn.parentElement;
-    parent.querySelectorAll('button').forEach(b => b.classList.remove('active-mode'));
-    btn.classList.add('active-mode');
-    quizStates[unitId].currentIndex = 0;
-    quizStates[unitId].score = 0;
-    quizStates[unitId].total = 0;
-    quizStates[unitId].results = [];
-    showNextQuestion(unitId);
-    updateScore(unitId);
-}
-
-function resetQuiz(unitId) {
-    const data = getQuizData(unitId);
-    const shuffled = [...data].sort(() => Math.random() - 0.5);
-    quizStates[unitId] = {
-        items: shuffled,
-        currentIndex: 0,
-        score: 0,
-        total: 0,
-        results: [],
-        currentMode: 'ko-zh',
-        hintUsed: false
-    };
-    document.getElementById('quiz-feedback-' + unitId).textContent = '';
-    document.getElementById('quiz-feedback-' + unitId).className = 'quiz-feedback';
-    document.getElementById('quiz-result-' + unitId).innerHTML = '';
-    document.getElementById('quiz-input-' + unitId).value = '';
-    document.getElementById('quiz-input-' + unitId).disabled = false;
-    const area = document.getElementById('quiz-' + unitId);
-    const modeBtns = area.querySelectorAll('.quiz-mode-toggle button');
-    modeBtns.forEach(b => b.classList.remove('active-mode'));
-    if (modeBtns.length > 0) modeBtns[0].classList.add('active-mode');
-    showNextQuestion(unitId);
-    updateScore(unitId);
-}
-
-function showNextQuestion(unitId) {
-    const state = quizStates[unitId];
-    if (!state) return;
-    const idx = state.currentIndex;
-    const items = state.items;
-    const questionEl = document.getElementById('quiz-question-' + unitId);
-    const progressEl = document.getElementById('quiz-progress-' + unitId);
-    const inputEl = document.getElementById('quiz-input-' + unitId);
-    const feedbackEl = document.getElementById('quiz-feedback-' + unitId);
-
-    if (idx >= items.length) {
-        questionEl.textContent = '🎉 全部完成!';
-        progressEl.textContent = '';
-        inputEl.style.display = 'none';
-        feedbackEl.textContent = '';
-        feedbackEl.className = 'quiz-feedback';
-        showResults(unitId);
-        return;
-    }
-
-    const item = items[idx];
-    if (state.currentMode === 'ko-zh') {
-        questionEl.textContent = item.ko;
-    } else {
-        // zh-ko mode: show Chinese meaning, optionally with usage hint
-        questionEl.textContent = item.zh + (item.usage ? ' (' + item.usage + ')' : '');
-    }
-
-    progressEl.textContent = '第 ' + (idx + 1) + '/' + items.length + ' 题';
-    inputEl.style.display = '';
-    inputEl.value = '';
-    inputEl.disabled = false;
-    inputEl.focus();
-    feedbackEl.textContent = '';
-    feedbackEl.className = 'quiz-feedback';
-    state.hintUsed = false;
-}
-
-function showHint(unitId) {
-    const state = quizStates[unitId];
-    if (!state || state.currentIndex >= state.items.length) return;
-    const item = state.items[state.currentIndex];
-    const feedbackEl = document.getElementById('quiz-feedback-' + unitId);
-    if (state.currentMode === 'ko-zh') {
-        feedbackEl.textContent = '提示: ' + item.zh;
-    } else {
-        feedbackEl.textContent = '提示: ' + item.ko;
-    }
-    feedbackEl.className = 'quiz-feedback';
-    state.hintUsed = true;
-}
-
-function checkAnswer(unitId) {
-    const state = quizStates[unitId];
-    if (!state || state.currentIndex >= state.items.length) return;
-
-    const item = state.items[state.currentIndex];
-    const inputEl = document.getElementById('quiz-input-' + unitId);
-    const feedbackEl = document.getElementById('quiz-feedback-' + unitId);
-    const userAnswer = inputEl.value.trim();
-
-    if (!userAnswer) return;
-
-    let correct = false;
-    if (state.currentMode === 'ko-zh') {
-        // Flexible Chinese matching: strip parentheses, trim
-        const expectedClean = item.zh.replace(/[（(].*?[）)]/g, '').trim();
-        const userClean = userAnswer.replace(/[（(].*?[）)]/g, '').trim();
-        correct = userClean === expectedClean || userAnswer === item.zh;
-    } else {
-        // zh-ko mode: exact Korean match (case-insensitive for common variations)
-        correct = userAnswer === item.ko;
-    }
-
-    state.total++;
-    if (correct) {
-        state.score++;
-        feedbackEl.textContent = '✅ 正确!';
-        feedbackEl.className = 'quiz-feedback correct';
-    } else {
-        const correctAnswer = state.currentMode === 'ko-zh' ? item.zh : item.ko;
-        feedbackEl.textContent = '❌ 错误! 正确答案: ' + correctAnswer;
-        feedbackEl.className = 'quiz-feedback incorrect';
-    }
-
-    state.results.push({
-        question: state.currentMode === 'ko-zh' ? item.ko : item.zh,
-        correctAnswer: state.currentMode === 'ko-zh' ? item.zh : item.ko,
-        userAnswer: userAnswer,
-        correct: correct,
-        mode: state.currentMode
-    });
-
-    updateScore(unitId);
-    inputEl.disabled = true;
-
-    setTimeout(() => {
-        state.currentIndex++;
-        showNextQuestion(unitId);
-    }, 1500);
-}
-
-function skipQuestion(unitId) {
-    const state = quizStates[unitId];
-    if (!state || state.currentIndex >= state.items.length) return;
-
-    const item = state.items[state.currentIndex];
-    state.results.push({
-        question: state.currentMode === 'ko-zh' ? item.ko : item.zh,
-        correctAnswer: state.currentMode === 'ko-zh' ? item.zh : item.ko,
-        userAnswer: '(跳过)',
-        correct: false,
-        mode: state.currentMode
-    });
-    state.total++;
-
-    state.currentIndex++;
-    showNextQuestion(unitId);
-    updateScore(unitId);
-}
-
-function updateScore(unitId) {
-    const state = quizStates[unitId];
-    if (!state) return;
-    const scoreEl = document.getElementById('quiz-score-' + unitId);
-    if (state.total > 0) {
-        scoreEl.textContent = '得分: ' + state.score + '/' + state.total;
-    } else {
-        scoreEl.textContent = '';
-    }
-}
-
-function showResults(unitId) {
-    const state = quizStates[unitId];
-    if (!state) return;
-    const resultEl = document.getElementById('quiz-result-' + unitId);
-    let html = '<h4>测试结果</h4><ul>';
-    state.results.forEach((r, i) => {
-        const icon = r.correct ? '&#x2705;' : '&#x274C;';
-        html += '<li>' + icon + ' <span class="ko-word">' + r.question + '</span> → ' + r.correctAnswer;
-        if (!r.correct && r.userAnswer !== '(跳过)') {
-            html += ' <span style="color:var(--error);">(你的答案: ' + r.userAnswer + ')</span>';
-        }
-        html += '</li>';
-    });
-    html += '</ul>';
-    resultEl.innerHTML = html;
-}
-
-// Pronunciation - Hybrid: Web Speech API + Audio fallback
-// Web Speech API works on most devices; Audio fallback for browsers that block it
-let currentAudio = null;
-let speechTimeout = null;
-
-function playWord(word) {
-    // Stop everything
-    stopAllSpeech();
-
-    // Try Web Speech API first
-    tryWebSpeech(word);
-}
-
-function stopAllSpeech() {
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-    }
-    if (currentAudio) {
-        currentAudio.pause();
-        currentAudio.remove();
-        currentAudio = null;
-    }
-    clearTimeout(speechTimeout);
-}
-
-function tryWebSpeech(word) {
-    if (!('speechSynthesis' in window)) {
-        fallbackAudio(word);
-        return;
-    }
-
-    const utter = new SpeechSynthesisUtterance(word);
-    utter.lang = 'ko-KR';
-    utter.rate = 0.85;
-    utter.pitch = 1;
-    utter.volume = 1;
-
-    // Try to pick Korean voice
-    const voices = speechSynthesis.getVoices();
-    const koVoice = voices.find(v => v.lang.startsWith('ko'));
-    if (koVoice) utter.voice = koVoice;
-
-    let started = false;
-    utter.onstart = function() { started = true; };
-    utter.onerror = function(e) {
-        if (!started && e.error !== 'canceled') {
-            fallbackAudio(word);
-        }
-    };
-
-    // Chrome bug workaround: pause-resume to reset internal state
-    speechSynthesis.pause();
-    speechSynthesis.resume();
-    speechSynthesis.speak(utter);
-
-    // If speech doesn't start within 2s, fallback to audio
-    speechTimeout = setTimeout(function() {
-        if (!started) {
-            speechSynthesis.cancel();
-            fallbackAudio(word);
-        }
-    }, 2000);
-}
-
-function fallbackAudio(word) {
-    const encoded = encodeURIComponent(word);
-    currentAudio = new Audio();
-    currentAudio.preload = 'auto';
-    currentAudio.src = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ko&q=' + encoded;
-    currentAudio.play().catch(function() {
-        // Google TTS also failed - nothing more we can do
-        currentAudio = null;
-    });
-}
-</script>
 </head>
 <body>
-<header>
-  <div class="header-inner">
-    <img src="illusts/woman_korean_a.png" alt="韩语学习" style="width:80px;height:80px;border-radius:12px;object-fit:contain;">
-    <h1>延世韩国语语法学习手册</h1>
-  </div>
-  <nav>
-    <button class="nav-btn" data-target="unit1">Unit 1 问候&amp;国籍</button>
-    <button class="nav-btn" data-target="unit2">Unit 2 职业&amp;物品</button>
-    <button class="nav-btn" data-target="unit3">Unit 3 家人&amp;数词&amp;场所</button>
-    <button class="nav-btn" data-target="unit4">Unit 4 动作&amp;教室物品</button>
-    <button class="nav-btn" data-target="unit5">Unit 5 食物&amp;形容词</button>
-    <button class="nav-btn" data-target="unit6">Unit 6 家人称呼&amp;敬语</button>
-    <button class="nav-btn" data-target="unit7">Unit 7 购物&amp;食物&amp;颜色</button>
-    <button class="nav-btn" data-target="unit8">Unit 8 交通&amp;电话&amp;方向</button>
-    <button class="nav-btn" data-target="unit9">Unit 9 季节&amp;天气&amp;计划</button>
-    <button class="nav-btn" data-target="unit10">Unit 10 爱好&amp;运动</button>
-  </nav>
-</header>
-<main>
-
-<div class="unit" id="unit1">
-<h2>Unit 1 问候 & 国籍</h2>
-<div class="section-title">语法</div>
-<div style="overflow-x:auto;">
-<table class="grammar-table">
-<thead><tr><th>语法点</th><th>用法详解</th><th>例句</th></tr></thead>
-<tbody>
-<tr>
-<td>은/는</td>
-<td>主语助词，表示主语或话题。有收音(받침)用 -은，无收音用 -는。</td>
-<td><ul class="example-list"><li><span class="ko-word">저는 학생입니다</span><button class="pron-btn-inline" data-word="저는 학생입니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">선생님은 한국 사람입니다</span><button class="pron-btn-inline" data-word="선생님은 한국 사람입니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">이것은 책입니다</span><button class="pron-btn-inline" data-word="이것은 책입니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>입니다</td>
-<td>表示「是…」，正式陈述形。名词后直接加。所有名词通用。</td>
-<td><ul class="example-list"><li><span class="ko-word">저는 중국 사람입니다</span><button class="pron-btn-inline" data-word="저는 중국 사람입니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">여기는 학교입니다</span><button class="pron-btn-inline" data-word="여기는 학교입니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">저는 학생입니다</span><button class="pron-btn-inline" data-word="저는 학생입니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>입니까?</td>
-<td>表示「是…吗？」，正式疑问形。名词后直接加，句尾语调上升。</td>
-<td><ul class="example-list"><li><span class="ko-word">한국 사람입니까?</span><button class="pron-btn-inline" data-word="한국 사람입니까?" title="读音">&#x1f50a;</button></li><li><span class="ko-word">학생입니까?</span><button class="pron-btn-inline" data-word="학생입니까?" title="读音">&#x1f50a;</button></li><li><span class="ko-word">이것이 교과서입니까?</span><button class="pron-btn-inline" data-word="이것이 교과서입니까?" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>이/가 아닙니다</td>
-<td>表示「不是…」。有收音用 -이 아닙니다，无收音用 -가 아닙니다。</td>
-<td><ul class="example-list"><li><span class="ko-word">저는 학생이 아닙니다</span><button class="pron-btn-inline" data-word="저는 학생이 아닙니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">이것은 사전이 아닙니다</span><button class="pron-btn-inline" data-word="이것은 사전이 아닙니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">그분은 의사가 아닙니다</span><button class="pron-btn-inline" data-word="그분은 의사가 아닙니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>에서</td>
-<td>表示「从…来」。与移动动词(오다/가다)搭配使用。</td>
-<td><ul class="example-list"><li><span class="ko-word">중국에서 왔습니다</span><button class="pron-btn-inline" data-word="중국에서 왔습니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">한국에서 왔어요</span><button class="pron-btn-inline" data-word="한국에서 왔어요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">학교에서 집에 갑니다</span><button class="pron-btn-inline" data-word="학교에서 집에 갑니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr>
-</tbody>
-</table>
+<div class="header">
+  <img src="illusts/header.jpg" alt="logo" style="width:50px;height:50px;border-radius:50%;margin-bottom:6px;object-fit:cover;">
+  <h1>延世韩国语第一册 · 学习手册</h1>
+  <p>按标准教材结构编排 · 点击🔊即可听发音</p>
+</div>
+<div class="nav" id="nav">
+  <button class="active" onclick="showUnit('unit1')">1.问候</button>
+  <button onclick="showUnit('unit2')">2.学校和家</button>
+  <button onclick="showUnit('unit3')">3.家人和朋友</button>
+  <button onclick="showUnit('unit4')">4.饮食</button>
+  <button onclick="showUnit('unit5')">5.一天的生活</button>
+  <button onclick="showUnit('unit6')">6.购物</button>
+  <button onclick="showUnit('unit7')">7.交通</button>
+  <button onclick="showUnit('unit8')">8.电话</button>
+  <button onclick="showUnit('unit9')">9.天气和季节</button>
+  <button onclick="showUnit('unit10')">10.节假日</button>
+</div>
+<div class="container" id="content">
+<!-- Content will be generated by JavaScript from embedded data -->
+</div>
+<div class="footer">
+  <img src="illusts/reading.png" alt="reading" style="max-width:120px;">
+  <p>延世韩国语第一册 学习手册 · 仅供个人学习使用</p>
 </div>
-
-<div class="section-title">词汇</div>
-<div class="vocab-grid">
-<div class="vocab-item">
-<span class="ko-word">저</span>
-<span class="roman">[jeo]</span>
-<span class="meaning">我(谦称)</span>
-<button class="pron-btn-inline" data-word="저" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">학생</span>
-<span class="roman">[haksaeng]</span>
-<span class="meaning">学生</span>
-<button class="pron-btn-inline" data-word="학생" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">선생님</span>
-<span class="roman">[seonsaengnim]</span>
-<span class="meaning">老师</span>
-<button class="pron-btn-inline" data-word="선생님" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">한국</span>
-<span class="roman">[hanguk]</span>
-<span class="meaning">韩国</span>
-<button class="pron-btn-inline" data-word="한국" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">중국</span>
-<span class="roman">[jungguk]</span>
-<span class="meaning">中国</span>
-<button class="pron-btn-inline" data-word="중국" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">일본</span>
-<span class="roman">[ilbon]</span>
-<span class="meaning">日本</span>
-<button class="pron-btn-inline" data-word="일본" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">미국</span>
-<span class="roman">[miguk]</span>
-<span class="meaning">美国</span>
-<button class="pron-btn-inline" data-word="미국" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">사람</span>
-<span class="roman">[saram]</span>
-<span class="meaning">人</span>
-<button class="pron-btn-inline" data-word="사람" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">이름</span>
-<span class="roman">[ireum]</span>
-<span class="meaning">名字</span>
-<button class="pron-btn-inline" data-word="이름" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">처음</span>
-<span class="roman">[cheoeum]</span>
-<span class="meaning">初次</span>
-<button class="pron-btn-inline" data-word="처음" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">반갑다</span>
-<span class="roman">[bangapda]</span>
-<span class="meaning">高兴</span>
-<button class="pron-btn-inline" data-word="반갑다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">학교</span>
-<span class="roman">[hakgyo]</span>
-<span class="meaning">学校</span>
-<button class="pron-btn-inline" data-word="학교" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">교과서</span>
-<span class="roman">[gyogwaseo]</span>
-<span class="meaning">教科书</span>
-<button class="pron-btn-inline" data-word="교과서" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">사전</span>
-<span class="roman">[sajeon]</span>
-<span class="meaning">词典</span>
-<button class="pron-btn-inline" data-word="사전" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">네</span>
-<span class="roman">[ne]</span>
-<span class="meaning">是的</span>
-<button class="pron-btn-inline" data-word="네" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">아니요</span>
-<span class="roman">[aniyo]</span>
-<span class="meaning">不是</span>
-<button class="pron-btn-inline" data-word="아니요" title="读音">&#x1f50a;</button>
-</div>
-</div>
-
-<div class="section-title">自测</div>
-<button class="test-btn" onclick="toggleQuiz('unit1')">开始自测</button>
-<div class="quiz-area" id="quiz-unit1">
-<div class="quiz-mode-toggle">
-<button class="active-mode" onclick="setQuizMode('unit1','ko-zh',this)">看韩语→写中文</button>
-<button onclick="setQuizMode('unit1','zh-ko',this)">看中文→写韩语</button>
-</div>
-<div class="quiz-progress" id="quiz-progress-unit1"></div>
-<div class="quiz-question" id="quiz-question-unit1"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit1" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit1')">
-<div class="quiz-btns">
-<button class="btn-hint" onclick="showHint('unit1')">提示</button>
-<button class="btn-skip" onclick="skipQuestion('unit1')">跳过</button>
-<button class="btn-confirm" onclick="checkAnswer('unit1')">确认</button>
-</div>
-<div class="quiz-feedback" id="quiz-feedback-unit1"></div>
-<div class="quiz-score" id="quiz-score-unit1"></div>
-<div class="quiz-result" id="quiz-result-unit1"></div>
-<button class="btn-retry" onclick="resetQuiz('unit1')">重新开始</button>
-</div>
-<script>initQuizData('unit1', [{"ko":"저","zh":"我(谦称)","usage":""},{"ko":"학생","zh":"学生","usage":""},{"ko":"선생님","zh":"老师","usage":""},{"ko":"한국","zh":"韩国","usage":""},{"ko":"중국","zh":"中国","usage":""},{"ko":"일본","zh":"日本","usage":""},{"ko":"미국","zh":"美国","usage":""},{"ko":"사람","zh":"人","usage":""},{"ko":"이름","zh":"名字","usage":""},{"ko":"처음","zh":"初次","usage":""},{"ko":"반갑다","zh":"高兴","usage":""},{"ko":"학교","zh":"学校","usage":""},{"ko":"교과서","zh":"教科书","usage":""},{"ko":"사전","zh":"词典","usage":""},{"ko":"네","zh":"是的","usage":""},{"ko":"아니요","zh":"不是","usage":""}]);</script>
-</div>
-<img src="illusts/woman_listening.png" alt="听力练习" class="illust">
-<div class="unit" id="unit2">
-<h2>Unit 2 职业 & 物品</h2>
-<div class="section-title">语法</div>
-<div style="overflow-x:auto;">
-<table class="grammar-table">
-<thead><tr><th>语法点</th><th>用法详解</th><th>例句</th></tr></thead>
-<tbody>
-<tr>
-<td>이/가</td>
-<td>主语格助词，强调主语或新信息。有收音用 -이，无收音用 -가。</td>
-<td><ul class="example-list"><li><span class="ko-word">이것이 교과서입니다</span><button class="pron-btn-inline" data-word="이것이 교과서입니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">친구가 옵니다</span><button class="pron-btn-inline" data-word="친구가 옵니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">날씨가 좋습니다</span><button class="pron-btn-inline" data-word="날씨가 좋습니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>이/그/저</td>
-<td>指示词。이=近指(这个)，그=中指(那个)，저=远指(那个)。</td>
-<td><ul class="example-list"><li><span class="ko-word">이 책은 교과서입니다</span><button class="pron-btn-inline" data-word="이 책은 교과서입니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">그 사람은 누구입니까?</span><button class="pron-btn-inline" data-word="그 사람은 누구입니까?" title="读音">&#x1f50a;</button></li><li><span class="ko-word">저 건물은 학교입니다</span><button class="pron-btn-inline" data-word="저 건물은 학교입니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>은/는...이/가 아닙니다</td>
-<td>表示「A不是B」。은/는标记主题，이/가 아닙니다否定。</td>
-<td><ul class="example-list"><li><span class="ko-word">이것은 사전이 아닙니다</span><button class="pron-btn-inline" data-word="이것은 사전이 아닙니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">저는 의사가 아닙니다</span><button class="pron-btn-inline" data-word="저는 의사가 아닙니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">그거는 제 책이 아닙니다</span><button class="pron-btn-inline" data-word="그거는 제 책이 아닙니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>도</td>
-<td>表示「也」。替代 은/는 或 이/가，附加于名词后。</td>
-<td><ul class="example-list"><li><span class="ko-word">저도 학생입니다</span><button class="pron-btn-inline" data-word="저도 학생입니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">친구도 옵니다</span><button class="pron-btn-inline" data-word="친구도 옵니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">한국어도 공부합니다</span><button class="pron-btn-inline" data-word="한국어도 공부합니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr>
-</tbody>
-</table>
-</div>
-
-<div class="section-title">词汇</div>
-<div class="vocab-grid">
-<div class="vocab-item">
-<span class="ko-word">의사</span>
-<span class="roman">[uisa]</span>
-<span class="meaning">医生</span>
-<button class="pron-btn-inline" data-word="의사" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">변호사</span>
-<span class="roman">[byeonhosa]</span>
-<span class="meaning">律师</span>
-<button class="pron-btn-inline" data-word="변호사" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">회사원</span>
-<span class="roman">[hoesawon]</span>
-<span class="meaning">公司职员</span>
-<button class="pron-btn-inline" data-word="회사원" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">가수</span>
-<span class="roman">[gasu]</span>
-<span class="meaning">歌手</span>
-<button class="pron-btn-inline" data-word="가수" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">요리사</span>
-<span class="roman">[yorisa]</span>
-<span class="meaning">厨师</span>
-<button class="pron-btn-inline" data-word="요리사" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">기자</span>
-<span class="roman">[gija]</span>
-<span class="meaning">记者</span>
-<button class="pron-btn-inline" data-word="기자" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">책</span>
-<span class="roman">[chaek]</span>
-<span class="meaning">书</span>
-<button class="pron-btn-inline" data-word="책" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">공책</span>
-<span class="roman">[gongchaek]</span>
-<span class="meaning">笔记本</span>
-<button class="pron-btn-inline" data-word="공책" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">가방</span>
-<span class="roman">[gabang]</span>
-<span class="meaning">包</span>
-<button class="pron-btn-inline" data-word="가방" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">볼펜</span>
-<span class="roman">[bolpen]</span>
-<span class="meaning">圆珠笔</span>
-<button class="pron-btn-inline" data-word="볼펜" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">연필</span>
-<span class="roman">[yeonpil]</span>
-<span class="meaning">铅笔</span>
-<button class="pron-btn-inline" data-word="연필" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">지우개</span>
-<span class="roman">[jiugae]</span>
-<span class="meaning">橡皮</span>
-<button class="pron-btn-inline" data-word="지우개" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">의자</span>
-<span class="roman">[uija]</span>
-<span class="meaning">椅子</span>
-<button class="pron-btn-inline" data-word="의자" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">책상</span>
-<span class="roman">[chaeksang]</span>
-<span class="meaning">书桌</span>
-<button class="pron-btn-inline" data-word="책상" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">시계</span>
-<span class="roman">[sigye]</span>
-<span class="meaning">钟表</span>
-<button class="pron-btn-inline" data-word="시계" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">이것</span>
-<span class="roman">[igeot]</span>
-<span class="meaning">这个</span>
-<button class="pron-btn-inline" data-word="이것" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">그것</span>
-<span class="roman">[geugeot]</span>
-<span class="meaning">那个</span>
-<button class="pron-btn-inline" data-word="그것" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">저것</span>
-<span class="roman">[jeogeot]</span>
-<span class="meaning">那个(远)</span>
-<button class="pron-btn-inline" data-word="저것" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">무엇</span>
-<span class="roman">[mueot]</span>
-<span class="meaning">什么</span>
-<button class="pron-btn-inline" data-word="무엇" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">누구</span>
-<span class="roman">[nugu]</span>
-<span class="meaning">谁</span>
-<button class="pron-btn-inline" data-word="누구" title="读音">&#x1f50a;</button>
-</div>
-</div>
-
-<div class="section-title">自测</div>
-<button class="test-btn" onclick="toggleQuiz('unit2')">开始自测</button>
-<div class="quiz-area" id="quiz-unit2">
-<div class="quiz-mode-toggle">
-<button class="active-mode" onclick="setQuizMode('unit2','ko-zh',this)">看韩语→写中文</button>
-<button onclick="setQuizMode('unit2','zh-ko',this)">看中文→写韩语</button>
-</div>
-<div class="quiz-progress" id="quiz-progress-unit2"></div>
-<div class="quiz-question" id="quiz-question-unit2"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit2" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit2')">
-<div class="quiz-btns">
-<button class="btn-hint" onclick="showHint('unit2')">提示</button>
-<button class="btn-skip" onclick="skipQuestion('unit2')">跳过</button>
-<button class="btn-confirm" onclick="checkAnswer('unit2')">确认</button>
-</div>
-<div class="quiz-feedback" id="quiz-feedback-unit2"></div>
-<div class="quiz-score" id="quiz-score-unit2"></div>
-<div class="quiz-result" id="quiz-result-unit2"></div>
-<button class="btn-retry" onclick="resetQuiz('unit2')">重新开始</button>
-</div>
-<script>initQuizData('unit2', [{"ko":"의사","zh":"医生","usage":""},{"ko":"변호사","zh":"律师","usage":""},{"ko":"회사원","zh":"公司职员","usage":""},{"ko":"가수","zh":"歌手","usage":""},{"ko":"요리사","zh":"厨师","usage":""},{"ko":"기자","zh":"记者","usage":""},{"ko":"책","zh":"书","usage":""},{"ko":"공책","zh":"笔记本","usage":""},{"ko":"가방","zh":"包","usage":""},{"ko":"볼펜","zh":"圆珠笔","usage":""},{"ko":"연필","zh":"铅笔","usage":""},{"ko":"지우개","zh":"橡皮","usage":""},{"ko":"의자","zh":"椅子","usage":""},{"ko":"책상","zh":"书桌","usage":""},{"ko":"시계","zh":"钟表","usage":""},{"ko":"휴대폰","zh":"手机","usage":""},{"ko":"안경","zh":"眼镜","usage":""},{"ko":"열쇠","zh":"钥匙","usage":""},{"ko":"돈","zh":"钱","usage":""},{"ko":"지갑","zh":"钱包","usage":""}]);</script>
-</div>
-<div class="illust-row">
-  <img src="illusts/woman_speaking.png" alt="口语练习" style="max-width:140px;border-radius:12px;">
-  <img src="illusts/man_listening.png" alt="听力练习" style="max-width:140px;border-radius:12px;">
-</div>
-<div class="unit" id="unit3">
-<h2>Unit 3 家人 & 数词 & 场所</h2>
-<div class="section-title">语法</div>
-<div style="overflow-x:auto;">
-<table class="grammar-table">
-<thead><tr><th>语法点</th><th>用法详解</th><th>例句</th></tr></thead>
-<tbody>
-<tr>
-<td>固有数词</td>
-<td>하나,둘,셋,넷,다섯,여섯,일곱,여덟,아홉,열。用于年龄、人数、时刻(小时)。</td>
-<td><ul class="example-list"><li><span class="ko-word">학생 세 명이 있습니다</span><button class="pron-btn-inline" data-word="학생 세 명이 있습니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">스무 살입니다</span><button class="pron-btn-inline" data-word="스무 살입니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">사과 두 개 주세요</span><button class="pron-btn-inline" data-word="사과 두 개 주세요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>에(地点)</td>
-<td>地点助词，表示「在…」。与存在动词 있다/없다 或移动动词搭配。</td>
-<td><ul class="example-list"><li><span class="ko-word">학교에 갑니다</span><button class="pron-btn-inline" data-word="학교에 갑니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">집에 있습니다</span><button class="pron-btn-inline" data-word="집에 있습니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">도서관에 책이 많습니다</span><button class="pron-btn-inline" data-word="도서관에 책이 많습니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>이/가 있다/없다</td>
-<td>表示「有/没有…」。있다=有/在，없다=没有/不在。</td>
-<td><ul class="example-list"><li><span class="ko-word">지우개가 있습니다</span><button class="pron-btn-inline" data-word="지우개가 있습니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">시간이 없습니다</span><button class="pron-btn-inline" data-word="시간이 없습니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">교실에 학생이 있습니다</span><button class="pron-btn-inline" data-word="교실에 학생이 있습니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>의</td>
-<td>所属格助词，表示「…的」。口语中常读作 [에]。</td>
-<td><ul class="example-list"><li><span class="ko-word">이것은 선생님의 책입니다</span><button class="pron-btn-inline" data-word="이것은 선생님의 책입니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">친구의 가방이에요</span><button class="pron-btn-inline" data-word="친구의 가방이에요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">그분은 저의 어머니입니다</span><button class="pron-btn-inline" data-word="그분은 저의 어머니입니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>位置名词</td>
-<td>앞(前), 뒤(后), 옆(旁), 위(上), 아래(下)。与 -에 搭配使用。</td>
-<td><ul class="example-list"><li><span class="ko-word">은행 앞에 있습니다</span><button class="pron-btn-inline" data-word="은행 앞에 있습니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">책상 위에 있어요</span><button class="pron-btn-inline" data-word="책상 위에 있어요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">학교 옆에 식당이 있습니다</span><button class="pron-btn-inline" data-word="학교 옆에 식당이 있습니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr>
-</tbody>
-</table>
-</div>
-
-<div class="section-title">词汇</div>
-<div class="vocab-grid">
-<div class="vocab-item">
-<span class="ko-word">가족</span>
-<span class="roman">[gajok]</span>
-<span class="meaning">家人</span>
-<button class="pron-btn-inline" data-word="가족" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">할아버지</span>
-<span class="roman">[harabeoji]</span>
-<span class="meaning">爷爷</span>
-<button class="pron-btn-inline" data-word="할아버지" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">할머니</span>
-<span class="roman">[halmeoni]</span>
-<span class="meaning">奶奶</span>
-<button class="pron-btn-inline" data-word="할머니" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">아버지</span>
-<span class="roman">[abeoji]</span>
-<span class="meaning">父亲</span>
-<button class="pron-btn-inline" data-word="아버지" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">어머니</span>
-<span class="roman">[eomeoni]</span>
-<span class="meaning">母亲</span>
-<button class="pron-btn-inline" data-word="어머니" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">오빠</span>
-<span class="roman">[oppa]</span>
-<span class="meaning">哥哥(女用)</span>
-<button class="pron-btn-inline" data-word="오빠" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">형</span>
-<span class="roman">[hyeong]</span>
-<span class="meaning">哥哥(男用)</span>
-<button class="pron-btn-inline" data-word="형" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">언니</span>
-<span class="roman">[eonni]</span>
-<span class="meaning">姐姐(女用)</span>
-<button class="pron-btn-inline" data-word="언니" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">누나</span>
-<span class="roman">[nuna]</span>
-<span class="meaning">姐姐(男用)</span>
-<button class="pron-btn-inline" data-word="누나" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">남동생</span>
-<span class="roman">[namdongsaeng]</span>
-<span class="meaning">弟弟</span>
-<button class="pron-btn-inline" data-word="남동생" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">여동생</span>
-<span class="roman">[yeodongsaeng]</span>
-<span class="meaning">妹妹</span>
-<button class="pron-btn-inline" data-word="여동생" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">하나</span>
-<span class="roman">[hana]</span>
-<span class="meaning">一</span>
-<button class="pron-btn-inline" data-word="하나" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">둘</span>
-<span class="roman">[dul]</span>
-<span class="meaning">二</span>
-<button class="pron-btn-inline" data-word="둘" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">셋</span>
-<span class="roman">[set]</span>
-<span class="meaning">三</span>
-<button class="pron-btn-inline" data-word="셋" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">앞</span>
-<span class="roman">[ap]</span>
-<span class="meaning">前面</span>
-<button class="pron-btn-inline" data-word="앞" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">뒤</span>
-<span class="roman">[dwi]</span>
-<span class="meaning">后面</span>
-<button class="pron-btn-inline" data-word="뒤" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">옆</span>
-<span class="roman">[yeop]</span>
-<span class="meaning">旁边</span>
-<button class="pron-btn-inline" data-word="옆" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">위</span>
-<span class="roman">[wi]</span>
-<span class="meaning">上面</span>
-<button class="pron-btn-inline" data-word="위" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">아래</span>
-<span class="roman">[arae]</span>
-<span class="meaning">下面</span>
-<button class="pron-btn-inline" data-word="아래" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">은행</span>
-<span class="roman">[eunhaeng]</span>
-<span class="meaning">银行</span>
-<button class="pron-btn-inline" data-word="은행" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">병원</span>
-<span class="roman">[byeongwon]</span>
-<span class="meaning">医院</span>
-<button class="pron-btn-inline" data-word="병원" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">약국</span>
-<span class="roman">[yakguk]</span>
-<span class="meaning">药店</span>
-<button class="pron-btn-inline" data-word="약국" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">식당</span>
-<span class="roman">[sikdang]</span>
-<span class="meaning">餐厅</span>
-<button class="pron-btn-inline" data-word="식당" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">도서관</span>
-<span class="roman">[doseogwan]</span>
-<span class="meaning">图书馆</span>
-<button class="pron-btn-inline" data-word="도서관" title="读音">&#x1f50a;</button>
-</div>
-</div>
-
-<div class="section-title">自测</div>
-<button class="test-btn" onclick="toggleQuiz('unit3')">开始自测</button>
-<div class="quiz-area" id="quiz-unit3">
-<div class="quiz-mode-toggle">
-<button class="active-mode" onclick="setQuizMode('unit3','ko-zh',this)">看韩语→写中文</button>
-<button onclick="setQuizMode('unit3','zh-ko',this)">看中文→写韩语</button>
-</div>
-<div class="quiz-progress" id="quiz-progress-unit3"></div>
-<div class="quiz-question" id="quiz-question-unit3"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit3" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit3')">
-<div class="quiz-btns">
-<button class="btn-hint" onclick="showHint('unit3')">提示</button>
-<button class="btn-skip" onclick="skipQuestion('unit3')">跳过</button>
-<button class="btn-confirm" onclick="checkAnswer('unit3')">确认</button>
-</div>
-<div class="quiz-feedback" id="quiz-feedback-unit3"></div>
-<div class="quiz-score" id="quiz-score-unit3"></div>
-<div class="quiz-result" id="quiz-result-unit3"></div>
-<button class="btn-retry" onclick="resetQuiz('unit3')">重新开始</button>
-</div>
-<script>initQuizData('unit3', [{"ko":"가족","zh":"家人","usage":""},{"ko":"아버지","zh":"爸爸","usage":""},{"ko":"어머니","zh":"妈妈","usage":""},{"ko":"할아버지","zh":"爷爷","usage":""},{"ko":"할머니","zh":"奶奶","usage":""},{"ko":"오빠","zh":"哥哥(女用)","usage":""},{"ko":"형","zh":"哥哥(男用)","usage":""},{"ko":"언니","zh":"姐姐(女用)","usage":""},{"ko":"누나","zh":"姐姐(男用)","usage":""},{"ko":"동생","zh":"弟弟/妹妹","usage":""},{"ko":"하나","zh":"一","usage":""},{"ko":"둘","zh":"二","usage":""},{"ko":"셋","zh":"三","usage":""},{"ko":"넷","zh":"四","usage":""},{"ko":"다섯","zh":"五","usage":""},{"ko":"여섯","zh":"六","usage":""},{"ko":"일곱","zh":"七","usage":""},{"ko":"여덟","zh":"八","usage":""},{"ko":"아홉","zh":"九","usage":""},{"ko":"열","zh":"十","usage":""},{"ko":"집","zh":"家","usage":""},{"ko":"학교","zh":"学校","usage":""},{"ko":"회사","zh":"公司","usage":""},{"ko":"병원","zh":"医院","usage":""},{"ko":"도서관","zh":"图书馆","usage":""},{"ko":"식당","zh":"餐厅","usage":""},{"ko":"은행","zh":"银行","usage":""},{"ko":"우체국","zh":"邮局","usage":""},{"ko":"가게","zh":"商店","usage":""},{"ko":"공원","zh":"公园","usage":""}]);</script>
-</div>
-<img src="illusts/woman_reading.png" alt="阅读学习" class="illust">
-<div class="unit" id="unit4">
-<h2>Unit 4 动作 & 教室物品</h2>
-<div class="section-title">语法</div>
-<div style="overflow-x:auto;">
-<table class="grammar-table">
-<thead><tr><th>语法点</th><th>用法详解</th><th>例句</th></tr></thead>
-<tbody>
-<tr>
-<td>ㅂ/습니다(动词)</td>
-<td>动词正式陈述形。有收音用 -습니다，无收音用 -ㅂ니다。</td>
-<td><ul class="example-list"><li><span class="ko-word">학교에 갑니다</span><button class="pron-btn-inline" data-word="학교에 갑니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">밥을 먹습니다</span><button class="pron-btn-inline" data-word="밥을 먹습니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">책을 읽습니다</span><button class="pron-btn-inline" data-word="책을 읽습니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>ㅂ/습니까?(动词)</td>
-<td>动词正式疑问形。有收音用 -습니까，无收音用 -ㅂ니까。</td>
-<td><ul class="example-list"><li><span class="ko-word">집에 갑니까?</span><button class="pron-btn-inline" data-word="집에 갑니까?" title="读音">&#x1f50a;</button></li><li><span class="ko-word">무엇을 먹습니까?</span><button class="pron-btn-inline" data-word="무엇을 먹습니까?" title="读音">&#x1f50a;</button></li><li><span class="ko-word">한국어를 공부합니까?</span><button class="pron-btn-inline" data-word="한국어를 공부합니까?" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>고</td>
-<td>连接两个动作，表示「…然后…」。动词词干后直接加。时态由最后动词决定。</td>
-<td><ul class="example-list"><li><span class="ko-word">밥을 먹고 학교에 갑니다</span><button class="pron-btn-inline" data-word="밥을 먹고 학교에 갑니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">친구를 만나고 영화를 봤어요</span><button class="pron-btn-inline" data-word="친구를 만나고 영화를 봤어요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">숙제를 하고 잤습니다</span><button class="pron-btn-inline" data-word="숙제를 하고 잤습니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>을/를</td>
-<td>宾语助词，表示动作对象。有收音用 -을，无收音用 -를。</td>
-<td><ul class="example-list"><li><span class="ko-word">밥을 먹습니다</span><button class="pron-btn-inline" data-word="밥을 먹습니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">책을 읽어요</span><button class="pron-btn-inline" data-word="책을 읽어요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">친구를 만납니다</span><button class="pron-btn-inline" data-word="친구를 만납니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>ㅂ/습니다(形容词)</td>
-<td>形容词正式陈述形。有收音用 -습니다，无收音用 -ㅂ니다。</td>
-<td><ul class="example-list"><li><span class="ko-word">날씨가 좋습니다</span><button class="pron-btn-inline" data-word="날씨가 좋습니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">학교가 큽니다</span><button class="pron-btn-inline" data-word="학교가 큽니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">방이 작습니다</span><button class="pron-btn-inline" data-word="방이 작습니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr>
-</tbody>
-</table>
-</div>
-
-<div class="section-title">词汇</div>
-<div class="vocab-grid">
-<div class="vocab-item">
-<span class="ko-word">가다</span>
-<span class="roman">[gada]</span>
-<span class="meaning">去</span>
-<button class="pron-btn-inline" data-word="가다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">오다</span>
-<span class="roman">[oda]</span>
-<span class="meaning">来</span>
-<button class="pron-btn-inline" data-word="오다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">먹다</span>
-<span class="roman">[meokda]</span>
-<span class="meaning">吃</span>
-<button class="pron-btn-inline" data-word="먹다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">마시다</span>
-<span class="roman">[masida]</span>
-<span class="meaning">喝</span>
-<button class="pron-btn-inline" data-word="마시다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">읽다</span>
-<span class="roman">[ikda]</span>
-<span class="meaning">读</span>
-<button class="pron-btn-inline" data-word="읽다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">보다</span>
-<span class="roman">[boda]</span>
-<span class="meaning">看</span>
-<button class="pron-btn-inline" data-word="보다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">만나다</span>
-<span class="roman">[mannada]</span>
-<span class="meaning">见面</span>
-<button class="pron-btn-inline" data-word="만나다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">공부하다</span>
-<span class="roman">[gongbuhada]</span>
-<span class="meaning">学习</span>
-<button class="pron-btn-inline" data-word="공부하다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">자다</span>
-<span class="roman">[jada]</span>
-<span class="meaning">睡觉</span>
-<button class="pron-btn-inline" data-word="자다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">운동하다</span>
-<span class="roman">[undonghada]</span>
-<span class="meaning">运动</span>
-<button class="pron-btn-inline" data-word="운동하다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">듣다</span>
-<span class="roman">[deutda]</span>
-<span class="meaning">听</span>
-<button class="pron-btn-inline" data-word="듣다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">말하다</span>
-<span class="roman">[malhada]</span>
-<span class="meaning">说</span>
-<button class="pron-btn-inline" data-word="말하다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">쓰다</span>
-<span class="roman">[sseuda]</span>
-<span class="meaning">写/用</span>
-<button class="pron-btn-inline" data-word="쓰다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">배우다</span>
-<span class="roman">[baeuda]</span>
-<span class="meaning">学习</span>
-<button class="pron-btn-inline" data-word="배우다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">가르치다</span>
-<span class="roman">[gareuchida]</span>
-<span class="meaning">教</span>
-<button class="pron-btn-inline" data-word="가르치다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">좋다</span>
-<span class="roman">[jota]</span>
-<span class="meaning">好</span>
-<button class="pron-btn-inline" data-word="좋다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">나쁘다</span>
-<span class="roman">[nappeuda]</span>
-<span class="meaning">坏</span>
-<button class="pron-btn-inline" data-word="나쁘다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">크다</span>
-<span class="roman">[keuda]</span>
-<span class="meaning">大</span>
-<button class="pron-btn-inline" data-word="크다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">작다</span>
-<span class="roman">[jakda]</span>
-<span class="meaning">小</span>
-<button class="pron-btn-inline" data-word="작다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">많다</span>
-<span class="roman">[manta]</span>
-<span class="meaning">多</span>
-<button class="pron-btn-inline" data-word="많다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">재미있다</span>
-<span class="roman">[jaemiitda]</span>
-<span class="meaning">有趣</span>
-<button class="pron-btn-inline" data-word="재미있다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">재미없다</span>
-<span class="roman">[jaemieopda]</span>
-<span class="meaning">无聊</span>
-<button class="pron-btn-inline" data-word="재미없다" title="读音">&#x1f50a;</button>
-</div>
-</div>
-
-<div class="section-title">自测</div>
-<button class="test-btn" onclick="toggleQuiz('unit4')">开始自测</button>
-<div class="quiz-area" id="quiz-unit4">
-<div class="quiz-mode-toggle">
-<button class="active-mode" onclick="setQuizMode('unit4','ko-zh',this)">看韩语→写中文</button>
-<button onclick="setQuizMode('unit4','zh-ko',this)">看中文→写韩语</button>
-</div>
-<div class="quiz-progress" id="quiz-progress-unit4"></div>
-<div class="quiz-question" id="quiz-question-unit4"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit4" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit4')">
-<div class="quiz-btns">
-<button class="btn-hint" onclick="showHint('unit4')">提示</button>
-<button class="btn-skip" onclick="skipQuestion('unit4')">跳过</button>
-<button class="btn-confirm" onclick="checkAnswer('unit4')">确认</button>
-</div>
-<div class="quiz-feedback" id="quiz-feedback-unit4"></div>
-<div class="quiz-score" id="quiz-score-unit4"></div>
-<div class="quiz-result" id="quiz-result-unit4"></div>
-<button class="btn-retry" onclick="resetQuiz('unit4')">重新开始</button>
-</div>
-<script>initQuizData('unit4', [{"ko":"가다","zh":"去","usage":""},{"ko":"오다","zh":"来","usage":""},{"ko":"먹다","zh":"吃","usage":""},{"ko":"마시다","zh":"喝","usage":""},{"ko":"보다","zh":"看","usage":""},{"ko":"읽다","zh":"读","usage":""},{"ko":"쓰다","zh":"写","usage":""},{"ko":"듣다","zh":"听","usage":""},{"ko":"말하다","zh":"说","usage":""},{"ko":"공부하다","zh":"学习","usage":""},{"ko":"가르치다","zh":"教","usage":""},{"ko":"배우다","zh":"学","usage":""},{"ko":"만나다","zh":"见面","usage":""},{"ko":"전화하다","zh":"打电话","usage":""},{"ko":"일하다","zh":"工作","usage":""},{"ko":"쉬다","zh":"休息","usage":""},{"ko":"자다","zh":"睡觉","usage":""},{"ko":"일어나다","zh":"起床","usage":""},{"ko":"씻다","zh":"洗","usage":""},{"ko":"입다","zh":"穿","usage":""},{"ko":"칠판","zh":"黑板","usage":""},{"ko":"분필","zh":"粉笔","usage":""},{"ko":"컴퓨터","zh":"电脑","usage":""},{"ko":"창문","zh":"窗户","usage":""},{"ko":"문","zh":"门","usage":""},{"ko":"시험","zh":"考试","usage":""},{"ko":"숙제","zh":"作业","usage":""},{"ko":"질문","zh":"提问","usage":""}]);</script>
-</div>
-<div class="unit" id="unit5">
-<h2>Unit 5 食物 & 形容词</h2>
-<div class="section-title">语法</div>
-<div style="overflow-x:auto;">
-<table class="grammar-table">
-<thead><tr><th>语法点</th><th>用法详解</th><th>例句</th></tr></thead>
-<tbody>
-<tr>
-<td>ㄴ/은(形容词定语)</td>
-<td>形容词修饰名词。有收音用 -은，无收音用 -ㄴ。</td>
-<td><ul class="example-list"><li><span class="ko-word">좋은 책입니다</span><button class="pron-btn-inline" data-word="좋은 책입니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">작은 가방이에요</span><button class="pron-btn-inline" data-word="작은 가방이에요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">예쁜 꽃이에요</span><button class="pron-btn-inline" data-word="예쁜 꽃이에요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>아/어/여요</td>
-<td>非正式礼貌体。元音ㅏ/ㅗ→아요，其他→어요，하다→여요(해요)。</td>
-<td><ul class="example-list"><li><span class="ko-word">지금 밥을 먹어요</span><button class="pron-btn-inline" data-word="지금 밥을 먹어요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">학교에 가요</span><button class="pron-btn-inline" data-word="학교에 가요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">한국어를 공부해요</span><button class="pron-btn-inline" data-word="한국어를 공부해요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>하고</td>
-<td>表示「和…一起」。名词后直接加，口语性强。</td>
-<td><ul class="example-list"><li><span class="ko-word">친구하고 영화를 봐요</span><button class="pron-btn-inline" data-word="친구하고 영화를 봐요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">동생하고 놀아요</span><button class="pron-btn-inline" data-word="동생하고 놀아요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">선생님하고 이야기했어요</span><button class="pron-btn-inline" data-word="선생님하고 이야기했어요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>안</td>
-<td>短型否定，表示「不…」。放在动词/形容词前面。</td>
-<td><ul class="example-list"><li><span class="ko-word">오늘은 학교에 안 갑니다</span><button class="pron-btn-inline" data-word="오늘은 학교에 안 갑니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">이 음식은 안 매워요</span><button class="pron-btn-inline" data-word="이 음식은 안 매워요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">숙제를 안 했어요</span><button class="pron-btn-inline" data-word="숙제를 안 했어요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr>
-</tbody>
-</table>
-</div>
-
-<div class="section-title">词汇</div>
-<div class="vocab-grid">
-<div class="vocab-item">
-<span class="ko-word">음식</span>
-<span class="roman">[eumsik]</span>
-<span class="meaning">食物</span>
-<button class="pron-btn-inline" data-word="음식" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">밥</span>
-<span class="roman">[bap]</span>
-<span class="meaning">饭</span>
-<button class="pron-btn-inline" data-word="밥" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">빵</span>
-<span class="roman">[ppang]</span>
-<span class="meaning">面包</span>
-<button class="pron-btn-inline" data-word="빵" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">고기</span>
-<span class="roman">[gogi]</span>
-<span class="meaning">肉</span>
-<button class="pron-btn-inline" data-word="고기" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">생선</span>
-<span class="roman">[saengseon]</span>
-<span class="meaning">鱼</span>
-<button class="pron-btn-inline" data-word="생선" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">야채</span>
-<span class="roman">[yachae]</span>
-<span class="meaning">蔬菜</span>
-<button class="pron-btn-inline" data-word="야채" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">과일</span>
-<span class="roman">[gwail]</span>
-<span class="meaning">水果</span>
-<button class="pron-btn-inline" data-word="과일" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">김치</span>
-<span class="roman">[gimchi]</span>
-<span class="meaning">泡菜</span>
-<button class="pron-btn-inline" data-word="김치" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">불고기</span>
-<span class="roman">[bulgogi]</span>
-<span class="meaning">烤肉</span>
-<button class="pron-btn-inline" data-word="불고기" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">비빔밥</span>
-<span class="roman">[bibimbap]</span>
-<span class="meaning">拌饭</span>
-<button class="pron-btn-inline" data-word="비빔밥" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">냉면</span>
-<span class="roman">[naengmyeon]</span>
-<span class="meaning">冷面</span>
-<button class="pron-btn-inline" data-word="냉면" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">떡볶이</span>
-<span class="roman">[tteokbokki]</span>
-<span class="meaning">炒年糕</span>
-<button class="pron-btn-inline" data-word="떡볶이" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">김밥</span>
-<span class="roman">[gimbap]</span>
-<span class="meaning">紫菜包饭</span>
-<button class="pron-btn-inline" data-word="김밥" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">라면</span>
-<span class="roman">[ramyeon]</span>
-<span class="meaning">拉面</span>
-<button class="pron-btn-inline" data-word="라면" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">물</span>
-<span class="roman">[mul]</span>
-<span class="meaning">水</span>
-<button class="pron-btn-inline" data-word="물" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">우유</span>
-<span class="roman">[uyu]</span>
-<span class="meaning">牛奶</span>
-<button class="pron-btn-inline" data-word="우유" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">커피</span>
-<span class="roman">[keopi]</span>
-<span class="meaning">咖啡</span>
-<button class="pron-btn-inline" data-word="커피" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">맛있다</span>
-<span class="roman">[masitda]</span>
-<span class="meaning">好吃</span>
-<button class="pron-btn-inline" data-word="맛있다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">맛없다</span>
-<span class="roman">[maseopda]</span>
-<span class="meaning">难吃</span>
-<button class="pron-btn-inline" data-word="맛없다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">달다</span>
-<span class="roman">[dalda]</span>
-<span class="meaning">甜</span>
-<button class="pron-btn-inline" data-word="달다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">맵다</span>
-<span class="roman">[maepda]</span>
-<span class="meaning">辣</span>
-<button class="pron-btn-inline" data-word="맵다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">뜨겁다</span>
-<span class="roman">[tteugeopda]</span>
-<span class="meaning">热</span>
-<button class="pron-btn-inline" data-word="뜨겁다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">차갑다</span>
-<span class="roman">[chagapda]</span>
-<span class="meaning">凉</span>
-<button class="pron-btn-inline" data-word="차갑다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">예쁘다</span>
-<span class="roman">[yeppeuda]</span>
-<span class="meaning">漂亮</span>
-<button class="pron-btn-inline" data-word="예쁘다" title="读音">&#x1f50a;</button>
-</div>
-</div>
-
-<div class="section-title">自测</div>
-<button class="test-btn" onclick="toggleQuiz('unit5')">开始自测</button>
-<div class="quiz-area" id="quiz-unit5">
-<div class="quiz-mode-toggle">
-<button class="active-mode" onclick="setQuizMode('unit5','ko-zh',this)">看韩语→写中文</button>
-<button onclick="setQuizMode('unit5','zh-ko',this)">看中文→写韩语</button>
-</div>
-<div class="quiz-progress" id="quiz-progress-unit5"></div>
-<div class="quiz-question" id="quiz-question-unit5"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit5" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit5')">
-<div class="quiz-btns">
-<button class="btn-hint" onclick="showHint('unit5')">提示</button>
-<button class="btn-skip" onclick="skipQuestion('unit5')">跳过</button>
-<button class="btn-confirm" onclick="checkAnswer('unit5')">确认</button>
-</div>
-<div class="quiz-feedback" id="quiz-feedback-unit5"></div>
-<div class="quiz-score" id="quiz-score-unit5"></div>
-<div class="quiz-result" id="quiz-result-unit5"></div>
-<button class="btn-retry" onclick="resetQuiz('unit5')">重新开始</button>
-</div>
-<script>initQuizData('unit5', [{"ko":"밥","zh":"饭","usage":""},{"ko":"빵","zh":"面包","usage":""},{"ko":"고기","zh":"肉","usage":""},{"ko":"생선","zh":"鱼","usage":""},{"ko":"야채","zh":"蔬菜","usage":""},{"ko":"과일","zh":"水果","usage":""},{"ko":"사과","zh":"苹果","usage":""},{"ko":"바나나","zh":"香蕉","usage":""},{"ko":"딸기","zh":"草莓","usage":""},{"ko":"포도","zh":"葡萄","usage":""},{"ko":"물","zh":"水","usage":""},{"ko":"우유","zh":"牛奶","usage":""},{"ko":"주스","zh":"果汁","usage":""},{"ko":"커피","zh":"咖啡","usage":""},{"ko":"차","zh":"茶","usage":""},{"ko":"맛있다","zh":"好吃","usage":""},{"ko":"맛없다","zh":"不好吃","usage":""},{"ko":"달다","zh":"甜","usage":""},{"ko":"짜다","zh":"咸","usage":""},{"ko":"맵다","zh":"辣","usage":""},{"ko":"크다","zh":"大","usage":""},{"ko":"작다","zh":"小","usage":""},{"ko":"좋다","zh":"好","usage":""},{"ko":"나쁘다","zh":"坏","usage":""},{"ko":"예쁘다","zh":"漂亮","usage":""},{"ko":"재미있다","zh":"有趣","usage":""},{"ko":"비싸다","zh":"贵","usage":""},{"ko":"싸다","zh":"便宜","usage":""},{"ko":"가깝다","zh":"近","usage":""},{"ko":"멀다","zh":"远","usage":""}]);</script>
-</div>
-<img src="illusts/man_reading.png" alt="阅读学习" class="illust">
-<div class="illust-row">
-  <img src="illusts/woman_writing.png" alt="写作练习" style="max-width:140px;border-radius:12px;">
-  <img src="illusts/man_korean_1.png" alt="韩语学习" style="max-width:140px;border-radius:12px;">
-</div>
-
-<div class="unit" id="unit6">
-<h2>Unit 6 家人称呼 & 敬语</h2>
-<div class="section-title">语法</div>
-<div style="overflow-x:auto;">
-<table class="grammar-table">
-<thead><tr><th>语法点</th><th>用法详解</th><th>例句</th></tr></thead>
-<tbody>
-<tr>
-<td>(으)시</td>
-<td>敬语后缀，表尊敬。有收音用 -으시，无收音用 -시。用于动词/形容词词干。</td>
-<td><ul class="example-list"><li><span class="ko-word">선생님이 오십니다</span><button class="pron-btn-inline" data-word="선생님이 오십니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">어머니가 책을 읽으십니다</span><button class="pron-btn-inline" data-word="어머니가 책을 읽으십니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">할아버지께서 주무십니다</span><button class="pron-btn-inline" data-word="할아버지께서 주무십니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>았/었/였</td>
-<td>过去时。ㅏ/ㅗ→았，其他→었，하다→였。</td>
-<td><ul class="example-list"><li><span class="ko-word">어제 영화를 봤습니다</span><button class="pron-btn-inline" data-word="어제 영화를 봤습니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">지난주에 친구를 만났어요</span><button class="pron-btn-inline" data-word="지난주에 친구를 만났어요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">작년에 한국어를 공부했어요</span><button class="pron-btn-inline" data-word="작년에 한국어를 공부했어요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>지 않다</td>
-<td>长型否定。动词词干后加 -지 않다，比 안 更正式。</td>
-<td><ul class="example-list"><li><span class="ko-word">오늘은 밥을 먹지 않습니다</span><button class="pron-btn-inline" data-word="오늘은 밥을 먹지 않습니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">날씨가 좋지 않아요</span><button class="pron-btn-inline" data-word="날씨가 좋지 않아요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">그 영화는 재미있지 않아요</span><button class="pron-btn-inline" data-word="그 영화는 재미있지 않아요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>께서</td>
-<td>敬语主语助词，替代 은/는/이/가，必须与敬语谓词搭配。</td>
-<td><ul class="example-list"><li><span class="ko-word">선생님께서 말씀하십니다</span><button class="pron-btn-inline" data-word="선생님께서 말씀하십니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">어머니께서 편지를 보내셨어요</span><button class="pron-btn-inline" data-word="어머니께서 편지를 보내셨어요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">할아버지께서 신문을 읽으십니다</span><button class="pron-btn-inline" data-word="할아버지께서 신문을 읽으십니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr>
-</tbody>
-</table>
-</div>
-
-<div class="section-title">词汇</div>
-<div class="vocab-grid">
-<div class="vocab-item">
-<span class="ko-word">할아버지</span>
-<span class="roman">[harabeoji]</span>
-<span class="meaning">爷爷</span>
-<button class="pron-btn-inline" data-word="할아버지" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">할머니</span>
-<span class="roman">[halmeoni]</span>
-<span class="meaning">奶奶</span>
-<button class="pron-btn-inline" data-word="할머니" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">아버님</span>
-<span class="roman">[abeonim]</span>
-<span class="meaning">父亲(敬)</span>
-<button class="pron-btn-inline" data-word="아버님" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">어머님</span>
-<span class="roman">[eomeonim]</span>
-<span class="meaning">母亲(敬)</span>
-<button class="pron-btn-inline" data-word="어머님" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">형님</span>
-<span class="roman">[hyeongnim]</span>
-<span class="meaning">哥哥(敬)</span>
-<button class="pron-btn-inline" data-word="형님" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">누님</span>
-<span class="roman">[nunim]</span>
-<span class="meaning">姐姐(敬)</span>
-<button class="pron-btn-inline" data-word="누님" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">아드님</span>
-<span class="roman">[adeunim]</span>
-<span class="meaning">令郎</span>
-<button class="pron-btn-inline" data-word="아드님" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">따님</span>
-<span class="roman">[ttanim]</span>
-<span class="meaning">令爱</span>
-<button class="pron-btn-inline" data-word="따님" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">말씀</span>
-<span class="roman">[malsseum]</span>
-<span class="meaning">话(敬)</span>
-<button class="pron-btn-inline" data-word="말씀" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">진지</span>
-<span class="roman">[jinji]</span>
-<span class="meaning">饭(敬)</span>
-<button class="pron-btn-inline" data-word="진지" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">댁</span>
-<span class="roman">[daek]</span>
-<span class="meaning">府上(敬)</span>
-<button class="pron-btn-inline" data-word="댁" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">성함</span>
-<span class="roman">[seongham]</span>
-<span class="meaning">姓名(敬)</span>
-<button class="pron-btn-inline" data-word="성함" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">연세</span>
-<span class="roman">[yeonse]</span>
-<span class="meaning">年龄(敬)</span>
-<button class="pron-btn-inline" data-word="연세" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">생신</span>
-<span class="roman">[saengsin]</span>
-<span class="meaning">生日(敬)</span>
-<button class="pron-btn-inline" data-word="생신" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">주무시다</span>
-<span class="roman">[jumusida]</span>
-<span class="meaning">睡(敬)</span>
-<button class="pron-btn-inline" data-word="주무시다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">계시다</span>
-<span class="roman">[gyesida]</span>
-<span class="meaning">在(敬)</span>
-<button class="pron-btn-inline" data-word="계시다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">드시다</span>
-<span class="roman">[deusida]</span>
-<span class="meaning">吃(敬)</span>
-<button class="pron-btn-inline" data-word="드시다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">편찮으시다</span>
-<span class="roman">[pyeonchaneusida]</span>
-<span class="meaning">不舒服(敬)</span>
-<button class="pron-btn-inline" data-word="편찮으시다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">돌아가시다</span>
-<span class="roman">[doragasida]</span>
-<span class="meaning">去世(敬)</span>
-<button class="pron-btn-inline" data-word="돌아가시다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">어제</span>
-<span class="roman">[eoje]</span>
-<span class="meaning">昨天</span>
-<button class="pron-btn-inline" data-word="어제" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">오늘</span>
-<span class="roman">[oneul]</span>
-<span class="meaning">今天</span>
-<button class="pron-btn-inline" data-word="오늘" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">내일</span>
-<span class="roman">[naeil]</span>
-<span class="meaning">明天</span>
-<button class="pron-btn-inline" data-word="내일" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">지난주</span>
-<span class="roman">[jinanju]</span>
-<span class="meaning">上周</span>
-<button class="pron-btn-inline" data-word="지난주" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">작년</span>
-<span class="roman">[jangnyeon]</span>
-<span class="meaning">去年</span>
-<button class="pron-btn-inline" data-word="작년" title="读音">&#x1f50a;</button>
-</div>
-</div>
-
-<div class="section-title">自测</div>
-<button class="test-btn" onclick="toggleQuiz('unit6')">开始自测</button>
-<div class="quiz-area" id="quiz-unit6">
-<div class="quiz-mode-toggle">
-<button class="active-mode" onclick="setQuizMode('unit6','ko-zh',this)">看韩语→写中文</button>
-<button onclick="setQuizMode('unit6','zh-ko',this)">看中文→写韩语</button>
-</div>
-<div class="quiz-progress" id="quiz-progress-unit6"></div>
-<div class="quiz-question" id="quiz-question-unit6"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit6" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit6')">
-<div class="quiz-btns">
-<button class="btn-hint" onclick="showHint('unit6')">提示</button>
-<button class="btn-skip" onclick="skipQuestion('unit6')">跳过</button>
-<button class="btn-confirm" onclick="checkAnswer('unit6')">确认</button>
-</div>
-<div class="quiz-feedback" id="quiz-feedback-unit6"></div>
-<div class="quiz-score" id="quiz-score-unit6"></div>
-<div class="quiz-result" id="quiz-result-unit6"></div>
-<button class="btn-retry" onclick="resetQuiz('unit6')">重新开始</button>
-</div>
-<script>initQuizData('unit6', [{"ko":"할아버지","zh":"爷爷","usage":""},{"ko":"할머니","zh":"奶奶","usage":""},{"ko":"아버지","zh":"爸爸","usage":""},{"ko":"어머니","zh":"妈妈","usage":""},{"ko":"아들","zh":"儿子","usage":""},{"ko":"딸","zh":"女儿","usage":""},{"ko":"부모님","zh":"父母","usage":""},{"ko":"형제","zh":"兄弟","usage":""},{"ko":"자매","zh":"姐妹","usage":""},{"ko":"삼촌","zh":"叔叔","usage":""},{"ko":"이모","zh":"姨妈","usage":""},{"ko":"사촌","zh":"堂表亲","usage":""},{"ko":"드시다","zh":"吃(敬)","usage":""},{"ko":"주무시다","zh":"睡(敬)","usage":""},{"ko":"계시다","zh":"在(敬)","usage":""},{"ko":"말씀하시다","zh":"说(敬)","usage":""},{"ko":"생신","zh":"生日(敬)","usage":""},{"ko":"연세","zh":"年龄(敬)","usage":""},{"ko":"댁","zh":"家(敬)","usage":""},{"ko":"진지","zh":"饭(敬)","usage":""}]);</script>
-</div>
-<div class="unit" id="unit7">
-<h2>Unit 7 购物 & 食物 & 颜色</h2>
-<div class="section-title">语法</div>
-<div style="overflow-x:auto;">
-<table class="grammar-table">
-<thead><tr><th>语法点</th><th>用法详解</th><th>例句</th></tr></thead>
-<tbody>
-<tr>
-<td>이/가 Adj</td>
-<td>形容词作谓语。主语用 이/가 标记。</td>
-<td><ul class="example-list"><li><span class="ko-word">이 음식이 맛있어요</span><button class="pron-btn-inline" data-word="이 음식이 맛있어요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">날씨가 추워요</span><button class="pron-btn-inline" data-word="날씨가 추워요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">이 가방이 비싸요</span><button class="pron-btn-inline" data-word="이 가방이 비싸요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>(으)ㄹ까요?</td>
-<td>建议或询问意见，「…吧？」。有收音用 -을까요，无收音用 -ㄹ까요。</td>
-<td><ul class="example-list"><li><span class="ko-word">같이 먹을까요?</span><button class="pron-btn-inline" data-word="같이 먹을까요?" title="读音">&#x1f50a;</button></li><li><span class="ko-word">영화를 볼까요?</span><button class="pron-btn-inline" data-word="영화를 볼까요?" title="读音">&#x1f50a;</button></li><li><span class="ko-word">어디로 갈까요?</span><button class="pron-btn-inline" data-word="어디로 갈까요?" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>고 싶다</td>
-<td>表示「想做…」。动词词干后加 -고 싶다。</td>
-<td><ul class="example-list"><li><span class="ko-word">비빔밥을 먹고 싶어요</span><button class="pron-btn-inline" data-word="비빔밥을 먹고 싶어요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">한국에 가고 싶어요</span><button class="pron-btn-inline" data-word="한국에 가고 싶어요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">친구를 만나고 싶습니다</span><button class="pron-btn-inline" data-word="친구를 만나고 싶습니다" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>보다</td>
-<td>比较，「比…更…」。放在比较对象后面。</td>
-<td><ul class="example-list"><li><span class="ko-word">이것이 그것보다 좋아요</span><button class="pron-btn-inline" data-word="이것이 그것보다 좋아요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">오늘이 어제보다 추워요</span><button class="pron-btn-inline" data-word="오늘이 어제보다 추워요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">한국어가 영어보다 어려워요</span><button class="pron-btn-inline" data-word="한국어가 영어보다 어려워요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr>
-</tbody>
-</table>
-</div>
-
-<div class="section-title">词汇</div>
-<div class="vocab-grid">
-<div class="vocab-item">
-<span class="ko-word">백화점</span>
-<span class="roman">[baekhwajeom]</span>
-<span class="meaning">百货商店</span>
-<button class="pron-btn-inline" data-word="백화점" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">시장</span>
-<span class="roman">[sijang]</span>
-<span class="meaning">市场</span>
-<button class="pron-btn-inline" data-word="시장" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">가게</span>
-<span class="roman">[gage]</span>
-<span class="meaning">店铺</span>
-<button class="pron-btn-inline" data-word="가게" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">편의점</span>
-<span class="roman">[pyeonuijeom]</span>
-<span class="meaning">便利店</span>
-<button class="pron-btn-inline" data-word="편의점" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">값</span>
-<span class="roman">[gap]</span>
-<span class="meaning">价格</span>
-<button class="pron-btn-inline" data-word="값" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">돈</span>
-<span class="roman">[don]</span>
-<span class="meaning">钱</span>
-<button class="pron-btn-inline" data-word="돈" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">비싸다</span>
-<span class="roman">[bissada]</span>
-<span class="meaning">贵</span>
-<button class="pron-btn-inline" data-word="비싸다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">싸다</span>
-<span class="roman">[ssada]</span>
-<span class="meaning">便宜</span>
-<button class="pron-btn-inline" data-word="싸다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">사다</span>
-<span class="roman">[sada]</span>
-<span class="meaning">买</span>
-<button class="pron-btn-inline" data-word="사다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">팔다</span>
-<span class="roman">[palda]</span>
-<span class="meaning">卖</span>
-<button class="pron-btn-inline" data-word="팔다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">주다</span>
-<span class="roman">[juda]</span>
-<span class="meaning">给</span>
-<button class="pron-btn-inline" data-word="주다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">받다</span>
-<span class="roman">[batda]</span>
-<span class="meaning">收</span>
-<button class="pron-btn-inline" data-word="받다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">빨간색</span>
-<span class="roman">[ppalgansaek]</span>
-<span class="meaning">红色</span>
-<button class="pron-btn-inline" data-word="빨간색" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">파란색</span>
-<span class="roman">[paransaek]</span>
-<span class="meaning">蓝色</span>
-<button class="pron-btn-inline" data-word="파란색" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">노란색</span>
-<span class="roman">[noransaek]</span>
-<span class="meaning">黄色</span>
-<button class="pron-btn-inline" data-word="노란색" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">초록색</span>
-<span class="roman">[choroksaek]</span>
-<span class="meaning">绿色</span>
-<button class="pron-btn-inline" data-word="초록색" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">검은색</span>
-<span class="roman">[geomeunsaek]</span>
-<span class="meaning">黑色</span>
-<button class="pron-btn-inline" data-word="검은색" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">하얀색</span>
-<span class="roman">[hayansaek]</span>
-<span class="meaning">白色</span>
-<button class="pron-btn-inline" data-word="하얀색" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">분홍색</span>
-<span class="roman">[bunhongsaek]</span>
-<span class="meaning">粉色</span>
-<button class="pron-btn-inline" data-word="분홍색" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">보라색</span>
-<span class="roman">[borasaek]</span>
-<span class="meaning">紫色</span>
-<button class="pron-btn-inline" data-word="보라색" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">주황색</span>
-<span class="roman">[juhwangsaek]</span>
-<span class="meaning">橙色</span>
-<button class="pron-btn-inline" data-word="주황색" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">회색</span>
-<span class="roman">[hoesaek]</span>
-<span class="meaning">灰色</span>
-<button class="pron-btn-inline" data-word="회색" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">갈색</span>
-<span class="roman">[galsaek]</span>
-<span class="meaning">棕色</span>
-<button class="pron-btn-inline" data-word="갈색" title="读音">&#x1f50a;</button>
-</div>
-</div>
-
-<div class="section-title">自测</div>
-<button class="test-btn" onclick="toggleQuiz('unit7')">开始自测</button>
-<div class="quiz-area" id="quiz-unit7">
-<div class="quiz-mode-toggle">
-<button class="active-mode" onclick="setQuizMode('unit7','ko-zh',this)">看韩语→写中文</button>
-<button onclick="setQuizMode('unit7','zh-ko',this)">看中文→写韩语</button>
-</div>
-<div class="quiz-progress" id="quiz-progress-unit7"></div>
-<div class="quiz-question" id="quiz-question-unit7"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit7" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit7')">
-<div class="quiz-btns">
-<button class="btn-hint" onclick="showHint('unit7')">提示</button>
-<button class="btn-skip" onclick="skipQuestion('unit7')">跳过</button>
-<button class="btn-confirm" onclick="checkAnswer('unit7')">确认</button>
-</div>
-<div class="quiz-feedback" id="quiz-feedback-unit7"></div>
-<div class="quiz-score" id="quiz-score-unit7"></div>
-<div class="quiz-result" id="quiz-result-unit7"></div>
-<button class="btn-retry" onclick="resetQuiz('unit7')">重新开始</button>
-</div>
-<script>initQuizData('unit7', [{"ko":"옷","zh":"衣服","usage":""},{"ko":"바지","zh":"裤子","usage":""},{"ko":"치마","zh":"裙子","usage":""},{"ko":"신발","zh":"鞋子","usage":""},{"ko":"모자","zh":"帽子","usage":""},{"ko":"양말","zh":"袜子","usage":""},{"ko":"가방","zh":"包","usage":""},{"ko":"시계","zh":"手表","usage":""},{"ko":"목걸이","zh":"项链","usage":""},{"ko":"귀걸이","zh":"耳环","usage":""},{"ko":"빨간색","zh":"红色","usage":""},{"ko":"파란색","zh":"蓝色","usage":""},{"ko":"노란색","zh":"黄色","usage":""},{"ko":"초록색","zh":"绿色","usage":""},{"ko":"검은색","zh":"黑色","usage":""},{"ko":"하얀색","zh":"白色","usage":""},{"ko":"주황색","zh":"橙色","usage":""},{"ko":"보라색","zh":"紫色","usage":""},{"ko":"분홍색","zh":"粉色","usage":""},{"ko":"회색","zh":"灰色","usage":""},{"ko":"김치","zh":"泡菜","usage":""},{"ko":"된장찌개","zh":"大酱汤","usage":""},{"ko":"불고기","zh":"烤肉","usage":""},{"ko":"냉면","zh":"冷面","usage":""},{"ko":"떡볶이","zh":"炒年糕","usage":""},{"ko":"김밥","zh":"紫菜包饭","usage":""},{"ko":"비빔밥","zh":"拌饭","usage":""},{"ko":"삼겹살","zh":"五花肉","usage":""}]);</script>
-</div>
-<img src="illusts/woman_korean_b.png" alt="韩语学习" class="illust">
-<div class="unit" id="unit8">
-<h2>Unit 8 交通 & 电话 & 方向</h2>
-<div class="section-title">语法</div>
-<div style="overflow-x:auto;">
-<table class="grammar-table">
-<thead><tr><th>语法点</th><th>用法详解</th><th>例句</th></tr></thead>
-<tbody>
-<tr>
-<td>(으)로</td>
-<td>表示方向或工具、方式。有收音(ㄹ除外)用 -으로，无收音或ㄹ收音用 -로。</td>
-<td><ul class="example-list"><li><span class="ko-word">왼쪽으로 가세요</span><button class="pron-btn-inline" data-word="왼쪽으로 가세요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">연필로 쓰세요</span><button class="pron-btn-inline" data-word="연필로 쓰세요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">한국으로 여행 가요</span><button class="pron-btn-inline" data-word="한국으로 여행 가요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>(으)러 가다/오다</td>
-<td>表示「去/来做…」。有收音用 -으러，无收音用 -러。</td>
-<td><ul class="example-list"><li><span class="ko-word">밥을 먹으러 갑니다</span><button class="pron-btn-inline" data-word="밥을 먹으러 갑니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">책을 사러 서점에 가요</span><button class="pron-btn-inline" data-word="책을 사러 서점에 가요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">친구를 만나러 왔어요</span><button class="pron-btn-inline" data-word="친구를 만나러 왔어요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>아/어/여 주다</td>
-<td>为他人做某事。含有帮助、服务的语感。</td>
-<td><ul class="example-list"><li><span class="ko-word">문을 열어 주세요</span><button class="pron-btn-inline" data-word="문을 열어 주세요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">사진을 찍어 주세요</span><button class="pron-btn-inline" data-word="사진을 찍어 주세요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">한국어를 가르쳐 주세요</span><button class="pron-btn-inline" data-word="한국어를 가르쳐 주세요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>(으)면</td>
-<td>表示「如果…」。有收音用 -으면，无收音用 -면。</td>
-<td><ul class="example-list"><li><span class="ko-word">시간이 있으면 전화하세요</span><button class="pron-btn-inline" data-word="시간이 있으면 전화하세요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">비가 오면 집에 있을 거예요</span><button class="pron-btn-inline" data-word="비가 오면 집에 있을 거예요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">내일이면 방학이에요</span><button class="pron-btn-inline" data-word="내일이면 방학이에요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr>
-</tbody>
-</table>
-</div>
-
-<div class="section-title">词汇</div>
-<div class="vocab-grid">
-<div class="vocab-item">
-<span class="ko-word">버스</span>
-<span class="roman">[beoseu]</span>
-<span class="meaning">公交车</span>
-<button class="pron-btn-inline" data-word="버스" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">지하철</span>
-<span class="roman">[jihacheol]</span>
-<span class="meaning">地铁</span>
-<button class="pron-btn-inline" data-word="지하철" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">택시</span>
-<span class="roman">[taeksi]</span>
-<span class="meaning">出租车</span>
-<button class="pron-btn-inline" data-word="택시" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">기차</span>
-<span class="roman">[gicha]</span>
-<span class="meaning">火车</span>
-<button class="pron-btn-inline" data-word="기차" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">비행기</span>
-<span class="roman">[bihaenggi]</span>
-<span class="meaning">飞机</span>
-<button class="pron-btn-inline" data-word="비행기" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">배</span>
-<span class="roman">[bae]</span>
-<span class="meaning">船</span>
-<button class="pron-btn-inline" data-word="배" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">자전거</span>
-<span class="roman">[jajeongeo]</span>
-<span class="meaning">自行车</span>
-<button class="pron-btn-inline" data-word="자전거" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">정류장</span>
-<span class="roman">[jeongnyujang]</span>
-<span class="meaning">车站</span>
-<button class="pron-btn-inline" data-word="정류장" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">역</span>
-<span class="roman">[yeok]</span>
-<span class="meaning">站</span>
-<button class="pron-btn-inline" data-word="역" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">공항</span>
-<span class="roman">[gonghang]</span>
-<span class="meaning">机场</span>
-<button class="pron-btn-inline" data-word="공항" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">전화</span>
-<span class="roman">[jeonhwa]</span>
-<span class="meaning">电话</span>
-<button class="pron-btn-inline" data-word="전화" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">전화번호</span>
-<span class="roman">[jeonhwabeonho]</span>
-<span class="meaning">电话号码</span>
-<button class="pron-btn-inline" data-word="전화번호" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">휴대폰</span>
-<span class="roman">[hyudaepon]</span>
-<span class="meaning">手机</span>
-<button class="pron-btn-inline" data-word="휴대폰" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">문자</span>
-<span class="roman">[munja]</span>
-<span class="meaning">短信</span>
-<button class="pron-btn-inline" data-word="문자" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">보내다</span>
-<span class="roman">[bonaeda]</span>
-<span class="meaning">发送</span>
-<button class="pron-btn-inline" data-word="보내다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">걸다</span>
-<span class="roman">[geolda]</span>
-<span class="meaning">打(电话)</span>
-<button class="pron-btn-inline" data-word="걸다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">왼쪽</span>
-<span class="roman">[oenjjok]</span>
-<span class="meaning">左边</span>
-<button class="pron-btn-inline" data-word="왼쪽" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">오른쪽</span>
-<span class="roman">[oreunjjok]</span>
-<span class="meaning">右边</span>
-<button class="pron-btn-inline" data-word="오른쪽" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">건너다</span>
-<span class="roman">[geonneoda]</span>
-<span class="meaning">过(马路)</span>
-<button class="pron-btn-inline" data-word="건너다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">지나다</span>
-<span class="roman">[jinada]</span>
-<span class="meaning">经过</span>
-<button class="pron-btn-inline" data-word="지나다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">돌다</span>
-<span class="roman">[dolda]</span>
-<span class="meaning">转</span>
-<button class="pron-btn-inline" data-word="돌다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">직진</span>
-<span class="roman">[jikjin]</span>
-<span class="meaning">直行</span>
-<button class="pron-btn-inline" data-word="직진" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">연필</span>
-<span class="roman">[yeonpil]</span>
-<span class="meaning">铅笔</span>
-<button class="pron-btn-inline" data-word="연필" title="读音">&#x1f50a;</button>
-</div>
-</div>
-
-<div class="section-title">自测</div>
-<button class="test-btn" onclick="toggleQuiz('unit8')">开始自测</button>
-<div class="quiz-area" id="quiz-unit8">
-<div class="quiz-mode-toggle">
-<button class="active-mode" onclick="setQuizMode('unit8','ko-zh',this)">看韩语→写中文</button>
-<button onclick="setQuizMode('unit8','zh-ko',this)">看中文→写韩语</button>
-</div>
-<div class="quiz-progress" id="quiz-progress-unit8"></div>
-<div class="quiz-question" id="quiz-question-unit8"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit8" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit8')">
-<div class="quiz-btns">
-<button class="btn-hint" onclick="showHint('unit8')">提示</button>
-<button class="btn-skip" onclick="skipQuestion('unit8')">跳过</button>
-<button class="btn-confirm" onclick="checkAnswer('unit8')">确认</button>
-</div>
-<div class="quiz-feedback" id="quiz-feedback-unit8"></div>
-<div class="quiz-score" id="quiz-score-unit8"></div>
-<div class="quiz-result" id="quiz-result-unit8"></div>
-<button class="btn-retry" onclick="resetQuiz('unit8')">重新开始</button>
-</div>
-<script>initQuizData('unit8', [{"ko":"버스","zh":"公交车","usage":""},{"ko":"지하철","zh":"地铁","usage":""},{"ko":"택시","zh":"出租车","usage":""},{"ko":"기차","zh":"火车","usage":""},{"ko":"비행기","zh":"飞机","usage":""},{"ko":"배","zh":"船","usage":""},{"ko":"자전거","zh":"自行车","usage":""},{"ko":"자동차","zh":"汽车","usage":""},{"ko":"정류장","zh":"公交站","usage":""},{"ko":"역","zh":"地铁站","usage":""},{"ko":"공항","zh":"机场","usage":""},{"ko":"표","zh":"票","usage":""},{"ko":"전화","zh":"电话","usage":""},{"ko":"전화번호","zh":"电话号码","usage":""},{"ko":"문자","zh":"短信","usage":""},{"ko":"메시지","zh":"消息","usage":""},{"ko":"이메일","zh":"电子邮件","usage":""},{"ko":"인터넷","zh":"网络","usage":""},{"ko":"사진","zh":"照片","usage":""},{"ko":"카메라","zh":"相机","usage":""},{"ko":"오른쪽","zh":"右边","usage":""},{"ko":"왼쪽","zh":"左边","usage":""},{"ko":"앞","zh":"前面","usage":""},{"ko":"뒤","zh":"后面","usage":""},{"ko":"옆","zh":"旁边","usage":""},{"ko":"위","zh":"上面","usage":""},{"ko":"아래","zh":"下面","usage":""},{"ko":"안","zh":"里面","usage":""}]);</script>
-</div>
-<img src="illusts/man_speaking.png" alt="口语练习" class="illust">
-<div class="unit" id="unit9">
-<h2>Unit 9 季节 & 天气 & 计划</h2>
-<div class="section-title">语法</div>
-<div style="overflow-x:auto;">
-<table class="grammar-table">
-<thead><tr><th>语法点</th><th>用法详解</th><th>例句</th></tr></thead>
-<tbody>
-<tr>
-<td>(으)ㄹ 거예요</td>
-<td>将来时，「会…/打算…」。有收音用 -을 거예요，无收音用 -ㄹ 거예요。</td>
-<td><ul class="example-list"><li><span class="ko-word">주말에 여행을 할 거예요</span><button class="pron-btn-inline" data-word="주말에 여행을 할 거예요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">내일 친구를 만날 거예요</span><button class="pron-btn-inline" data-word="내일 친구를 만날 거예요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">저녁에 공부할 거예요</span><button class="pron-btn-inline" data-word="저녁에 공부할 거예요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>겠</td>
-<td>意向或推测。第一人称表意向，第三人称表推测。</td>
-<td><ul class="example-list"><li><span class="ko-word">제가 하겠습니다</span><button class="pron-btn-inline" data-word="제가 하겠습니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">내일은 날씨가 좋겠어요</span><button class="pron-btn-inline" data-word="내일은 날씨가 좋겠어요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">맛있겠어요!</span><button class="pron-btn-inline" data-word="맛있겠어요!" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>기 전에</td>
-<td>表示「在…之前」。动词词干直接加 -기 전에。</td>
-<td><ul class="example-list"><li><span class="ko-word">밥을 먹기 전에 손을 씻습니다</span><button class="pron-btn-inline" data-word="밥을 먹기 전에 손을 씻습니다" title="读音">&#x1f50a;</button></li><li><span class="ko-word">자기 전에 책을 읽어요</span><button class="pron-btn-inline" data-word="자기 전에 책을 읽어요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">학교에 가기 전에 아침을 먹어요</span><button class="pron-btn-inline" data-word="학교에 가기 전에 아침을 먹어요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>(으)ㄴ 후에</td>
-<td>表示「在…之后」。有收音用 -은 후에，无收音用 -ㄴ 후에。</td>
-<td><ul class="example-list"><li><span class="ko-word">수업이 끝난 후에 만나요</span><button class="pron-btn-inline" data-word="수업이 끝난 후에 만나요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">밥을 먹은 후에 산책해요</span><button class="pron-btn-inline" data-word="밥을 먹은 후에 산책해요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">영화를 본 후에 커피를 마셨어요</span><button class="pron-btn-inline" data-word="영화를 본 후에 커피를 마셨어요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr>
-</tbody>
-</table>
-</div>
-
-<div class="section-title">词汇</div>
-<div class="vocab-grid">
-<div class="vocab-item">
-<span class="ko-word">봄</span>
-<span class="roman">[bom]</span>
-<span class="meaning">春天</span>
-<button class="pron-btn-inline" data-word="봄" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">여름</span>
-<span class="roman">[yeoreum]</span>
-<span class="meaning">夏天</span>
-<button class="pron-btn-inline" data-word="여름" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">가을</span>
-<span class="roman">[gaeul]</span>
-<span class="meaning">秋天</span>
-<button class="pron-btn-inline" data-word="가을" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">겨울</span>
-<span class="roman">[gyeoul]</span>
-<span class="meaning">冬天</span>
-<button class="pron-btn-inline" data-word="겨울" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">날씨</span>
-<span class="roman">[nalssi]</span>
-<span class="meaning">天气</span>
-<button class="pron-btn-inline" data-word="날씨" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">맑다</span>
-<span class="roman">[makda]</span>
-<span class="meaning">晴朗</span>
-<button class="pron-btn-inline" data-word="맑다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">흐리다</span>
-<span class="roman">[heurida]</span>
-<span class="meaning">阴天</span>
-<button class="pron-btn-inline" data-word="흐리다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">비</span>
-<span class="roman">[bi]</span>
-<span class="meaning">雨</span>
-<button class="pron-btn-inline" data-word="비" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">눈</span>
-<span class="roman">[nun]</span>
-<span class="meaning">雪</span>
-<button class="pron-btn-inline" data-word="눈" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">바람</span>
-<span class="roman">[baram]</span>
-<span class="meaning">风</span>
-<button class="pron-btn-inline" data-word="바람" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">춥다</span>
-<span class="roman">[chupda]</span>
-<span class="meaning">冷</span>
-<button class="pron-btn-inline" data-word="춥다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">덥다</span>
-<span class="roman">[deopda]</span>
-<span class="meaning">热</span>
-<button class="pron-btn-inline" data-word="덥다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">따뜻하다</span>
-<span class="roman">[ttatteuthada]</span>
-<span class="meaning">温暖</span>
-<button class="pron-btn-inline" data-word="따뜻하다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">시원하다</span>
-<span class="roman">[siwonhada]</span>
-<span class="meaning">凉爽</span>
-<button class="pron-btn-inline" data-word="시원하다" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">계획</span>
-<span class="roman">[gyehoek]</span>
-<span class="meaning">计划</span>
-<button class="pron-btn-inline" data-word="계획" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">약속</span>
-<span class="roman">[yaksok]</span>
-<span class="meaning">约定</span>
-<button class="pron-btn-inline" data-word="약속" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">여행</span>
-<span class="roman">[yeohaeng]</span>
-<span class="meaning">旅行</span>
-<button class="pron-btn-inline" data-word="여행" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">휴가</span>
-<span class="roman">[hyuga]</span>
-<span class="meaning">休假</span>
-<button class="pron-btn-inline" data-word="휴가" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">주말</span>
-<span class="roman">[jumal]</span>
-<span class="meaning">周末</span>
-<button class="pron-btn-inline" data-word="주말" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">모레</span>
-<span class="roman">[more]</span>
-<span class="meaning">后天</span>
-<button class="pron-btn-inline" data-word="모레" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">다음 주</span>
-<span class="roman">[daeum ju]</span>
-<span class="meaning">下周</span>
-<button class="pron-btn-inline" data-word="다음 주" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">지난주</span>
-<span class="roman">[jinanju]</span>
-<span class="meaning">上周</span>
-<button class="pron-btn-inline" data-word="지난주" title="读音">&#x1f50a;</button>
-</div>
-</div>
-
-<div class="section-title">自测</div>
-<button class="test-btn" onclick="toggleQuiz('unit9')">开始自测</button>
-<div class="quiz-area" id="quiz-unit9">
-<div class="quiz-mode-toggle">
-<button class="active-mode" onclick="setQuizMode('unit9','ko-zh',this)">看韩语→写中文</button>
-<button onclick="setQuizMode('unit9','zh-ko',this)">看中文→写韩语</button>
-</div>
-<div class="quiz-progress" id="quiz-progress-unit9"></div>
-<div class="quiz-question" id="quiz-question-unit9"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit9" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit9')">
-<div class="quiz-btns">
-<button class="btn-hint" onclick="showHint('unit9')">提示</button>
-<button class="btn-skip" onclick="skipQuestion('unit9')">跳过</button>
-<button class="btn-confirm" onclick="checkAnswer('unit9')">确认</button>
-</div>
-<div class="quiz-feedback" id="quiz-feedback-unit9"></div>
-<div class="quiz-score" id="quiz-score-unit9"></div>
-<div class="quiz-result" id="quiz-result-unit9"></div>
-<button class="btn-retry" onclick="resetQuiz('unit9')">重新开始</button>
-</div>
-<script>initQuizData('unit9', [{"ko":"봄","zh":"春天","usage":""},{"ko":"여름","zh":"夏天","usage":""},{"ko":"가을","zh":"秋天","usage":""},{"ko":"겨울","zh":"冬天","usage":""},{"ko":"날씨","zh":"天气","usage":""},{"ko":"맑다","zh":"晴朗","usage":""},{"ko":"흐리다","zh":"阴天","usage":""},{"ko":"비","zh":"雨","usage":""},{"ko":"눈","zh":"雪","usage":""},{"ko":"바람","zh":"风","usage":""},{"ko":"춥다","zh":"冷","usage":""},{"ko":"덥다","zh":"热","usage":""},{"ko":"따뜻하다","zh":"温暖","usage":""},{"ko":"시원하다","zh":"凉爽","usage":""},{"ko":"계획","zh":"计划","usage":""},{"ko":"약속","zh":"约定","usage":""},{"ko":"여행","zh":"旅行","usage":""},{"ko":"휴가","zh":"休假","usage":""},{"ko":"주말","zh":"周末","usage":""},{"ko":"모레","zh":"后天","usage":""},{"ko":"다음 주","zh":"下周","usage":""},{"ko":"지난주","zh":"上周","usage":""}]);</script>
-</div>
-<img src="illusts/woman_speaking.png" alt="口语练习" class="illust">
-<div class="unit" id="unit10">
-<h2>Unit 10 爱好 & 运动</h2>
-<div class="section-title">语法</div>
-<div style="overflow-x:auto;">
-<table class="grammar-table">
-<thead><tr><th>语法点</th><th>用法详解</th><th>例句</th></tr></thead>
-<tbody>
-<tr>
-<td>는 것</td>
-<td>动词名词化，「…这件事」。口语中常缩写为 -는 거。</td>
-<td><ul class="example-list"><li><span class="ko-word">영화를 보는 것을 좋아해요</span><button class="pron-btn-inline" data-word="영화를 보는 것을 좋아해요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">요리하는 것이 취미예요</span><button class="pron-btn-inline" data-word="요리하는 것이 취미예요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">혼자 여행하는 것이 재미있어요</span><button class="pron-btn-inline" data-word="혼자 여행하는 것이 재미있어요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>(으)ㄹ 수 있다/없다</td>
-<td>表示「能/不能…」。有收音用 -을 수，无收音用 -ㄹ 수。</td>
-<td><ul class="example-list"><li><span class="ko-word">한국어를 말할 수 있어요</span><button class="pron-btn-inline" data-word="한국어를 말할 수 있어요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">오늘은 만날 수 없어요</span><button class="pron-btn-inline" data-word="오늘은 만날 수 없어요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">수영할 수 있어요?</span><button class="pron-btn-inline" data-word="수영할 수 있어요?" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>아/어/여 보다</td>
-<td>表示「试试看…」。强调尝试、体验。</td>
-<td><ul class="example-list"><li><span class="ko-word">이 음식을 먹어 보세요</span><button class="pron-btn-inline" data-word="이 음식을 먹어 보세요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">한복을 입어 봤어요</span><button class="pron-btn-inline" data-word="한복을 입어 봤어요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">한국에 가 보고 싶어요</span><button class="pron-btn-inline" data-word="한국에 가 보고 싶어요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr><tr>
-<td>(으)면서</td>
-<td>表示「一边…一边…」。有收音用 -으면서，无收音用 -면서。</td>
-<td><ul class="example-list"><li><span class="ko-word">음악을 들으면서 공부해요</span><button class="pron-btn-inline" data-word="음악을 들으면서 공부해요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">밥을 먹으면서 TV를 봐요</span><button class="pron-btn-inline" data-word="밥을 먹으면서 TV를 봐요" title="读音">&#x1f50a;</button></li><li><span class="ko-word">친구하고 이야기하면서 걸었어요</span><button class="pron-btn-inline" data-word="친구하고 이야기하면서 걸었어요" title="读音">&#x1f50a;</button></li></ul></td>
-</tr>
-</tbody>
-</table>
-</div>
-
-<div class="section-title">词汇</div>
-<div class="vocab-grid">
-<div class="vocab-item">
-<span class="ko-word">취미</span>
-<span class="roman">[chwimi]</span>
-<span class="meaning">爱好</span>
-<button class="pron-btn-inline" data-word="취미" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">운동</span>
-<span class="roman">[undong]</span>
-<span class="meaning">运动</span>
-<button class="pron-btn-inline" data-word="운동" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">수영</span>
-<span class="roman">[suyeong]</span>
-<span class="meaning">游泳</span>
-<button class="pron-btn-inline" data-word="수영" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">축구</span>
-<span class="roman">[chukgu]</span>
-<span class="meaning">足球</span>
-<button class="pron-btn-inline" data-word="축구" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">야구</span>
-<span class="roman">[yagu]</span>
-<span class="meaning">棒球</span>
-<button class="pron-btn-inline" data-word="야구" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">농구</span>
-<span class="roman">[nonggu]</span>
-<span class="meaning">篮球</span>
-<button class="pron-btn-inline" data-word="농구" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">배구</span>
-<span class="roman">[baegu]</span>
-<span class="meaning">排球</span>
-<button class="pron-btn-inline" data-word="배구" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">탁구</span>
-<span class="roman">[takgu]</span>
-<span class="meaning">乒乓球</span>
-<button class="pron-btn-inline" data-word="탁구" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">테니스</span>
-<span class="roman">[teniseu]</span>
-<span class="meaning">网球</span>
-<button class="pron-btn-inline" data-word="테니스" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">골프</span>
-<span class="roman">[golpeu]</span>
-<span class="meaning">高尔夫</span>
-<button class="pron-btn-inline" data-word="골프" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">등산</span>
-<span class="roman">[deungsan]</span>
-<span class="meaning">登山</span>
-<button class="pron-btn-inline" data-word="등산" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">낚시</span>
-<span class="roman">[naksi]</span>
-<span class="meaning">钓鱼</span>
-<button class="pron-btn-inline" data-word="낚시" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">요리</span>
-<span class="roman">[yori]</span>
-<span class="meaning">烹饪</span>
-<button class="pron-btn-inline" data-word="요리" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">사진</span>
-<span class="roman">[sajin]</span>
-<span class="meaning">照片</span>
-<button class="pron-btn-inline" data-word="사진" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">독서</span>
-<span class="roman">[dokseo]</span>
-<span class="meaning">读书</span>
-<button class="pron-btn-inline" data-word="독서" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">음악</span>
-<span class="roman">[eumak]</span>
-<span class="meaning">音乐</span>
-<button class="pron-btn-inline" data-word="음악" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">영화</span>
-<span class="roman">[yeonghwa]</span>
-<span class="meaning">电影</span>
-<button class="pron-btn-inline" data-word="영화" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">그림</span>
-<span class="roman">[geurim]</span>
-<span class="meaning">画</span>
-<button class="pron-btn-inline" data-word="그림" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">춤</span>
-<span class="roman">[chum]</span>
-<span class="meaning">舞蹈</span>
-<button class="pron-btn-inline" data-word="춤" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">노래</span>
-<span class="roman">[norae]</span>
-<span class="meaning">歌曲</span>
-<button class="pron-btn-inline" data-word="노래" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">악기</span>
-<span class="roman">[akgi]</span>
-<span class="meaning">乐器</span>
-<button class="pron-btn-inline" data-word="악기" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">피아노</span>
-<span class="roman">[piano]</span>
-<span class="meaning">钢琴</span>
-<button class="pron-btn-inline" data-word="피아노" title="读音">&#x1f50a;</button>
-</div><div class="vocab-item">
-<span class="ko-word">기타</span>
-<span class="roman">[gita]</span>
-<span class="meaning">吉他</span>
-<button class="pron-btn-inline" data-word="기타" title="读音">&#x1f50a;</button>
-</div>
-</div>
-
-<div class="section-title">自测</div>
-<button class="test-btn" onclick="toggleQuiz('unit10')">开始自测</button>
-<div class="quiz-area" id="quiz-unit10">
-<div class="quiz-mode-toggle">
-<button class="active-mode" onclick="setQuizMode('unit10','ko-zh',this)">看韩语→写中文</button>
-<button onclick="setQuizMode('unit10','zh-ko',this)">看中文→写韩语</button>
-</div>
-<div class="quiz-progress" id="quiz-progress-unit10"></div>
-<div class="quiz-question" id="quiz-question-unit10"></div>
-<input type="text" class="quiz-input" id="quiz-input-unit10" autocapitalize="off" autocomplete="off" placeholder="输入你的答案..." onkeypress="if(event.key==='Enter')checkAnswer('unit10')">
-<div class="quiz-btns">
-<button class="btn-hint" onclick="showHint('unit10')">提示</button>
-<button class="btn-skip" onclick="skipQuestion('unit10')">跳过</button>
-<button class="btn-confirm" onclick="checkAnswer('unit10')">确认</button>
-</div>
-<div class="quiz-feedback" id="quiz-feedback-unit10"></div>
-<div class="quiz-score" id="quiz-score-unit10"></div>
-<div class="quiz-result" id="quiz-result-unit10"></div>
-<button class="btn-retry" onclick="resetQuiz('unit10')">重新开始</button>
-</div>
-<script>initQuizData('unit10', [{"ko":"취미","zh":"爱好","usage":""},{"ko":"운동","zh":"运动","usage":""},{"ko":"수영","zh":"游泳","usage":""},{"ko":"축구","zh":"足球","usage":""},{"ko":"야구","zh":"棒球","usage":""},{"ko":"농구","zh":"篮球","usage":""},{"ko":"배구","zh":"排球","usage":""},{"ko":"탁구","zh":"乒乓球","usage":""},{"ko":"테니스","zh":"网球","usage":""},{"ko":"골프","zh":"高尔夫","usage":""},{"ko":"등산","zh":"登山","usage":""},{"ko":"낚시","zh":"钓鱼","usage":""},{"ko":"요리","zh":"烹饪","usage":""},{"ko":"사진","zh":"照片","usage":""},{"ko":"독서","zh":"读书","usage":""},{"ko":"음악","zh":"音乐","usage":""},{"ko":"영화","zh":"电影","usage":""},{"ko":"그림","zh":"画","usage":""},{"ko":"춤","zh":"舞蹈","usage":""},{"ko":"노래","zh":"歌曲","usage":""},{"ko":"악기","zh":"乐器","usage":""},{"ko":"피아노","zh":"钢琴","usage":""},{"ko":"기타","zh":"吉他","usage":""}]);</script>
-</div>
-<div class="unit">
-<h2>特殊音变总结</h2>
-<div style="overflow-x:auto;">
-<table class="summary-table">
-<thead><tr><th>音变类型</th><th>规则</th><th>例子</th></tr></thead>
-<tbody>
-<tr><td>ㄷ 不规则</td><td>ㄷ → ㄹ (元音前)</td><td>듣다 → 들어요 (听) / 걷다 → 걸어요 (走) / 묻다 → 물어요 (问)</td></tr>
-<tr><td>ㅂ 不规则</td><td>ㅂ → 우/오 (元音前)</td><td>춥다 → 추워요 (冷) / 덥다 → 더워요 (热) / 돕다 → 도와요 (帮助)</td></tr>
-<tr><td>ㅅ 不规则</td><td>ㅅ 脱落 (元音前)</td><td>짓다 → 지어요 (建造) / 낫다 → 나아요 (痊愈) / 붓다 → 부어요 (倒)</td></tr>
-<tr><td>르 不规则</td><td>르 → ㄹㄹ (元音前)</td><td>모르다 → 몰라요 (不知道) / 빠르다 → 빨라요 (快) / 부르다 → 불러요 (叫)</td></tr>
-<tr><td>ㄹ 脱落</td><td>ㄹ 脱落 (ㄴ/ㅂ/ㅅ 前)</td><td>살다 → 사는 (住) / 알다 → 아는 (知道) / 팔다 → 파는 (卖)</td></tr>
-<tr><td>으 脱落</td><td>으 脱落 (元音接续)</td><td>쓰다 → 써요 (写) / 크다 → 커요 (大) / 예쁘다 → 예뻐요 (漂亮)</td></tr>
-</tbody>
-</table>
-</div>
-</div>
-
-<div class="unit">
-<h2>人称代词表</h2>
-<div style="overflow-x:auto;">
-<table class="summary-table">
-<thead><tr><th>中文</th><th>韩语(普通)</th><th>韩语(谦/敬)</th><th>说明</th></tr></thead>
-<tbody>
-<tr><td>我</td><td>나</td><td>저</td><td>저 是谦称，用于正式场合</td></tr>
-<tr><td>你</td><td>너</td><td>당신/그쪽</td><td>당신 常用于夫妻间或书面语</td></tr>
-<tr><td>我们</td><td>우리</td><td>저희</td><td>저희 是谦称</td></tr>
-<tr><td>他/她</td><td>그/그녀</td><td>그분</td><td>그분 是敬称</td></tr>
-<tr><td>这位</td><td>이분</td><td>—</td><td>敬称，指眼前的人</td></tr>
-<tr><td>那位</td><td>그분</td><td>저분</td><td>저분 指远处的人（敬）</td></tr>
-</tbody>
-</table>
-</div>
-</div>
-</main>
-<footer>
-  <div class="illust-row">
-    <img src="illusts/woman_korean_a.png" alt="韩语学习" style="max-width:120px;border-radius:12px;">
-    <img src="illusts/man_korean_1.png" alt="韩语学习" style="max-width:120px;border-radius:12px;">
-  </div>
-  <p>延世韩国语语法学习手册</p>
-</footer>
-
 <script>
-// Navigation
-document.addEventListener('DOMContentLoaded', function() {
-    // Nav buttons
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const target = this.getAttribute('data-target');
-            const el = document.getElementById(target);
-            if (el) {
-                el.scrollIntoView({ behavior: 'smooth' });
-            }
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-        });
-    });
-    
-    // Pronunciation buttons
-    document.addEventListener('click', function(e) {
-        const btn = e.target.closest('.pron-btn, .pron-btn-inline');
-        if (btn) {
-            const word = btn.getAttribute('data-word');
-            if (word) {
-                playWord(word);
-                // Visual feedback
-                btn.classList.add('playing');
-                setTimeout(() => btn.classList.remove('playing'), 1500);
-            }
-        }
-    });
-    
-    // Scroll spy for nav
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const id = entry.target.id;
-                document.querySelectorAll('.nav-btn').forEach(b => {
-                    b.classList.toggle('active', b.getAttribute('data-target') === id);
-                });
-            }
-        });
-    }, { threshold: 0.3 });
-    
-    document.querySelectorAll('.unit[id^="unit"]').forEach(el => observer.observe(el));
-});
-</script>
+// ===========================================
+// PRONUNCIATION: Web Speech API
+// ===========================================
+let currentUtterance = null;
+function speakWord(text) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ko-KR';
+    u.rate = 0.85;
+    currentUtterance = u;
+    window.speechSynthesis.speak(u);
+    return true;
+  }
+  return false;
+}
+function playBtn(btn, text) {
+  const allBtns = document.querySelectorAll('.speaker-btn.playing');
+  allBtns.forEach(b => b.classList.remove('playing'));
+  btn.classList.add('playing');
+  const ok = speakWord(text);
+  if (ok) {
+    setTimeout(() => btn.classList.remove('playing'), 1500);
+  } else {
+    btn.classList.remove('playing');
+  }
+}
 
+// ===========================================
+// NAVIGATION
+// ===========================================
+function showUnit(id) {
+  document.querySelectorAll('.unit').forEach(u => u.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  const unit = document.getElementById(id);
+  if (unit) unit.classList.add('active');
+  const btn = document.querySelector(`.nav button[onclick="showUnit('${id}')"]`);
+  if (btn) btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===========================================
+// ALL LESSON DATA (embedded for efficiency)
+// ===========================================
+const lessonData = {
+"unit1": {
+  "title": "第1课 问候", "koTitle": "인사",
+  "illust": "illusts/woman_korean_a.png",
+  "bilibili": {
+    "1": "https://www.bilibili.com/video/BV1sHpez1EEL",
+    "2": "https://www.bilibili.com/video/BV1tLpezSEEB",
+    "3": "https://www.bilibili.com/video/BV1tLpezDEQ2",
+    "4": "https://www.bilibili.com/video/BV1tFpqztEXt"
+  },
+  "sections": [
+    {
+      "num": "01", "title": "안녕하십니까? (你好!)", "task": "이름 말하기 (说说名字)",
+      "grammar": [
+        {"point": "입니다", "explain": "이다不可单独使用，附在名词后作谓语，表示身份或状态。正式场合使用的终结词尾。注意：입니다 是 이다 的 합쇼체（正式敬语）形式。", "examples": ["저는 학생입니다.", "이것은 제 책상입니다.", "여기는 학교입니다."]},
+        {"point": "은/는", "explain": "用于名词后，表示主语或话题。有收音(받침)用 -은，无收音用 -는。也可表示对比或强调。은/는 是韩语中最基础的助词之一，相当于中文的'话题标记'。", "examples": ["저는 한국 사람입니다.", "서울은 한국의 수도입니다.", "이것은 교과서입니다."]}
+      ],
+      "dialogue": [
+        {"speaker": "리에", "text": "안녕하십니까?"},
+        {"speaker": "웨이", "text": "네, 안녕하십니까?"},
+        {"speaker": "리에", "text": "리에입니다."},
+        {"speaker": "웨이", "text": "저는 웨이입니다."}
+      ],
+      "vocab": [
+        {"ko": "이름", "zh": "姓名"}, {"ko": "선생님", "zh": "老师"},
+        {"ko": "씨", "zh": "先生/小姐（敬称）"}, {"ko": "성", "zh": "姓"}
+      ]
+    },
+    {
+      "num": "02", "title": "어느 나라 사람입니까? (你是哪国人?)", "task": "국적 말하기 (说说国籍)",
+      "grammar": [
+        {"point": "입니까?", "explain": "입니다的疑问形式，表示'是…吗？'。句尾语调上升。名词后直接加。注意和 반말（非敬语）的 이야? 区分。", "examples": ["이분이 어느 나라 사람입니까?", "여기가 신촌입니까?", "학생입니까?"]}
+      ],
+      "dialogue": [
+        {"speaker": "리에", "text": "어느 나라 사람입니까?"},
+        {"speaker": "제임스", "text": "미국 사람입니다. 리에 씨는 중국 사람입니까?"},
+        {"speaker": "리에", "text": "아니요, 저는 일본 사람입니다."},
+        {"speaker": "제임스", "text": "아, 그렇습니까?"}
+      ],
+      "vocab": [
+        {"ko": "어느", "zh": "哪（个）"}, {"ko": "나라", "zh": "国家"},
+        {"ko": "미국", "zh": "美国"}, {"ko": "중국", "zh": "中国"},
+        {"ko": "일본", "zh": "日本"}, {"ko": "아니요", "zh": "不"},
+        {"ko": "그렇습니까", "zh": "是吗"}
+      ]
+    },
+    {
+      "num": "03", "title": "회사원이 아닙니다 (我不是公司职员)", "task": "직업 말하기 (说说职业)",
+      "grammar": [
+        {"point": "이/가 아니다", "explain": "이다的否定形式，表示'不是…'。有收音用 -이 아니다，无收音用 -가 아니다。这是韩语中表示'不是'的核心句型，注意和 안/지 않다 的区别（后者用于动词/形容词）。", "examples": ["저는 일본 사람이 아닙니다.", "이것은 교과서가 아닙니다.", "저는 회사원이 아닙니다."]}
+      ],
+      "dialogue": [
+        {"speaker": "웨이", "text": "회사원입니까?"},
+        {"speaker": "마리아", "text": "아니요, 회사원이 아닙니다."},
+        {"speaker": "웨이", "text": "그럼 학생입니까?"},
+        {"speaker": "마리아", "text": "네, 대학생입니다."}
+      ],
+      "vocab": [
+        {"ko": "회사원", "zh": "公司职员"}, {"ko": "그럼", "zh": "那么"},
+        {"ko": "대학생", "zh": "大学生"}, {"ko": "직업", "zh": "职业"},
+        {"ko": "경찰", "zh": "警察"}, {"ko": "가수", "zh": "歌手"},
+        {"ko": "의사", "zh": "医生"}, {"ko": "간호사", "zh": "护士"},
+        {"ko": "은행원", "zh": "银行职员"}, {"ko": "비서", "zh": "秘书"},
+        {"ko": "기자", "zh": "记者"}, {"ko": "변호사", "zh": "律师"}
+      ]
+    },
+    {
+      "num": "04", "title": "반갑습니다 (认识你很高兴)", "task": "인사 나누기 (打招呼)",
+      "grammar": [
+        {"point": "습니다/ㅂ니다", "explain": "与谓词词干连用，正式陈述形。有收音用 -습니다，无收音用 -ㅂ니다。这是韩语中最正式的敬语终结词尾，在正式场合、新闻、演讲中使用。", "examples": ["학교에 갑니다.", "만나서 반갑습니다.", "책을 읽습니다."]},
+        {"point": "습니까/ㅂ니까?", "explain": "与谓词词干连用，正式疑问形。有收音用 -습니까，无收音用 -ㅂ니까。和 입니까 不同，습니까 用于动词和形容词。", "examples": ["무엇을 합니까?", "사전이 있습니까?", "어디에 갑니까?"]}
+      ],
+      "dialogue": [
+        {"speaker": "미선", "text": "누구입니까?"},
+        {"speaker": "웨이", "text": "제 친구 이영수입니다."},
+        {"speaker": "미선", "text": "처음 뵙겠습니다. 김미선입니다."},
+        {"speaker": "영수", "text": "안녕하십니까? 반갑습니다."}
+      ],
+      "vocab": [
+        {"ko": "누구", "zh": "谁"}, {"ko": "처음 뵙겠습니다", "zh": "初次见面"},
+        {"ko": "반갑다", "zh": "高兴"}, {"ko": "가다", "zh": "去"},
+        {"ko": "오다", "zh": "来"}, {"ko": "만나다", "zh": "见面"},
+        {"ko": "인사하다", "zh": "打招呼"}, {"ko": "자다", "zh": "睡"},
+        {"ko": "먹다", "zh": "吃"}, {"ko": "입다", "zh": "穿"},
+        {"ko": "듣다", "zh": "听"}, {"ko": "읽다", "zh": "读"}, {"ko": "쓰다", "zh": "写"}
+      ]
+    }
+  ],
+  "allVocab": [
+    {"ko":"이름","zh":"姓名"},{"ko":"선생님","zh":"老师"},{"ko":"씨","zh":"先生/小姐"},
+    {"ko":"어느","zh":"哪"},{"ko":"나라","zh":"国家"},{"ko":"사람","zh":"人"},
+    {"ko":"미국","zh":"美国"},{"ko":"중국","zh":"中国"},{"ko":"일본","zh":"日本"},
+    {"ko":"아니요","zh":"不"},{"ko":"그렇습니까","zh":"是吗"},{"ko":"회사원","zh":"公司职员"},
+    {"ko":"그럼","zh":"那么"},{"ko":"학생","zh":"学生"},{"ko":"대학생","zh":"大学生"},
+    {"ko":"직업","zh":"职业"},{"ko":"경찰","zh":"警察"},{"ko":"가수","zh":"歌手"},
+    {"ko":"의사","zh":"医生"},{"ko":"간호사","zh":"护士"},{"ko":"은행원","zh":"银行职员"},
+    {"ko":"비서","zh":"秘书"},{"ko":"기자","zh":"记者"},{"ko":"변호사","zh":"律师"},
+    {"ko":"누구","zh":"谁"},{"ko":"처음 뵙겠습니다","zh":"初次见面"},
+    {"ko":"반갑다","zh":"高兴"},{"ko":"가다","zh":"去"},{"ko":"오다","zh":"来"},
+    {"ko":"만나다","zh":"见面"},{"ko":"인사하다","zh":"打招呼"},{"ko":"자다","zh":"睡"},
+    {"ko":"먹다","zh":"吃"},{"ko":"입다","zh":"穿"},{"ko":"듣다","zh":"听"},
+    {"ko":"읽다","zh":"读"},{"ko":"쓰다","zh":"写"}
+  ]
+},
+"unit2": {
+  "title": "第2课 学校和家", "koTitle": "학교와 집",
+  "illust": "illusts/woman_korean_a.png",
+  "bilibili": {
+    "1": "https://www.bilibili.com/video/BV1dFWMzZE6n",
+    "2": "https://www.bilibili.com/video/BV1dFWMzZE6n",
+    "3": "https://www.bilibili.com/video/BV1dFWMzZE6n",
+    "4": "https://www.bilibili.com/video/BV1rvWgzkEwc"
+  },
+  "sections": [
+    {
+      "num": "01", "title": "이것이 교과서입니까? (这是课本吗?)", "task": "사물 이름 말하기 (说说物品名称)",
+      "grammar": [
+        {"point": "이/가", "explain": "用于名词后的主格助词，表示主语。有收音用 -이，无收音用 -가。和 은/는 的区别：이/가 强调主语（新信息），은/는 强调话题（已知信息）。", "examples": ["이것이 책상입니다.", "여기가 학교입니다.", "날씨가 좋습니다."]}
+      ],
+      "dialogue": [
+        {"speaker": "마리아", "text": "이것이 교과서입니까?"},
+        {"speaker": "점원", "text": "네, 그렇습니다."},
+        {"speaker": "마리아", "text": "그럼 저것은 무엇입니까?"},
+        {"speaker": "점원", "text": "사전입니다."}
+      ],
+      "vocab": [
+        {"ko":"교과서","zh":"课本"},{"ko":"점원","zh":"店员"},{"ko":"사전","zh":"词典"}
+      ]
+    },
+    {
+      "num": "02", "title": "지도도 있습니까? (也有地图吗?)", "task": "물건 유무 말하기 (说说物品有无)",
+      "grammar": [
+        {"point": "도", "explain": "表示'也'，用于名词后。과主格助词 이/가、宾格助词 을/를 连用时，助词省略。相当于中文的'也'。", "examples": ["책상이 있습니다. 의자도 있습니다.", "농구를 합니다. 야구도 합니다.", "저도 학생입니다."]},
+        {"point": "있다/없다", "explain": "있다表示'有、在'；없다表示'没有、不在'。对长辈用 계시다 代替 있다。这是韩语中最高频的词汇之一。", "examples": ["친구가 있습니다.", "그림이 없습니다.", "선생님이 계십니다."]}
+      ],
+      "dialogue": [
+        {"speaker": "영수", "text": "달력이 있습니까?"},
+        {"speaker": "마리아", "text": "네, 있습니다."},
+        {"speaker": "영수", "text": "지도도 있습니까?"},
+        {"speaker": "마리아", "text": "아니요, 없습니다."}
+      ],
+      "vocab": [
+        {"ko":"달력","zh":"日历"},{"ko":"지도","zh":"地图"},{"ko":"없다","zh":"没有"},
+        {"ko":"교실","zh":"教室"},{"ko":"창문","zh":"窗户"},{"ko":"칠판","zh":"黑板"},
+        {"ko":"그림","zh":"画"},{"ko":"문","zh":"门"},{"ko":"의자","zh":"椅子"},
+        {"ko":"많다","zh":"多"},{"ko":"적다","zh":"少"},{"ko":"크다","zh":"大"},
+        {"ko":"작다","zh":"小"},{"ko":"좋다","zh":"好"},{"ko":"나쁘다","zh":"不好"}
+      ]
+    },
+    {
+      "num": "03", "title": "은행이 어디에 있습니까? (银行在哪里?)", "task": "위치 말하기 (说说位置)",
+      "grammar": [
+        {"point": "에 (位置)", "explain": "与名词连用，表示存在的位置。通常与 있다/없다 连用。表示'在…'。注意与 에서（动作进行场所）区分。", "examples": ["친구가 미국에 있습니다.", "교실에 텔레비전이 없습니다.", "집에 갑니다."]}
+      ],
+      "dialogue": [
+        {"speaker": "마리아", "text": "은행이 어디에 있습니까?"},
+        {"speaker": "영수", "text": "학생회관에 있습니다."},
+        {"speaker": "마리아", "text": "학생회관은 어디에 있습니까?"},
+        {"speaker": "영수", "text": "도서관 앞에 있습니다."}
+      ],
+      "vocab": [
+        {"ko":"은행","zh":"银行"},{"ko":"어디","zh":"哪儿"},{"ko":"학생회관","zh":"学生会馆"},
+        {"ko":"도서관","zh":"图书馆"},{"ko":"앞","zh":"前面"},{"ko":"화장실","zh":"洗手间"},
+        {"ko":"식당","zh":"食堂"},{"ko":"서점","zh":"书店"},{"ko":"우체국","zh":"邮局"},
+        {"ko":"사무실","zh":"办公室"},{"ko":"뒤","zh":"后面"},{"ko":"옆","zh":"旁边"},
+        {"ko":"위","zh":"上面"},{"ko":"밑","zh":"下面"},{"ko":"안","zh":"里面"},{"ko":"밖","zh":"外面"}
+      ]
+    },
+    {
+      "num": "04", "title": "집이 어디입니까? (你家在哪里?)", "task": "주변 시설 말하기 (说说周边设施)",
+      "grammar": [
+        {"point": "하고", "explain": "与名词连用，连接两个或以上名词，相当于'和、与'。口语中常用，比 과/와 更随意。", "examples": ["책하고 공책이 있습니다.", "친구하고 어머니가 계십니다.", "사과하고 배를 샀어요."]}
+      ],
+      "dialogue": [
+        {"speaker": "영수", "text": "집이 어디입니까?"},
+        {"speaker": "마리아", "text": "신촌입니다."},
+        {"speaker": "영수", "text": "집 근처에 무엇이 있습니까?"},
+        {"speaker": "마리아", "text": "백화점하고 지하철역이 있습니다."}
+      ],
+      "vocab": [
+        {"ko":"집","zh":"家"},{"ko":"근처","zh":"附近"},{"ko":"백화점","zh":"百货商店"},
+        {"ko":"지하철","zh":"地铁"},{"ko":"역","zh":"站"},{"ko":"극장","zh":"剧场"},
+        {"ko":"병원","zh":"医院"},{"ko":"약국","zh":"药店"},{"ko":"회사","zh":"公司"},
+        {"ko":"가게","zh":"店"},{"ko":"공원","zh":"公园"},{"ko":"시장","zh":"市场"}
+      ]
+    }
+  ],
+  "allVocab": [
+    {"ko":"교과서","zh":"课本"},{"ko":"점원","zh":"店员"},{"ko":"사전","zh":"词典"},
+    {"ko":"달력","zh":"日历"},{"ko":"지도","zh":"地图"},{"ko":"없다","zh":"没有"},
+    {"ko":"교실","zh":"教室"},{"ko":"창문","zh":"窗户"},{"ko":"칠판","zh":"黑板"},
+    {"ko":"그림","zh":"画"},{"ko":"문","zh":"门"},{"ko":"의자","zh":"椅子"},
+    {"ko":"많다","zh":"多"},{"ko":"적다","zh":"少"},{"ko":"크다","zh":"大"},
+    {"ko":"작다","zh":"小"},{"ko":"좋다","zh":"好"},{"ko":"나쁘다","zh":"不好"},
+    {"ko":"은행","zh":"银行"},{"ko":"어디","zh":"哪儿"},{"ko":"학생회관","zh":"学生会馆"},
+    {"ko":"도서관","zh":"图书馆"},{"ko":"앞","zh":"前面"},{"ko":"화장실","zh":"洗手间"},
+    {"ko":"식당","zh":"食堂"},{"ko":"서점","zh":"书店"},{"ko":"우체국","zh":"邮局"},
+    {"ko":"사무실","zh":"办公室"},{"ko":"뒤","zh":"后面"},{"ko":"옆","zh":"旁边"},
+    {"ko":"위","zh":"上面"},{"ko":"밑","zh":"下面"},{"ko":"안","zh":"里面"},{"ko":"밖","zh":"外面"},
+    {"ko":"집","zh":"家"},{"ko":"근처","zh":"附近"},{"ko":"백화점","zh":"百货商店"},
+    {"ko":"지하철","zh":"地铁"},{"ko":"역","zh":"站"},{"ko":"극장","zh":"剧场"},
+    {"ko":"병원","zh":"医院"},{"ko":"약국","zh":"药店"},{"ko":"회사","zh":"公司"},
+    {"ko":"가게","zh":"店"},{"ko":"공원","zh":"公园"},{"ko":"시장","zh":"市场"}
+  ]
+},
+"unit3": {
+  "title": "第3课 家人和朋友", "koTitle": "가족과 친구",
+  "illust": "illusts/woman_korean_a.png",
+  "bilibili": {
+    "1": "https://www.bilibili.com/video/BV1wfpDzxE41",
+    "2": "https://www.bilibili.com/video/BV1JApQzQErs",
+    "3": "https://www.bilibili.com/video/BV1nwpQzWEMn",
+    "4": "https://www.bilibili.com/video/BV1otpDz1Era"
+  },
+  "sections": [
+    {
+      "num": "01", "title": "가족 사진을 봅니다 (看家庭照片)", "task": "일상 활동 말하기 (说说日常活动)",
+      "grammar": [
+        {"point": "을/를", "explain": "名词后的宾格助词，表示宾语。有收音用 -을，无收音用 -를。口语中常省略。", "examples": ["그분은 신문을 봅니다.", "학생들은 노래를 잘 부릅니다.", "밥을 먹습니다."]}
+      ],
+      "dialogue": [
+        {"speaker": "민철", "text": "제임스 씨, 무엇을 합니까?"},
+        {"speaker": "제임스", "text": "가족 사진을 봅니다."},
+        {"speaker": "민철", "text": "사진을 자주 봅니까?"},
+        {"speaker": "제임스", "text": "아니요, 가끔 봅니다."}
+      ],
+      "vocab": [
+        {"ko":"하다","zh":"做"},{"ko":"가족","zh":"家人"},{"ko":"사진","zh":"照片"},
+        {"ko":"보다","zh":"看"},{"ko":"자주","zh":"经常"},{"ko":"가끔","zh":"偶尔"},
+        {"ko":"일하다","zh":"工作"},{"ko":"공부하다","zh":"学习"},{"ko":"숙제하다","zh":"做作业"},
+        {"ko":"이야기하다","zh":"讲故事"},{"ko":"노래하다","zh":"唱歌"},{"ko":"운동하다","zh":"运动"},
+        {"ko":"산책하다","zh":"散步"}
+      ]
+    },
+    {
+      "num": "02", "title": "부모님은 어디에 계십니까? (父母在哪里?)", "task": "가족 소개하기 (介绍家人)",
+      "grammar": [
+        {"point": "으시/시", "explain": "尊称词尾，用于谓词词干后，表示对主语的尊敬。有收音用 -으시-，无收音用 -시-。常与敬语主格助词 께서 搭配。", "examples": ["어머니께서 가십니다.", "아버지께서는 신문을 읽으십니다.", "선생님께서 오십니다."]},
+        {"point": "数词 (하나~열)", "explain": "韩国语固有数词，用于数数。하나/둘/셋/넷在单位名词前变为 한/두/세/네。主要用于年龄、人数、时间（小时）等。", "examples": ["사람 한 명", "사과 세 개", "커피 두 잔"]}
+      ],
+      "dialogue": [
+        {"speaker": "민철", "text": "가족이 몇 명입니까?"},
+        {"speaker": "제임스", "text": "아버지, 어머니, 누나 그리고 저 모두 네 사람입니다."},
+        {"speaker": "민철", "text": "부모님은 어디에 계십니까?"},
+        {"speaker": "제임스", "text": "고향에 계십니다."}
+      ],
+      "vocab": [
+        {"ko":"몇","zh":"几"},{"ko":"명","zh":"口/名"},{"ko":"아버지","zh":"爸爸"},
+        {"ko":"어머니","zh":"妈妈"},{"ko":"누나","zh":"姐姐（男称）"},{"ko":"모두","zh":"都"},
+        {"ko":"부모님","zh":"父母"},{"ko":"계시다","zh":"在（敬语）"},{"ko":"고향","zh":"家乡"},
+        {"ko":"할아버지","zh":"爷爷"},{"ko":"할머니","zh":"奶奶"},
+        {"ko":"형","zh":"哥哥（男称）"},{"ko":"오빠","zh":"哥哥（女称）"},{"ko":"언니","zh":"姐姐（女称）"},
+        {"ko":"동생","zh":"弟弟/妹妹"},{"ko":"하나","zh":"一"},{"ko":"둘","zh":"二"},
+        {"ko":"셋","zh":"三"},{"ko":"넷","zh":"四"},{"ko":"다섯","zh":"五"}
+      ]
+    },
+    {
+      "num": "03", "title": "공기가 좋습니까? (空气好吗?)", "task": "고향 설명하기 (说说家乡)",
+      "grammar": [
+        {"point": "고 (并列)", "explain": "连接词尾，表示并列罗列两种或以上动作、状态或事实。相当于'既…又…'。", "examples": ["남대문시장은 옷이 싸고 좋습니다.", "내일은 춥고 비가 오겠습니다.", "공기도 좋고 조용합니다."]}
+      ],
+      "dialogue": [
+        {"speaker": "민철", "text": "여기가 고향입니까?"},
+        {"speaker": "제임스", "text": "네, 우리 고향에는 산이 많습니다."},
+        {"speaker": "민철", "text": "공기가 좋습니까?"},
+        {"speaker": "제임스", "text": "네, 공기도 좋고 조용합니다."}
+      ],
+      "vocab": [
+        {"ko":"산","zh":"山"},{"ko":"공기","zh":"空气"},{"ko":"조용하다","zh":"安静"},
+        {"ko":"깨끗하다","zh":"干净"},{"ko":"더럽다","zh":"脏"},{"ko":"시끄럽다","zh":"吵"},
+        {"ko":"넓다","zh":"宽"},{"ko":"좁다","zh":"窄"},{"ko":"춥다","zh":"冷"},
+        {"ko":"덥다","zh":"热"},{"ko":"시원하다","zh":"凉快"},{"ko":"따뜻하다","zh":"温暖"},
+        {"ko":"예쁘다","zh":"漂亮"},{"ko":"복잡하다","zh":"复杂"}
+      ]
+    },
+    {
+      "num": "04", "title": "대학교에서 경제학을 공부합니다 (在大学学习经济学)", "task": "전공 말하기 (说说专业)",
+      "grammar": [
+        {"point": "에서 (场所)", "explain": "用于表示处所的名词后，表示动作进行的场所。与 에（存在位置）不同，에서 强调'在…做某事'。", "examples": ["도서관에서 공부합니다.", "교실에서 담배를 피우지 마십시오.", "식당에서 밥을 먹습니다."]}
+      ],
+      "dialogue": [
+        {"speaker": "민철", "text": "고향에 한국 친구가 있습니까?"},
+        {"speaker": "제임스", "text": "네, 한 명 있습니다."},
+        {"speaker": "민철", "text": "그 친구는 무엇을 합니까?"},
+        {"speaker": "제임스", "text": "대학교에서 경제학을 공부합니다."}
+      ],
+      "vocab": [
+        {"ko":"대학교","zh":"大学"},{"ko":"경제학","zh":"经济学"},{"ko":"전공","zh":"专业"},
+        {"ko":"역사학","zh":"历史学"},{"ko":"컴퓨터공학","zh":"计算机工学"},
+        {"ko":"정치학","zh":"政治学"},{"ko":"법학","zh":"法学"},
+        {"ko":"경영학","zh":"经营学"},{"ko":"의학","zh":"医学"},
+        {"ko":"영문학","zh":"英国文学"},{"ko":"생물학","zh":"生物学"}
+      ]
+    }
+  ],
+  "allVocab": [
+    {"ko":"하다","zh":"做"},{"ko":"가족","zh":"家人"},{"ko":"사진","zh":"照片"},
+    {"ko":"보다","zh":"看"},{"ko":"자주","zh":"经常"},{"ko":"가끔","zh":"偶尔"},
+    {"ko":"일하다","zh":"工作"},{"ko":"공부하다","zh":"学习"},{"ko":"숙제하다","zh":"做作业"},
+    {"ko":"이야기하다","zh":"讲故事"},{"ko":"노래하다","zh":"唱歌"},{"ko":"운동하다","zh":"运动"},
+    {"ko":"산책하다","zh":"散步"},{"ko":"몇","zh":"几"},{"ko":"명","zh":"口/名"},
+    {"ko":"아버지","zh":"爸爸"},{"ko":"어머니","zh":"妈妈"},{"ko":"누나","zh":"姐姐（男称）"},
+    {"ko":"모두","zh":"都"},{"ko":"부모님","zh":"父母"},{"ko":"계시다","zh":"在（敬语）"},
+    {"ko":"고향","zh":"家乡"},{"ko":"할아버지","zh":"爷爷"},{"ko":"할머니","zh":"奶奶"},
+    {"ko":"형","zh":"哥哥（男称）"},{"ko":"오빠","zh":"哥哥（女称）"},{"ko":"언니","zh":"姐姐（女称）"},
+    {"ko":"동생","zh":"弟弟/妹妹"},{"ko":"하나","zh":"一"},{"ko":"둘","zh":"二"},
+    {"ko":"셋","zh":"三"},{"ko":"넷","zh":"四"},{"ko":"다섯","zh":"五"},
+    {"ko":"산","zh":"山"},{"ko":"공기","zh":"空气"},{"ko":"조용하다","zh":"安静"},
+    {"ko":"깨끗하다","zh":"干净"},{"ko":"더럽다","zh":"脏"},{"ko":"시끄럽다","zh":"吵"},
+    {"ko":"넓다","zh":"宽"},{"ko":"좁다","zh":"窄"},{"ko":"춥다","zh":"冷"},
+    {"ko":"덥다","zh":"热"},{"ko":"시원하다","zh":"凉快"},{"ko":"따뜻하다","zh":"温暖"},
+    {"ko":"예쁘다","zh":"漂亮"},{"ko":"복잡하다","zh":"复杂"},
+    {"ko":"대학교","zh":"大学"},{"ko":"경제학","zh":"经济学"},{"ko":"전공","zh":"专业"},
+    {"ko":"역사학","zh":"历史学"},{"ko":"컴퓨터공학","zh":"计算机工学"},
+    {"ko":"정치학","zh":"政治学"},{"ko":"법학","zh":"法学"},
+    {"ko":"경영학","zh":"经营学"},{"ko":"의학","zh":"医学"},
+    {"ko":"영문학","zh":"英国文学"},{"ko":"생물학","zh":"生物学"}
+  ]
+},
+"unit4": {
+  "title": "第4课 饮食", "koTitle": "음식",
+  "illust": "illusts/woman_korean_a.png",
+  "bilibili": {
+    "1": "https://www.bilibili.com/video/BV1VFJozEEN1",
+    "2": "https://www.bilibili.com/video/BV1VFJozEEN1",
+    "3": "https://www.bilibili.com/video/BV1VFJozEEN1",
+    "4": "https://www.bilibili.com/video/BV1VFJozEEN1"
+  },
+  "sections": [
+    {
+      "num": "01", "title": "식당에 갑시다 (去餐厅吧)", "task": "제안하기 (提议)",
+      "grammar": [
+        {"point": "에 가다/오다", "explain": "表示目的地。에 + 移动动词（가다/오다/다니다等）。", "examples": ["날마다 학교에 갑니다.", "친구가 우리 집에 옵니다.", "식당에 갑니다."]},
+        {"point": "을까요? (提议)", "explain": "表示提议一起做某事。用于共动句中，相当于'…好吗？'。", "examples": ["점심을 같이 먹을까요?", "도서관에 갈까요?", "영화를 볼까요?"]},
+        {"point": "읍시다/ㅂ시다", "explain": "表示提议一起做某事，共动句。有收音用 -읍시다，无收音用 -ㅂ시다。", "examples": ["한국 음식을 먹읍시다.", "영화를 봅시다.", "같이 갑시다."]}
+      ],
+      "dialogue": [
+        {"speaker": "리에", "text": "마리아 씨, 어디에 갑니까?"},
+        {"speaker": "마리아", "text": "식당에 갑니다."},
+        {"speaker": "리에", "text": "누구하고 갑니까?"},
+        {"speaker": "마리아", "text": "혼자 갑니다."},
+        {"speaker": "리에", "text": "같이 갈까요?"},
+        {"speaker": "마리아", "text": "네, 그럽시다."}
+      ],
+      "vocab": [
+        {"ko":"혼자","zh":"一个人"},{"ko":"같이","zh":"一起"},{"ko":"그럽시다","zh":"那样做吧"},
+        {"ko":"나가다","zh":"出去"},{"ko":"들어오다","zh":"进来"},
+        {"ko":"올라가다","zh":"上去"},{"ko":"내려오다","zh":"下来"},
+        {"ko":"한식집","zh":"韩餐馆"},{"ko":"중국집","zh":"中餐厅"},
+        {"ko":"일식집","zh":"日料店"},{"ko":"양식집","zh":"西餐厅"}
+      ]
+    },
+    {
+      "num": "02", "title": "무슨 음식을 좋아하십니까? (你喜欢什么食物?)", "task": "음식 취향 말하기 (说说饮食喜好)",
+      "grammar": [
+        {"point": "지 않다", "explain": "表示否定，'不…'。不能用于命令句或共动句。和 안 的区别：지 않다 更正式。", "examples": ["내일은 학교에 가지 않습니다.", "음식이 맵지 않습니다.", "그 영화는 재미있지 않아요."]},
+        {"point": "ㄹ特殊音变", "explain": "以ㄹ结尾的谓词词干遇到ㄴ/ㅂ/ㅅ开头词尾时，ㄹ脱落。如 살다 → 삽니다。", "examples": ["살다 → 삽니다", "알다 → 압니까?", "만들다 → 만듭니다."]}
+      ],
+      "dialogue": [
+        {"speaker": "리에", "text": "무슨 음식을 좋아하십니까?"},
+        {"speaker": "마리아", "text": "저는 불고기를 좋아합니다."},
+        {"speaker": "리에", "text": "불고기는 맛이 어떻습니까?"},
+        {"speaker": "마리아", "text": "아주 맛있습니다."},
+        {"speaker": "리에", "text": "맵지 않습니까?"},
+        {"speaker": "마리아", "text": "네, 외국인들도 잘 먹습니다."}
+      ],
+      "vocab": [
+        {"ko":"무슨","zh":"什么"},{"ko":"맛","zh":"味道"},{"ko":"맛있다","zh":"好吃"},
+        {"ko":"맵다","zh":"辣"},{"ko":"외국인","zh":"外国人"},{"ko":"잘","zh":"好"},
+        {"ko":"한식","zh":"韩餐"},{"ko":"중국 음식","zh":"中餐"},
+        {"ko":"일식","zh":"日餐"},{"ko":"양식","zh":"西餐"},
+        {"ko":"자장면","zh":"炸酱面"},{"ko":"초밥","zh":"寿司"},
+        {"ko":"스테이크","zh":"牛排"},{"ko":"맛없다","zh":"不好吃"},
+        {"ko":"달다","zh":"甜"},{"ko":"쓰다","zh":"苦"},
+        {"ko":"시다","zh":"酸"},{"ko":"짜다","zh":"咸"},{"ko":"싱겁다","zh":"淡"}
+      ]
+    },
+    {
+      "num": "03", "title": "저는 불고기를 먹고 싶습니다 (我想吃烤肉)", "task": "희망 표현하기 (表达愿望)",
+      "grammar": [
+        {"point": "고 싶다", "explain": "用于动词词干后，表示'想做…'。第一人称主语。第三人称用 고 싶어하다。", "examples": ["커피를 마시고 싶습니다.", "친구들을 만나고 싶습니다.", "한국에 가고 싶습니다."]},
+        {"point": "겠 (意志)", "explain": "和动词词干连用，表示说话人的意志。疑问句中询问对方意图。", "examples": ["저는 비빔밥을 먹겠습니다.", "뭘 잡수시겠습니까?", "제가 하겠습니다."]}
+      ],
+      "dialogue": [
+        {"speaker": "리에", "text": "이 식당에서는 무슨 음식이 맛있습니까?"},
+        {"speaker": "마리아", "text": "비빔밥이 맛있습니다."},
+        {"speaker": "리에", "text": "불고기는 어떻습니까?"},
+        {"speaker": "마리아", "text": "불고기도 맛있습니다."},
+        {"speaker": "리에", "text": "저는 불고기를 먹고 싶습니다."},
+        {"speaker": "마리아", "text": "그럼 저는 비빔밥을 먹겠습니다."}
+      ],
+      "vocab": [
+        {"ko":"갈비","zh":"排骨"},{"ko":"삼겹살","zh":"五花肉"},{"ko":"김치찌개","zh":"泡菜汤"},
+        {"ko":"된장찌개","zh":"大酱汤"},{"ko":"순두부찌개","zh":"嫩豆腐汤"},
+        {"ko":"닭갈비","zh":"鸡排"},{"ko":"삼계탕","zh":"参鸡汤"},
+        {"ko":"갈비탕","zh":"排骨汤"},{"ko":"냉면","zh":"冷面"},
+        {"ko":"칼국수","zh":"刀削面"},{"ko":"라면","zh":"泡面"},
+        {"ko":"김밥","zh":"紫菜包饭"},{"ko":"떡볶이","zh":"炒年糕"}
+      ]
+    },
+    {
+      "num": "04", "title": "물 좀 주십시오 (请给我水)", "task": "주문하기 (点餐)",
+      "grammar": [
+        {"point": "으십시오/십시오", "explain": "正式命令句。无收音用 -십시오，有收音用 -으십시오。表示'请…'。", "examples": ["조용히 하십시오.", "여기 앉으십시오.", "물 좀 주십시오."]},
+        {"point": "을까요? (询问)", "explain": "表示询问对方意见，'我…好吗？'。", "examples": ["제가 점심을 준비할까요?", "녹차를 드릴까요?", "문을 닫을까요?"]}
+      ],
+      "dialogue": [
+        {"speaker": "마리아", "text": "여기요."},
+        {"speaker": "종업원", "text": "네, 뭘 드릴까요?"},
+        {"speaker": "리에", "text": "저는 불고기를 주십시오."},
+        {"speaker": "마리아", "text": "저는 비빔밥을 먹겠습니다."},
+        {"speaker": "종업원", "text": "불고기 일 인분하고 비빔밥 하나요."},
+        {"speaker": "리에", "text": "그리고 여기 물 좀 주십시오."}
+      ],
+      "vocab": [
+        {"ko":"종업원","zh":"服务员"},{"ko":"드리다","zh":"给（敬语）"},{"ko":"주다","zh":"给"},
+        {"ko":"물","zh":"水"},{"ko":"일","zh":"一（汉字数词）"},{"ko":"이","zh":"二"},
+        {"ko":"삼","zh":"三"},{"ko":"사","zh":"四"},{"ko":"오","zh":"五"},
+        {"ko":"잔","zh":"杯"},{"ko":"병","zh":"瓶"},{"ko":"그릇","zh":"碗"},
+        {"ko":"커피","zh":"咖啡"},{"ko":"소주","zh":"烧酒"},{"ko":"사과","zh":"苹果"}
+      ]
+    }
+  ],
+  "allVocab": [
+    {"ko":"혼자","zh":"一个人"},{"ko":"같이","zh":"一起"},{"ko":"그럽시다","zh":"那样做吧"},
+    {"ko":"나가다","zh":"出去"},{"ko":"들어오다","zh":"进来"},{"ko":"올라가다","zh":"上去"},
+    {"ko":"내려오다","zh":"下来"},{"ko":"한식집","zh":"韩餐馆"},{"ko":"중국집","zh":"中餐厅"},
+    {"ko":"일식집","zh":"日料店"},{"ko":"양식집","zh":"西餐厅"},{"ko":"무슨","zh":"什么"},
+    {"ko":"맛","zh":"味道"},{"ko":"맛있다","zh":"好吃"},{"ko":"맵다","zh":"辣"},
+    {"ko":"외국인","zh":"外国人"},{"ko":"잘","zh":"好"},{"ko":"한식","zh":"韩餐"},
+    {"ko":"중국 음식","zh":"中餐"},{"ko":"일식","zh":"日餐"},{"ko":"양식","zh":"西餐"},
+    {"ko":"자장면","zh":"炸酱面"},{"ko":"초밥","zh":"寿司"},{"ko":"스테이크","zh":"牛排"},
+    {"ko":"맛없다","zh":"不好吃"},{"ko":"달다","zh":"甜"},{"ko":"쓰다","zh":"苦"},
+    {"ko":"시다","zh":"酸"},{"ko":"짜다","zh":"咸"},{"ko":"싱겁다","zh":"淡"},
+    {"ko":"갈비","zh":"排骨"},{"ko":"삼겹살","zh":"五花肉"},{"ko":"김치찌개","zh":"泡菜汤"},
+    {"ko":"된장찌개","zh":"大酱汤"},{"ko":"순두부찌개","zh":"嫩豆腐汤"},{"ko":"닭갈비","zh":"鸡排"},
+    {"ko":"삼계탕","zh":"参鸡汤"},{"ko":"갈비탕","zh":"排骨汤"},{"ko":"냉면","zh":"冷面"},
+    {"ko":"칼국수","zh":"刀削面"},{"ko":"라면","zh":"泡面"},{"ko":"김밥","zh":"紫菜包饭"},
+    {"ko":"떡볶이","zh":"炒年糕"},{"ko":"종업원","zh":"服务员"},{"ko":"드리다","zh":"给（敬语）"},
+    {"ko":"주다","zh":"给"},{"ko":"물","zh":"水"},{"ko":"일","zh":"一"},{"ko":"이","zh":"二"},
+    {"ko":"삼","zh":"三"},{"ko":"사","zh":"四"},{"ko":"오","zh":"五"},
+    {"ko":"잔","zh":"杯"},{"ko":"병","zh":"瓶"},{"ko":"그릇","zh":"碗"},
+    {"ko":"커피","zh":"咖啡"},{"ko":"소주","zh":"烧酒"},{"ko":"사과","zh":"苹果"}
+  ]
+},
+"unit5": {
+  "title": "第5课 一天的生活", "koTitle": "하루 생활",
+  "illust": "illusts/woman_korean_a.png",
+  "bilibili": {
+    "1": "https://www.bilibili.com/video/BV1x4nxzpEmt",
+    "2": "https://www.bilibili.com/video/BV1x4nxzpEmt",
+    "3": "https://www.bilibili.com/video/BV1x4nxzpEmt",
+    "4": "https://www.bilibili.com/video/BV1x4nxzpEmt"
+  },
+  "sections": [
+    {
+      "num": "01", "title": "몇 시예요? (现在几点?)", "task": "시간 묻고 답하기 (询问和回答时间)",
+      "grammar": [
+        {"point": "까지", "explain": "表示时间、地点的终点。'到…为止'。", "examples": ["몇 시까지 갑니까?", "여기까지 하십시오.", "다섯 시까지 오세요."]},
+        {"point": "어요/아요/여요", "explain": "非格式体终结词尾，亲切柔和。아/오结尾用 -아요，其他用 -어요，하다用 -여요(해요)。这是日常对话中最常用的敬语词尾。", "examples": ["지금 가요.", "밥을 먹어요.", "공부해요."]}
+      ],
+      "dialogue": [
+        {"speaker": "리에", "text": "지금 몇 시예요?"},
+        {"speaker": "웨이", "text": "한 시 십 분이에요."},
+        {"speaker": "리에", "text": "어디에 가요?"},
+        {"speaker": "웨이", "text": "회사에 가요."},
+        {"speaker": "리에", "text": "몇 시까지 가요?"},
+        {"speaker": "웨이", "text": "두 시까지 가요."}
+      ],
+      "vocab": [
+        {"ko":"지금","zh":"现在"},{"ko":"시","zh":"点"},{"ko":"분","zh":"分"},
+        {"ko":"시간","zh":"时间"},{"ko":"반","zh":"半"},{"ko":"시계","zh":"表"},
+        {"ko":"오전","zh":"上午"},{"ko":"오후","zh":"下午"}
+      ]
+    },
+    {
+      "num": "02", "title": "오늘은 몇 월 며칠이에요? (今天是几月几号?)", "task": "날짜 말하기 (说说日期)",
+      "grammar": [
+        {"point": "지요?", "explain": "表示说话人已有所了解，希望对方确认。相当于'…吧？'。口语中常缩略为 죠。", "examples": ["날씨가 덥지요?", "오늘이 목요일이지요?", "맛있지요?"]},
+        {"point": "으세요/세요", "explain": "在 어요/아요/여요 前加尊称词尾 으시/시。表示'请…'或尊敬地询问。", "examples": ["어떤 음식이 좋으세요?", "저와 같이 가세요.", "여기 앉으세요."]}
+      ],
+      "dialogue": [
+        {"speaker": "리에", "text": "오늘이 몇 월 며칠이에요?"},
+        {"speaker": "웨이", "text": "시월 팔일이에요."},
+        {"speaker": "리에", "text": "목요일이지요?"},
+        {"speaker": "웨이", "text": "아니요, 금요일이에요."},
+        {"speaker": "리에", "text": "아, 그래요? 그럼 내일 뭐 하세요?"},
+        {"speaker": "웨이", "text": "글쎄요, 집에서 쉬고 싶어요."}
+      ],
+      "vocab": [
+        {"ko":"월","zh":"月"},{"ko":"며칠","zh":"几号"},{"ko":"목요일","zh":"星期四"},
+        {"ko":"금요일","zh":"星期五"},{"ko":"내일","zh":"明天"},{"ko":"글쎄요","zh":"嗯…"},
+        {"ko":"쉬다","zh":"休息"},{"ko":"월요일","zh":"星期一"},{"ko":"화요일","zh":"星期二"},
+        {"ko":"수요일","zh":"星期三"},{"ko":"토요일","zh":"星期六"},{"ko":"일요일","zh":"星期日"}
+      ]
+    },
+    {
+      "num": "03", "title": "아침에 몇 시에 일어나세요? (早上几点起床?)", "task": "하루 일과 말하기 (说说一天日程)",
+      "grammar": [
+        {"point": "에 (时间)", "explain": "与表示时间的名词连用，表示动作发生的时间。不和 언제/오늘/내일/어제 等词连用。", "examples": ["9시에 학교에 갑니다.", "12시에 점심을 먹었습니다.", "아침 7시에 일어나요."]},
+        {"point": "부터~까지", "explain": "부터表示起点，까지表示终点。'从…到…'。", "examples": ["월요일부터 금요일까지는 바쁩니다.", "1층부터 5층까지는 기숙사입니다.", "아침부터 저녁까지 일해요."]},
+        {"point": "고 (先后)", "explain": "表示动作先后顺序。'…之后…'。时态由后面动词决定。", "examples": ["밥을 먹고 이를 닦았습니다.", "손을 씻고 오세요.", "숙제를 하고 잘 거예요."]}
+      ],
+      "dialogue": [
+        {"speaker": "정희", "text": "아침에 몇 시에 일어나세요?"},
+        {"speaker": "웨이", "text": "7시 반에 일어나요."},
+        {"speaker": "정희", "text": "아침을 먹고 학교에 가세요?"},
+        {"speaker": "웨이", "text": "아니요, 아침을 안 먹어요."},
+        {"speaker": "정희", "text": "수업은 날마다 있어요?"},
+        {"speaker": "웨이", "text": "네, 월요일부터 금요일까지 있어요."}
+      ],
+      "vocab": [
+        {"ko":"아침","zh":"早上"},{"ko":"일어나다","zh":"起床"},{"ko":"수업","zh":"课"},
+        {"ko":"마시다","zh":"喝"},{"ko":"세수하다","zh":"洗脸"},{"ko":"닦다","zh":"刷"},
+        {"ko":"이를 닦다","zh":"刷牙"},{"ko":"타다","zh":"乘坐"},{"ko":"내리다","zh":"下来"},
+        {"ko":"잠","zh":"睡觉"},{"ko":"저녁","zh":"晚上"},{"ko":"점심","zh":"中午"}
+      ]
+    },
+    {
+      "num": "04", "title": "어제 무엇을 했어요? (昨天做什么了?)", "task": "과거 일 말하기 (说说过去的事情)",
+      "grammar": [
+        {"point": "었/았/였 (过去时)", "explain": "表示过去时。아/오结尾用 -았-，其他用 -었-，하다用 -였-(했-)。", "examples": ["어제 친구를 만났어요.", "영화를 봤어요.", "집에서 쉬었어요."]},
+        {"point": "ㅂ特殊音变", "explain": "部分以ㅂ结尾的谓词遇到元音开头词尾时，ㅂ变成우。如 덥다→더워요, 춥다→추워요。", "examples": ["어제 날씨가 아주 더웠습니다.", "좀 도와주세요.", "가방이 너무 가벼워요."]}
+      ],
+      "dialogue": [
+        {"speaker": "정희", "text": "어제 집에서 쉬었어요?"},
+        {"speaker": "웨이", "text": "아니요, 친구를 만났어요."},
+        {"speaker": "정희", "text": "친구하고 무엇을 했어요?"},
+        {"speaker": "웨이", "text": "영화를 봤어요."},
+        {"speaker": "정희", "text": "영화가 어땠어요?"},
+        {"speaker": "웨이", "text": "아주 아름다웠어요."}
+      ],
+      "vocab": [
+        {"ko":"어제","zh":"昨天"},{"ko":"아름답다","zh":"漂亮"},{"ko":"그제","zh":"前天"},
+        {"ko":"모레","zh":"后天"},{"ko":"지난 주","zh":"上周"},{"ko":"이번 주","zh":"这周"},
+        {"ko":"다음 주","zh":"下周"},{"ko":"지난 달","zh":"上个月"},{"ko":"이번 달","zh":"这个月"},
+        {"ko":"다음 달","zh":"下个月"},{"ko":"작년","zh":"去年"},{"ko":"올해","zh":"今年"},{"ko":"내년","zh":"明年"}
+      ]
+    }
+  ],
+  "allVocab": [
+    {"ko":"지금","zh":"现在"},{"ko":"시","zh":"点"},{"ko":"분","zh":"分"},
+    {"ko":"시간","zh":"时间"},{"ko":"반","zh":"半"},{"ko":"시계","zh":"表"},
+    {"ko":"오전","zh":"上午"},{"ko":"오후","zh":"下午"},{"ko":"월","zh":"月"},
+    {"ko":"며칠","zh":"几号"},{"ko":"목요일","zh":"星期四"},{"ko":"금요일","zh":"星期五"},
+    {"ko":"내일","zh":"明天"},{"ko":"글쎄요","zh":"嗯…"},{"ko":"쉬다","zh":"休息"},
+    {"ko":"월요일","zh":"星期一"},{"ko":"화요일","zh":"星期二"},{"ko":"수요일","zh":"星期三"},
+    {"ko":"토요일","zh":"星期六"},{"ko":"일요일","zh":"星期日"},{"ko":"아침","zh":"早上"},
+    {"ko":"일어나다","zh":"起床"},{"ko":"수업","zh":"课"},{"ko":"마시다","zh":"喝"},
+    {"ko":"세수하다","zh":"洗脸"},{"ko":"닦다","zh":"刷"},{"ko":"이를 닦다","zh":"刷牙"},
+    {"ko":"타다","zh":"乘坐"},{"ko":"내리다","zh":"下来"},{"ko":"잠","zh":"睡觉"},
+    {"ko":"저녁","zh":"晚上"},{"ko":"점심","zh":"中午"},{"ko":"어제","zh":"昨天"},
+    {"ko":"아름답다","zh":"漂亮"},{"ko":"그제","zh":"前天"},{"ko":"모레","zh":"后天"},
+    {"ko":"지난 주","zh":"上周"},{"ko":"이번 주","zh":"这周"},{"ko":"다음 주","zh":"下周"},
+    {"ko":"지난 달","zh":"上个月"},{"ko":"이번 달","zh":"这个月"},{"ko":"다음 달","zh":"下个月"},
+    {"ko":"작년","zh":"去年"},{"ko":"올해","zh":"今年"},{"ko":"내년","zh":"明年"}
+  ]
+},
+"unit6": {
+  "title": "第6课 购物", "koTitle": "물건 사기",
+  "illust": "illusts/woman_korean_a.png",
+  "bilibili": {
+    "1": "https://www.bilibili.com/video/BV1MmdBBcEBJ",
+    "2": "https://www.bilibili.com/video/BV1MmdBBcEBJ",
+    "3": "https://www.bilibili.com/video/BV1MmdBBcEBJ",
+    "4": "https://www.bilibili.com/video/BV1MmdBBcEBJ"
+  },
+  "sections": [
+    {
+      "num": "01", "title": "선물을 사러 갑시다 (去买礼物吧)", "task": "쇼핑 제안하기 (提议购物)",
+      "grammar": [
+        {"point": "으러/러", "explain": "接动词词干后，与移动动词连用，表示移动目的。'去/来…做…'。", "examples": ["영화를 보러 갈까요?", "밥 먹으러 식당에 갔다 왔어요.", "책을 사러 서점에 가요."]},
+        {"point": "과/와", "explain": "连接名词，'和、与'。有收音用 과，无收音用 와。口语中可用 하고 代替。", "examples": ["봄과 가을을 좋아합니다.", "책상 위에 시계와 책이 있습니다.", "사과와 배를 샀어요."]}
+      ],
+      "dialogue": [
+        {"speaker": "마리아", "text": "오후에 선물을 사러 갑시다."},
+        {"speaker": "웨이", "text": "그럽시다. 뭘 살까요?"},
+        {"speaker": "마리아", "text": "장미꽃과 케이크를 삽시다."},
+        {"speaker": "웨이", "text": "어디에서 살까요?"},
+        {"speaker": "마리아", "text": "학교 앞에 꽃 가게도 있고 빵집도 있어요."},
+        {"speaker": "웨이", "text": "그럼 거기에 갑시다."}
+      ],
+      "vocab": [
+        {"ko":"선물","zh":"礼物"},{"ko":"장미꽃","zh":"玫瑰"},{"ko":"케이크","zh":"蛋糕"},
+        {"ko":"꽃 가게","zh":"花店"},{"ko":"빵","zh":"面包"},{"ko":"빵집","zh":"面包房"},
+        {"ko":"옷 가게","zh":"服装店"},{"ko":"과일 가게","zh":"水果店"},
+        {"ko":"문방구","zh":"文具店"},{"ko":"편의점","zh":"便利店"},{"ko":"슈퍼마켓","zh":"超市"}
+      ]
+    },
+    {
+      "num": "02", "title": "좋지만 좀 비싸요 (好是好，就是有点贵)", "task": "물건 비교하기 (比较商品)",
+      "grammar": [
+        {"point": "지만", "explain": "表示转折，'虽然…但是…'。", "examples": ["값은 비싸지만 물건이 좋아요.", "바람은 불지만 비는 안 와요.", "맛있지만 너무 매워요."]},
+        {"point": "은/ㄴ (定语形)", "explain": "形容词修饰名词，表示现在状态。有收音用 -은，无收音用 -ㄴ。", "examples": ["예쁜 꽃", "좋은 집", "큰 가방"]},
+        {"point": "ㅎ特殊音变", "explain": "以ㅎ结尾的形容词词干遇到特定词尾时，ㅎ脱落。如 빨갛다→빨간。", "examples": ["빨갛다 + ㄴ → 빨간", "그렇다 + 면 → 그러면", "노랗다 → 노란"]}
+      ],
+      "dialogue": [
+        {"speaker": "마리아", "text": "케이크 있어요?"},
+        {"speaker": "주인", "text": "네, 여기 있습니다."},
+        {"speaker": "마리아", "text": "좀 큰 거 없어요?"},
+        {"speaker": "주인", "text": "이 케이크는 어때요?"},
+        {"speaker": "마리아", "text": "좋지만 좀 비싸요."},
+        {"speaker": "주인", "text": "그럼, 이 치즈 케이크를 사세요."}
+      ],
+      "vocab": [
+        {"ko":"주인","zh":"主人/老板"},{"ko":"치즈","zh":"奶酪"},{"ko":"색","zh":"颜色"},
+        {"ko":"빨간색","zh":"红色"},{"ko":"노란색","zh":"黄色"},{"ko":"파란색","zh":"蓝色"},
+        {"ko":"하얀색","zh":"白色"},{"ko":"검은색","zh":"黑色"},{"ko":"길다","zh":"长"},
+        {"ko":"짧다","zh":"短"},{"ko":"두껍다","zh":"厚"},{"ko":"얇다","zh":"薄"},
+        {"ko":"무겁다","zh":"重"},{"ko":"가볍다","zh":"轻"},{"ko":"비싸다","zh":"贵"},
+        {"ko":"싸다","zh":"便宜"},{"ko":"가깝다","zh":"近"},{"ko":"멀다","zh":"远"}
+      ]
+    },
+    {
+      "num": "03", "title": "얼마예요? (多少钱?)", "task": "가격 묻기 (询问价格)",
+      "grammar": [
+        {"point": "어/아/여 주다", "explain": "表示'为某人做某事'。给长辈用 드리다 代替 주다。", "examples": ["전화번호 좀 알려 주십시오.", "친구에게 우산을 빌려 주었어요.", "문 좀 열어 주세요."]},
+        {"point": "单位名词", "explain": "数事物时，数词后加单位名词。韩语有丰富的单位名词系统。", "examples": ["연필 한 자루", "공책이 몇 권", "사과 세 개"]}
+      ],
+      "dialogue": [
+        {"speaker": "웨이", "text": "장미꽃 좀 보여 주세요."},
+        {"speaker": "주인", "text": "네, 구경하세요."},
+        {"speaker": "웨이", "text": "얼마예요?"},
+        {"speaker": "주인", "text": "한 송이에 1,000원입니다."},
+        {"speaker": "웨이", "text": "이건 얼마예요?"},
+        {"speaker": "주인", "text": "그건 한 송이에 1,500원입니다."}
+      ],
+      "vocab": [
+        {"ko":"보여 주다","zh":"给…看"},{"ko":"구경하다","zh":"观赏"},{"ko":"얼마","zh":"多少"},
+        {"ko":"송이","zh":"朵（花）"},{"ko":"대","zh":"辆"},{"ko":"신발","zh":"鞋子"},
+        {"ko":"켤레","zh":"双"},{"ko":"개","zh":"个"},{"ko":"마리","zh":"只"},
+        {"ko":"자루","zh":"支/把"},{"ko":"벌","zh":"件（衣服）"},{"ko":"권","zh":"本"},
+        {"ko":"장","zh":"张"},{"ko":"콜라","zh":"可乐"}
+      ]
+    },
+    {
+      "num": "04", "title": "깎아 주세요 (请便宜点)", "task": "흥정하기 (讨价还价)",
+      "grammar": [
+        {"point": "에게", "explain": "用于人或动物的名词后，表示动作涉及的对象。口语中常用 한테。", "examples": ["친구한테 책을 빌려 주었습니다.", "부모님께 전화를 했습니다.", "선생님에게 물어보세요."]},
+        {"point": "定语词尾 (는/은/을)", "explain": "动词修饰名词。过去用 은/ㄴ，现在用 는，将来用 을/ㄹ。", "examples": ["결혼한 사람", "만날 사람", "읽는 책"]}
+      ],
+      "dialogue": [
+        {"speaker": "마리아", "text": "장미꽃 10송이 주세요."},
+        {"speaker": "주인", "text": "누구에게 선물합니까?"},
+        {"speaker": "마리아", "text": "친구에게 선물해요. 친구가 좋아하는 꽃이에요."},
+        {"speaker": "주인", "text": "여기 있습니다. 15,000원입니다."},
+        {"speaker": "마리아", "text": "좀 비싸요. 깎아 주세요."},
+        {"speaker": "주인", "text": "그럼 14,000원 주십시오."}
+      ],
+      "vocab": [
+        {"ko":"선물하다","zh":"送礼物"},{"ko":"깎다","zh":"削减"},{"ko":"꽃다발","zh":"花束"},
+        {"ko":"손수건","zh":"手绢"},{"ko":"상품권","zh":"商品券"},{"ko":"인형","zh":"玩偶"},
+        {"ko":"화장품","zh":"化妆品"},{"ko":"향수","zh":"香水"},{"ko":"액세서리","zh":"饰品"},
+        {"ko":"만년필","zh":"钢笔"},{"ko":"전화하다","zh":"打电话"},{"ko":"선물을 주다","zh":"送礼物"},
+        {"ko":"드리다","zh":"给（敬语）"},{"ko":"넥타이","zh":"领带"}
+      ]
+    }
+  ],
+  "allVocab": [
+    {"ko":"선물","zh":"礼物"},{"ko":"장미꽃","zh":"玫瑰"},{"ko":"케이크","zh":"蛋糕"},
+    {"ko":"꽃 가게","zh":"花店"},{"ko":"빵","zh":"面包"},{"ko":"빵집","zh":"面包房"},
+    {"ko":"옷 가게","zh":"服装店"},{"ko":"과일 가게","zh":"水果店"},{"ko":"문방구","zh":"文具店"},
+    {"ko":"편의점","zh":"便利店"},{"ko":"슈퍼마켓","zh":"超市"},{"ko":"주인","zh":"主人/老板"},
+    {"ko":"치즈","zh":"奶酪"},{"ko":"색","zh":"颜色"},{"ko":"빨간색","zh":"红色"},
+    {"ko":"노란색","zh":"黄色"},{"ko":"파란색","zh":"蓝色"},{"ko":"하얀색","zh":"白色"},
+    {"ko":"검은색","zh":"黑色"},{"ko":"길다","zh":"长"},{"ko":"짧다","zh":"短"},
+    {"ko":"두껍다","zh":"厚"},{"ko":"얇다","zh":"薄"},{"ko":"무겁다","zh":"重"},
+    {"ko":"가볍다","zh":"轻"},{"ko":"비싸다","zh":"贵"},{"ko":"싸다","zh":"便宜"},
+    {"ko":"가깝다","zh":"近"},{"ko":"멀다","zh":"远"},{"ko":"보여 주다","zh":"给…看"},
+    {"ko":"구경하다","zh":"观赏"},{"ko":"얼마","zh":"多少"},{"ko":"송이","zh":"朵"},
+    {"ko":"대","zh":"辆"},{"ko":"신발","zh":"鞋子"},{"ko":"켤레","zh":"双"},
+    {"ko":"개","zh":"个"},{"ko":"마리","zh":"只"},{"ko":"자루","zh":"支/把"},
+    {"ko":"벌","zh":"件"},{"ko":"권","zh":"本"},{"ko":"장","zh":"张"},
+    {"ko":"콜라","zh":"可乐"},{"ko":"선물하다","zh":"送礼物"},{"ko":"깎다","zh":"削减"},
+    {"ko":"꽃다발","zh":"花束"},{"ko":"손수건","zh":"手绢"},{"ko":"상품권","zh":"商品券"},
+    {"ko":"인형","zh":"玩偶"},{"ko":"화장품","zh":"化妆品"},{"ko":"향수","zh":"香水"},
+    {"ko":"액세서리","zh":"饰品"},{"ko":"만년필","zh":"钢笔"},{"ko":"전화하다","zh":"打电话"},
+    {"ko":"선물을 주다","zh":"送礼物"},{"ko":"드리다","zh":"给（敬语）"},{"ko":"넥타이","zh":"领带"}
+  ]
+},
+"unit7": {
+  "title": "第7课 交通", "koTitle": "교통",
+  "illust": "illusts/woman_korean_a.png",
+  "bilibili": {
+    "1": "https://www.bilibili.com/video/BV1WjwFzbEDc",
+    "2": "https://www.bilibili.com/video/BV1WjwFzbEDc",
+    "3": "https://www.bilibili.com/video/BV1WjwFzbEDc",
+    "4": "https://www.bilibili.com/video/BV1WjwFzbEDc"
+  },
+  "sections": [
+    {
+      "num": "01", "title": "길 좀 묻겠습니다 (请问一下路)", "task": "길 묻기 (问路)",
+      "grammar": [
+        {"point": "으로/로 (方向)", "explain": "用于处所名词后，表示移动方向。有收音用 -으로，无收音或ㄹ结尾用 -로。", "examples": ["어디로 가십니까?", "사무실로 갑니다.", "왼쪽으로 가세요."]},
+        {"point": "어서/아서 (顺序)", "explain": "表示前后动作的连贯。'…了之后…'。", "examples": ["야채를 씻어서 냉장고에 넣었습니다.", "아침에 일어나서 운동을 하세요?", "나가서 왼쪽으로 가세요."]}
+      ],
+      "dialogue": [
+        {"speaker": "제임스", "text": "실례지만 길 좀 묻겠습니다."},
+        {"speaker": "남자", "text": "어딜 찾으세요?"},
+        {"speaker": "제임스", "text": "연세 아파트가 어디에 있습니까?"},
+        {"speaker": "남자", "text": "잠실역 근처에 있습니다."},
+        {"speaker": "제임스", "text": "잠실역에서 어떻게 갑니까?"},
+        {"speaker": "남자", "text": "잠실역 6번 출구로 나가서 왼쪽으로 가세요."}
+      ],
+      "vocab": [
+        {"ko":"실례","zh":"打扰一下"},{"ko":"길","zh":"路"},{"ko":"묻다","zh":"询问"},
+        {"ko":"찾다","zh":"找"},{"ko":"아파트","zh":"公寓"},{"ko":"번","zh":"号"},
+        {"ko":"출구","zh":"出口"},{"ko":"왼쪽","zh":"左边"},{"ko":"이쪽","zh":"这边"},
+        {"ko":"그쪽","zh":"那边"},{"ko":"저쪽","zh":"那边"},{"ko":"오른쪽","zh":"右边"}
+      ]
+    },
+    {
+      "num": "02", "title": "지하철로 40분쯤 걸립니다 (坐地铁大约40分钟)", "task": "교통수단 말하기 (说说交通方式)",
+      "grammar": [
+        {"point": "으로/로 (方式)", "explain": "表示方式、手段、工具。'用…、以…方式'。", "examples": ["젓가락으로 먹습니다.", "버스로 왔습니다.", "지하철로 가요."]},
+        {"point": "에서~까지", "explain": "에서表示起点，까지表示终点。'从…到…'。", "examples": ["서울에서 부산까지 기차로 5시간 걸립니다.", "12시에서 1시까지 점심시간입니다.", "집에서 학교까지 버스로 가요."]},
+        {"point": "어서/아서 (原因)", "explain": "表示原因。'因为…所以…'。", "examples": ["한국이 좋아서 한국에 왔습니다.", "피곤해서 일찍 집에 갔습니다.", "교통이 복잡해서 시간이 많이 걸립니다."]}
+      ],
+      "dialogue": [
+        {"speaker": "리에", "text": "여기서 잠실까지 얼마나 걸려요?"},
+        {"speaker": "남자", "text": "지하철로 40분쯤 걸립니다."},
+        {"speaker": "리에", "text": "몇 호선을 타요?"},
+        {"speaker": "남자", "text": "2호선을 타세요."},
+        {"speaker": "리에", "text": "버스는 없어요?"},
+        {"speaker": "남자", "text": "교통이 복잡해서 시간이 많이 걸립니다."}
+      ],
+      "vocab": [
+        {"ko":"얼마나","zh":"多少/多久"},{"ko":"걸리다","zh":"需要（时间）"},{"ko":"호선","zh":"线路"},
+        {"ko":"교통","zh":"交通"},{"ko":"버스","zh":"公交"},{"ko":"시내버스","zh":"市内公交"},
+        {"ko":"고속버스","zh":"高速巴士"},{"ko":"택시","zh":"出租车"},{"ko":"자동차","zh":"汽车"},
+        {"ko":"기차","zh":"火车"},{"ko":"자전거","zh":"自行车"},{"ko":"비행기","zh":"飞机"},
+        {"ko":"배","zh":"船"},{"ko":"부산","zh":"釜山"}
+      ]
+    },
+    {
+      "num": "03", "title": "사람이 많으니까 조심하세요 (人很多，请小心)", "task": "주의 주기 (提醒注意)",
+      "grammar": [
+        {"point": "으니까/니까", "explain": "表示原因，或进行前一动作后才知道后一状况。'因为…所以…'。", "examples": ["날씨가 추우니까 안으로 들어가세요.", "오늘은 눈이 많이 오니까 자동차를 운전하지 마세요.", "사람이 많으니까 조심하세요."]},
+        {"point": "지 말다", "explain": "表示禁止，'不要…、别…'。", "examples": ["도서관에서 떠들지 마세요.", "쓰레기를 버리지 맙시다.", "앉지 마세요."]}
+      ],
+      "dialogue": [
+        {"speaker": "리에", "text": "여기 앉을까요?"},
+        {"speaker": "제임스", "text": "아니요, 앉지 마세요. 다음 역에서 내려요."},
+        {"speaker": "리에", "text": "그럼 문 앞으로 나갈까요?"},
+        {"speaker": "제임스", "text": "네, 저쪽으로 갑시다."},
+        {"speaker": "리에", "text": "내립니다. 좀 비켜 주십시오."},
+        {"speaker": "제임스", "text": "사람이 많으니까 조심하세요."}
+      ],
+      "vocab": [
+        {"ko":"앉다","zh":"坐"},{"ko":"비키다","zh":"让开"},{"ko":"조심하다","zh":"小心"},
+        {"ko":"공항","zh":"机场"},{"ko":"고속버스 터미널","zh":"高速巴士站"},
+        {"ko":"타다","zh":"乘/坐"},{"ko":"내리다","zh":"下来"},{"ko":"갈아타다","zh":"换乘"},
+        {"ko":"도착하다","zh":"到达"}
+      ]
+    },
+    {
+      "num": "04", "title": "정민철 씨, 지금 올 거예요? (正民哲，现在来吗?)", "task": "약속 확인하기 (确认约定)",
+      "grammar": [
+        {"point": "을/ㄹ 거예요", "explain": "第一/二人称表示意志或打算；第三人称表示推测。'会…、打算…'。", "examples": ["내일 몇 시에 오실 거예요?", "기차가 곧 도착할 거예요.", "아마 30분쯤 늦을 거예요."]},
+        {"point": "만", "explain": "表示'仅仅、只'。", "examples": ["10분만 자고 싶어요.", "잠깐만 기다리세요.", "한 개만 주세요."]}
+      ],
+      "dialogue": [
+        {"speaker": "민철", "text": "여보세요, 죄송하지만 웨이 씨 좀 바꿔 주세요."},
+        {"speaker": "남자", "text": "잠깐만 기다리세요."},
+        {"speaker": "웨이", "text": "전화 바꿨습니다."},
+        {"speaker": "민철", "text": "웨이 씨, 저 정민철이에요."},
+        {"speaker": "웨이", "text": "민철 씨, 지금 올 거예요?"},
+        {"speaker": "민철", "text": "미안해요. 아직 회사예요. 아마 30분쯤 늦을 거예요."}
+      ],
+      "vocab": [
+        {"ko":"아직","zh":"还"},{"ko":"아마","zh":"也许"},{"ko":"통화하다","zh":"通话"},
+        {"ko":"전화를 끊다","zh":"挂电话"},{"ko":"바꾸다","zh":"换"},
+        {"ko":"통화 중이다","zh":"通话中"},{"ko":"전화를 받다","zh":"接电话"}
+      ]
+    }
+  ],
+  "allVocab": [
+    {"ko":"실례","zh":"打扰一下"},{"ko":"길","zh":"路"},{"ko":"묻다","zh":"询问"},
+    {"ko":"찾다","zh":"找"},{"ko":"아파트","zh":"公寓"},{"ko":"번","zh":"号"},
+    {"ko":"출구","zh":"出口"},{"ko":"왼쪽","zh":"左边"},{"ko":"이쪽","zh":"这边"},
+    {"ko":"그쪽","zh":"那边"},{"ko":"저쪽","zh":"那边"},{"ko":"오른쪽","zh":"右边"},
+    {"ko":"얼마나","zh":"多少/多久"},{"ko":"걸리다","zh":"需要（时间）"},{"ko":"호선","zh":"线路"},
+    {"ko":"교통","zh":"交通"},{"ko":"버스","zh":"公交"},{"ko":"시내버스","zh":"市内公交"},
+    {"ko":"고속버스","zh":"高速巴士"},{"ko":"택시","zh":"出租车"},{"ko":"자동차","zh":"汽车"},
+    {"ko":"기차","zh":"火车"},{"ko":"자전거","zh":"自行车"},{"ko":"비행기","zh":"飞机"},
+    {"ko":"배","zh":"船"},{"ko":"부산","zh":"釜山"},{"ko":"앉다","zh":"坐"},
+    {"ko":"비키다","zh":"让开"},{"ko":"조심하다","zh":"小心"},{"ko":"공항","zh":"机场"},
+    {"ko":"고속버스 터미널","zh":"高速巴士站"},{"ko":"타다","zh":"乘/坐"},
+    {"ko":"내리다","zh":"下来"},{"ko":"갈아타다","zh":"换乘"},{"ko":"도착하다","zh":"到达"},
+    {"ko":"아직","zh":"还"},{"ko":"아마","zh":"也许"},{"ko":"통화하다","zh":"通话"},
+    {"ko":"전화를 끊다","zh":"挂电话"},{"ko":"바꾸다","zh":"换"},
+    {"ko":"통화 중이다","zh":"通话中"},{"ko":"전화를 받다","zh":"接电话"}
+  ]
+},
+"unit8": {
+  "title": "第8课 电话", "koTitle": "전화",
+  "illust": "illusts/woman_korean_a.png",
+  "bilibili": {
+    "1": "https://www.bilibili.com/video/BV1GjwJzcE5i",
+    "2": "https://www.bilibili.com/video/BV1GjwJzcE5i",
+    "3": "https://www.bilibili.com/video/BV1GjwJzcE5i",
+    "4": "https://www.bilibili.com/video/BV1GjwJzcE5i"
+  },
+  "sections": [
+    {
+      "num": "01", "title": "이따가 오후에 전화해 주세요 (一会儿下午给我打电话)", "task": "전화 약속하기 (约电话)",
+      "grammar": [
+        {"point": "을게요/ㄹ게요", "explain": "表示说话人的意志、承诺。'我会…的'。注意和 을 거예요 区分：을게요 更强调当下承诺。", "examples": ["이따가 전화할게요.", "내일은 꼭 일찍 올게요.", "제가 할게요."]},
+        {"point": "이나/나", "explain": "表示从两个或以上事物中选择。'或者'。", "examples": ["오늘 두 시나 세 시쯤에 전화해 주세요.", "지하철이나 버스를 타고 학교에 갑니다.", "커피나 차를 마실까요?"]}
+      ],
+      "dialogue": [
+        {"speaker": "민철", "text": "리에 씨, 이따가 오후에 전화해 주세요."},
+        {"speaker": "리에", "text": "네, 전화번호 좀 가르쳐 주세요."},
+        {"speaker": "민철", "text": "회사는 2124-3467이에요."},
+        {"speaker": "리에", "text": "집은 몇 번이에요?"},
+        {"speaker": "민철", "text": "3464-2879예요."},
+        {"speaker": "리에", "text": "그럼 이따가 3시나 4시쯤에 전화할게요."}
+      ],
+      "vocab": [
+        {"ko":"이따가","zh":"一会儿"},{"ko":"전화번호","zh":"电话号码"},
+        {"ko":"국제전화","zh":"国际电话"},{"ko":"시외전화","zh":"长途电话"},
+        {"ko":"휴대전화","zh":"手机"},{"ko":"의","zh":"的"},
+        {"ko":"범죄","zh":"犯罪"},{"ko":"화재","zh":"火灾"},{"ko":"신고","zh":"申报"}
+      ]
+    },
+    {
+      "num": "02", "title": "정민철 씨 계세요? (正民哲在吗?)", "task": "전화 받기/걸기 (接打电话)",
+      "grammar": [
+        {"point": "는데요/은데요/ㄴ데요", "explain": "表示叙述某一状况并期待对方回应。电话中常用'전데요'表示'我就是'。", "examples": ["바로 전데요. 누구세요?", "시간이 좀 오래 걸리는데요.", "날씨가 추운데요."]}
+      ],
+      "dialogue": [
+        {"speaker": "리에", "text": "여보세요, 거기 연세 여행사지요?"},
+        {"speaker": "민철", "text": "네, 누굴 찾으십니까?"},
+        {"speaker": "리에", "text": "정민철 씨 계세요?"},
+        {"speaker": "민철", "text": "바로 전데요. 누구세요?"},
+        {"speaker": "리에", "text": "리에예요. 지금 안 바쁘세요?"},
+        {"speaker": "민철", "text": "네, 괜찮아요. 말씀하세요."}
+      ],
+      "vocab": [
+        {"ko":"여보세요","zh":"喂"},{"ko":"여행사","zh":"旅行社"},{"ko":"바로","zh":"就/马上"},
+        {"ko":"괜찮다","zh":"没关系"},{"ko":"전화를 걸다","zh":"打电话"},
+        {"ko":"전화를 받다","zh":"接电话"},{"ko":"전화번호를 누르다","zh":"按号码"},
+        {"ko":"전화벨이 울리다","zh":"电话铃响"},{"ko":"핸드폰","zh":"手机"},
+        {"ko":"잘못","zh":"错误"},{"ko":"문자메시지를 보내다","zh":"发短信"},
+        {"ko":"음성메시지를 남기다","zh":"留言"}
+      ]
+    },
+    {
+      "num": "03", "title": "토요일 오후에 웨이 씨 집에서 파티가 있어요 (周六下午在韦家开派对)", "task": "초대하기 (邀请)",
+      "grammar": [
+        {"point": "에게서/한테서", "explain": "表示动作的出发点。'从…那里'。常与 배우다/듣다/받다 等连用。", "examples": ["선생님한테서 한국말을 배웁니다.", "친구한테서 그 이야기를 들었어요.", "웨이 씨한테서 전화 받았어요?"]},
+        {"point": "으면/면", "explain": "表示假设条件。'如果…的话'。", "examples": ["내일 날씨가 좋으면 설악산에 갑시다.", "싫으면 다른 것으로 바꾸세요.", "늦으면 전화할게요."]}
+      ],
+      "dialogue": [
+        {"speaker": "리에", "text": "웨이 씨한테서 전화 받았어요?"},
+        {"speaker": "민철", "text": "아니요, 안 받았는데요."},
+        {"speaker": "리에", "text": "토요일 오후에 웨이 씨 집에서 파티가 있어요."},
+        {"speaker": "민철", "text": "그래요? 몇 시에 파티를 해요?"},
+        {"speaker": "리에", "text": "5시까지 오세요."},
+        {"speaker": "민철", "text": "네, 늦으면 전화할게요."}
+      ],
+      "vocab": [
+        {"ko":"늦다","zh":"晚/迟到"},{"ko":"약속하다","zh":"约定"},
+        {"ko":"약속 장소","zh":"约定场所"},{"ko":"약속 시간","zh":"约定时间"},
+        {"ko":"약속 시간을 바꾸다","zh":"更改约定时间"},
+        {"ko":"약속을 어기다","zh":"毁约"},{"ko":"약속을 지키다","zh":"守约"}
+      ]
+    },
+    {
+      "num": "04", "title": "전화 바꿨습니다 (电话换人了)", "task": "전화 연결하기 (转接电话)",
+      "grammar": [
+        {"point": "을/ㄹ 거예요 (推测)", "explain": "表示推测。'应该会…'。", "examples": ["이번 주말에는 집에서 푹 쉴 거예요.", "이번 겨울은 좀 추울 거예요.", "아마 늦을 거예요."]},
+        {"point": "만 (限定)", "explain": "表示限定，'只'。", "examples": ["한 개만 주세요.", "조금만 더 주세요.", "잠깐만 기다리세요."]}
+      ],
+      "dialogue": [
+        {"speaker": "민철", "text": "여보세요, 죄송하지만 웨이 씨 좀 바꿔 주세요."},
+        {"speaker": "남자", "text": "잠깐만 기다리세요."},
+        {"speaker": "웨이", "text": "전화 바꿨습니다."},
+        {"speaker": "민철", "text": "웨이 씨, 저 정민철이에요."},
+        {"speaker": "웨이", "text": "민철 씨, 지금 올 거예요?"},
+        {"speaker": "민철", "text": "미안해요. 아직 회사예요. 아마 30분쯤 늦을 거예요."}
+      ],
+      "vocab": [
+        {"ko":"아직","zh":"还"},{"ko":"아마","zh":"也许"},{"ko":"통화하다","zh":"通话"},
+        {"ko":"전화를 끊다","zh":"挂电话"},{"ko":"바꾸다","zh":"换"},
+        {"ko":"통화 중이다","zh":"通话中"},{"ko":"전화를 받다","zh":"接电话"}
+      ]
+    }
+  ],
+  "allVocab": [
+    {"ko":"이따가","zh":"一会儿"},{"ko":"전화번호","zh":"电话号码"},{"ko":"국제전화","zh":"国际电话"},
+    {"ko":"시외전화","zh":"长途电话"},{"ko":"휴대전화","zh":"手机"},{"ko":"의","zh":"的"},
+    {"ko":"범죄","zh":"犯罪"},{"ko":"화재","zh":"火灾"},{"ko":"신고","zh":"申报"},
+    {"ko":"여보세요","zh":"喂"},{"ko":"여행사","zh":"旅行社"},{"ko":"바로","zh":"就/马上"},
+    {"ko":"괜찮다","zh":"没关系"},{"ko":"전화를 걸다","zh":"打电话"},
+    {"ko":"전화를 받다","zh":"接电话"},{"ko":"전화번호를 누르다","zh":"按号码"},
+    {"ko":"전화벨이 울리다","zh":"电话铃响"},{"ko":"핸드폰","zh":"手机"},
+    {"ko":"잘못","zh":"错误"},{"ko":"문자메시지를 보내다","zh":"发短信"},
+    {"ko":"음성메시지를 남기다","zh":"留言"},{"ko":"늦다","zh":"晚/迟到"},
+    {"ko":"약속하다","zh":"约定"},{"ko":"약속 장소","zh":"约定场所"},
+    {"ko":"약속 시간","zh":"约定时间"},{"ko":"약속 시간을 바꾸다","zh":"更改约定时间"},
+    {"ko":"약속을 어기다","zh":"毁约"},{"ko":"약속을 지키다","zh":"守约"},
+    {"ko":"아직","zh":"还"},{"ko":"아마","zh":"也许"},{"ko":"통화하다","zh":"通话"},
+    {"ko":"전화를 끊다","zh":"挂电话"},{"ko":"바꾸다","zh":"换"},
+    {"ko":"통화 중이다","zh":"通话中"},{"ko":"전화를 받다","zh":"接电话"}
+  ]
+},
+"unit9": {
+  "title": "第9课 天气和季节", "koTitle": "날씨와 계절",
+  "illust": "illusts/woman_korean_a.png",
+  "bilibili": {
+    "1": "https://www.bilibili.com/video/BV1WjwFzbEDc",
+    "2": "https://www.bilibili.com/video/BV1WjwFzbEDc",
+    "3": "https://www.bilibili.com/video/BV1WjwFzbEDc",
+    "4": "https://www.bilibili.com/video/BV1WjwFzbEDc"
+  },
+  "sections": [
+    {
+      "num": "01", "title": "저는 스키를 탈 수 있는 겨울이 좋아요 (我喜欢能滑雪的冬天)", "task": "계절 선호 말하기 (说说季节偏好)",
+      "grammar": [
+        {"point": "는데/은데/ㄴ데 (转折)", "explain": "表示对立、转折。'…而…'。", "examples": ["저는 농구를 좋아하는데 친구들은 야구를 좋아합니다.", "서울은 복잡한데 여기는 그렇지 않군요.", "저는 봄을 좋아하는데…"]},
+        {"point": "을/ㄹ 수 있다", "explain": "表示'能做…'。否定形式为 을/ㄹ 수 없다。", "examples": ["나도 한국말을 할 수 있습니다.", "한국 신문은 어려워서 읽을 수 없습니다.", "스키를 탈 수 있습니다."]}
+      ],
+      "dialogue": [
+        {"speaker": "미선", "text": "저는 봄을 좋아하는데 제임스 씨는 어느 계절을 좋아하세요?"},
+        {"speaker": "제임스", "text": "저는 스키를 탈 수 있는 겨울이 좋아요."},
+        {"speaker": "미선", "text": "스키를 좋아하세요?"},
+        {"speaker": "제임스", "text": "네, 겨울이 되면 스키장에 자주 가요."},
+        {"speaker": "미선", "text": "그럼 이번 겨울에는 같이 스키장에 갈까요?"},
+        {"speaker": "제임스", "text": "아! 그거 좋은 생각이에요."}
+      ],
+      "vocab": [
+        {"ko":"봄","zh":"春天"},{"ko":"계절","zh":"季节"},{"ko":"스키","zh":"滑雪"},
+        {"ko":"되다","zh":"到/成为"},{"ko":"스키장","zh":"滑雪场"},{"ko":"생각","zh":"想法"}
+      ]
+    },
+    {
+      "num": "02", "title": "날씨가 조금 흐린데요 (天气有点阴)", "task": "날씨 묘사하기 (描述天气)",
+      "grammar": [
+        {"point": "은/ㄴ 후에", "explain": "表示前一个动作完成后。'…之后'。", "examples": ["식사한 후에 차를 마십니다.", "퇴근 후에 한잔 합니다.", "비가 온 후에는 날씨가 맑겠지요?"]},
+        {"point": "겠 (推测)", "explain": "表示说话人的推测。'应该会…'。", "examples": ["주말이라서 교통이 복잡하겠어요.", "하늘을 보니까 오후에는 비가 오겠어요.", "내일은 맑겠지요?"]}
+      ],
+      "dialogue": [
+        {"speaker": "미선", "text": "오늘 날씨가 조금 흐린데요."},
+        {"speaker": "제임스", "text": "네, 하늘에 구름이 좀 꼈어요."},
+        {"speaker": "미선", "text": "바람도 좀 부는데요."},
+        {"speaker": "제임스", "text": "아마 저녁에는 비가 올 거예요."},
+        {"speaker": "미선", "text": "비가 온 후에는 날씨가 맑겠지요?"},
+        {"speaker": "제임스", "text": "네, 내일은 맑을 거예요."}
+      ],
+      "vocab": [
+        {"ko":"흐리다","zh":"阴"},{"ko":"하늘","zh":"天空"},{"ko":"구름이 끼다","zh":"多云"},
+        {"ko":"비가 오다","zh":"下雨"},{"ko":"맑다","zh":"晴"}
+      ]
+    },
+    {
+      "num": "03", "title": "오늘보다 따뜻할 것 같아요 (好像比今天暖和)", "task": "비교하기 (比较)",
+      "grammar": [
+        {"point": "보다", "explain": "表示比较。'比…'。보다前面是被比较对象。", "examples": ["언니가 동생보다 커요.", "지하철이 버스보다 더 빨라요.", "오늘보다 따뜻할 것 같아요."]},
+        {"point": "을/ㄹ 것 같다", "explain": "表示推测。'好像会…、看起来…'。", "examples": ["곧 비가 올 것 같아요.", "이번 시험이 어려울 것 같아요.", "따뜻할 것 같아요."]}
+      ],
+      "dialogue": [
+        {"speaker": "제임스", "text": "내일은 날씨가 어떨까요?"},
+        {"speaker": "미선", "text": "오늘보다 따뜻할 것 같아요."},
+        {"speaker": "제임스", "text": "미선 씨 고향은 겨울에 날씨가 어때요?"},
+        {"speaker": "미선", "text": "남쪽이니까 서울보다 따뜻해요."},
+        {"speaker": "제임스", "text": "여름에는 날씨가 어때요? 더워요?"},
+        {"speaker": "미선", "text": "네, 덥고 비가 많이 와요."}
+      ],
+      "vocab": [
+        {"ko":"보다","zh":"比"},{"ko":"도","zh":"度"},{"ko":"덥다","zh":"热"},
+        {"ko":"따뜻하다","zh":"温暖"},{"ko":"선선하다","zh":"凉爽"},
+        {"ko":"쌀쌀하다","zh":"凉飕飕"},{"ko":"춥다","zh":"冷"}
+      ]
+    },
+    {
+      "num": "04", "title": "봄이 되니까 산책하는 사람이 많군요 (春天到了，散步的人真多啊)", "task": "감탄 표현하기 (表达感叹)",
+      "grammar": [
+        {"point": "는군요/군요", "explain": "表示感叹、评价。'真…啊！'。动词后用 -는군요，形容词后用 -군요。", "examples": ["방이 참 넓군요.", "어제 잠을 못 자서 아주 피곤하겠군요.", "산책하는 사람이 많군요."]},
+        {"point": "고 있다", "explain": "表示动作正在进行。'正在…'。", "examples": ["연세대학교에서 한국말을 배우고 있습니다.", "지금 뭐 하고 있어요?", "사람들이 운동을 하고 있어요."]}
+      ],
+      "dialogue": [
+        {"speaker": "제임스", "text": "봄이 되니까 산책하는 사람이 많군요."},
+        {"speaker": "미선", "text": "저기에서 사람들이 운동을 하고 있어요."},
+        {"speaker": "제임스", "text": "미선 씨는 무슨 운동을 자주 하세요?"},
+        {"speaker": "미선", "text": "봄에는 등산을 하고 여름에는 수영을 해요."},
+        {"speaker": "제임스", "text": "한국 사람들은 등산을 참 좋아하는 것 같아요."},
+        {"speaker": "미선", "text": "산이 많아서 그럴 거예요."}
+      ],
+      "vocab": [
+        {"ko":"등산","zh":"登山"},{"ko":"수영","zh":"游泳"}
+      ]
+    }
+  ],
+  "allVocab": [
+    {"ko":"봄","zh":"春天"},{"ko":"계절","zh":"季节"},{"ko":"스키","zh":"滑雪"},
+    {"ko":"되다","zh":"到/成为"},{"ko":"스키장","zh":"滑雪场"},{"ko":"생각","zh":"想法"},
+    {"ko":"흐리다","zh":"阴"},{"ko":"하늘","zh":"天空"},{"ko":"구름이 끼다","zh":"多云"},
+    {"ko":"비가 오다","zh":"下雨"},{"ko":"맑다","zh":"晴"},{"ko":"보다","zh":"比"},
+    {"ko":"도","zh":"度"},{"ko":"덥다","zh":"热"},{"ko":"따뜻하다","zh":"温暖"},
+    {"ko":"선선하다","zh":"凉爽"},{"ko":"쌀쌀하다","zh":"凉飕飕"},{"ko":"춥다","zh":"冷"},
+    {"ko":"등산","zh":"登山"},{"ko":"수영","zh":"游泳"}
+  ]
+},
+"unit10": {
+  "title": "第10课 节假日", "koTitle": "휴일과 방학",
+  "illust": "illusts/woman_korean_a.png",
+  "bilibili": {
+    "1": "https://www.bilibili.com/video/BV1WjwFzbEDc",
+    "2": "https://www.bilibili.com/video/BV1WjwFzbEDc",
+    "3": "https://www.bilibili.com/video/BV1WjwFzbEDc",
+    "4": "https://www.bilibili.com/video/BV1WjwFzbEDc"
+  },
+  "sections": [
+    {
+      "num": "01", "title": "설악산에 가려고 해요 (打算去雪岳山)", "task": "계획 말하기 (说说计划)",
+      "grammar": [
+        {"point": "으려고/려고 하다", "explain": "表示计划或意图。'打算…'。有收音用 -으려고 하다，无收音用 -려고 하다。", "examples": ["내일 대사관에 가려고 합니다.", "도서관에 가서 책을 읽으려고 합니다.", "설악산에 가려고 해요."]},
+        {"point": "동안", "explain": "表示时间段，'在…期间'。", "examples": ["방학 동안 여행을 많이 하고 싶어요.", "몇 달 동안 친구를 통 못 만났어요.", "2주 동안 방학이에요."]}
+      ],
+      "dialogue": [
+        {"speaker": "정희", "text": "웨이 씨, 방학이 언제예요?"},
+        {"speaker": "웨이", "text": "6월 초에 수업이 끝나면 2주 동안 방학이에요."},
+        {"speaker": "정희", "text": "그래요? 웨이 씨는 뭘 하실 거예요?"},
+        {"speaker": "웨이", "text": "이번 방학에는 설악산에 가려고 해요."},
+        {"speaker": "정희", "text": "등산을 하실 거예요?"},
+        {"speaker": "웨이", "text": "아니요, 이번에는 사진을 찍으러 가요."}
+      ],
+      "vocab": [
+        {"ko":"초","zh":"初"},{"ko":"끝나다","zh":"结束"},{"ko":"찍다","zh":"拍（照片）"}
+      ]
+    },
+    {
+      "num": "02", "title": "시간이 있을 때는 여행을 가요 (有时间的时候去旅行)", "task": "취미 말하기 (说说爱好)",
+      "grammar": [
+        {"point": "을/ㄹ 때", "explain": "表示动作或状态发生的时间。'…的时候'。", "examples": ["버스를 탈 때 조심하세요.", "공항에 도착했을 때는 밤이었어요.", "시간이 있을 때는 여행을 가요."]},
+        {"point": "중에서", "explain": "表示'…当中'。", "examples": ["한국 음식 중에서 무엇이 제일 맛이 있어요?", "한국에 있는 산 중에서 설악산이 제일 유명해요.", "여행하신 곳 중에서 어디가 제일 좋았어요?"]}
+      ],
+      "dialogue": [
+        {"speaker": "웨이", "text": "제 취미는 사진 찍기예요."},
+        {"speaker": "정희", "text": "그래요? 뭘 찍는데요?"},
+        {"speaker": "웨이", "text": "주로 꽃을 찍어요. 정희 씨 취미는 뭐예요?"},
+        {"speaker": "정희", "text": "시간이 있을 때는 여행을 가요. 그리고 영화 보는 것도 좋아해요."},
+        {"speaker": "웨이", "text": "여행하신 곳 중에서 어디가 제일 좋았어요?"},
+        {"speaker": "정희", "text": "저는 제주도가 제일 좋았어요."}
+      ],
+      "vocab": [
+        {"ko":"주로","zh":"主要"},{"ko":"중","zh":"…当中"},{"ko":"제일","zh":"最"}
+      ]
+    },
+    {
+      "num": "03", "title": "한 달에 한 번쯤 가요 (一个月大概去一次)", "task": "빈도 말하기 (说说频率)",
+      "grammar": [
+        {"point": "에 ~쯤", "explain": "에接在单位名词后表示基准，쯤表示大致估计。'大约…'。", "examples": ["하루에 8시간쯤 자요.", "일주일에 한 번쯤 친구들을 만나요.", "한 달에 한 번쯤 가요."]},
+        {"point": "못", "explain": "主要用于动词前，表示'不能、不会'。", "examples": ["매운 음식은 못 먹어요.", "어릴 때는 물이 무서워서 수영을 못했어요.", "극장에 자주 못 가요."]}
+      ],
+      "dialogue": [
+        {"speaker": "정희", "text": "웨이 씨는 영화를 자주 보세요?"},
+        {"speaker": "웨이", "text": "아니요, 바빠서 극장에 자주 못 가요. 한 달에 한 번쯤 가요."},
+        {"speaker": "정희", "text": "어떤 영화를 좋아하세요?"},
+        {"speaker": "웨이", "text": "슬픈 영화를 좋아해요."},
+        {"speaker": "정희", "text": "주말에는 표 사기가 어렵지요?"},
+        {"speaker": "웨이", "text": "네, 그런데 요즘에는 인터넷으로 예매할 수 있어서 편해요."}
+      ],
+      "vocab": [
+        {"ko":"슬프다","zh":"悲伤"},{"ko":"어렵다","zh":"难"},{"ko":"인터넷","zh":"网络"},
+        {"ko":"예매하다","zh":"预购"},{"ko":"편하다","zh":"方便/舒服"}
+      ]
+    },
+    {
+      "num": "04", "title": "산책을 하고 집에서 쉬었어요 (散完步在家休息了)", "task": "주말 활동 말하기 (说说周末活动)",
+      "grammar": [
+        {"point": "기 전에", "explain": "表示一个动作发生在另一个动作之前。'…之前'。", "examples": ["밥을 먹기 전에 손을 씻어요.", "여행하기 전에 준비할 게 많나요?", "탁구를 배우기 전에는 별로 많이 안 했어요."]},
+        {"point": "지 못하다", "explain": "表示'不能、不会'。与 못 的区别：지 못하다 更正式，못 更口语。", "examples": ["한자를 몰라서 신문을 읽지 못해요.", "저는 노래를 잘 부르지 못합니다.", "잘 치지 못하는데…"]}
+      ],
+      "dialogue": [
+        {"speaker": "정희", "text": "웨이 씨, 지난 주말에 뭘 하셨어요?"},
+        {"speaker": "웨이", "text": "산책을 하고 집에서 쉬었어요. 정희 씨는 뭘 하셨어요?"},
+        {"speaker": "정희", "text": "토요일에는 수영을 하고 일요일에는 탁구를 쳤어요."},
+        {"speaker": "웨이", "text": "주말마다 운동을 많이 하세요?"},
+        {"speaker": "정희", "text": "탁구를 배우기 전에는 별로 많이 안 했어요."},
+        {"speaker": "웨이", "text": "탁구를 잘 치세요? 저는 잘 치지 못하는데 좀 가르쳐 주세요."}
+      ],
+      "vocab": [
+        {"ko":"탁구를 치다","zh":"打乒乓球"},{"ko":"마다","zh":"每"},
+        {"ko":"배우다","zh":"学习"},{"ko":"별로","zh":"不太"}
+      ]
+    }
+  ],
+  "allVocab": [
+    {"ko":"초","zh":"初"},{"ko":"끝나다","zh":"结束"},{"ko":"찍다","zh":"拍（照片）"},
+    {"ko":"주로","zh":"主要"},{"ko":"중","zh":"…当中"},{"ko":"제일","zh":"最"},
+    {"ko":"슬프다","zh":"悲伤"},{"ko":"어렵다","zh":"难"},{"ko":"인터넷","zh":"网络"},
+    {"ko":"예매하다","zh":"预购"},{"ko":"편하다","zh":"方便/舒服"},
+    {"ko":"탁구를 치다","zh":"打乒乓球"},{"ko":"마다","zh":"每"},
+    {"ko":"배우다","zh":"学习"},{"ko":"별로","zh":"不太"}
+  ]
+}
+};
+
+// ===========================================
+// RENDER ENGINE
+// ===========================================
+function renderAll() {
+  const container = document.getElementById('content');
+  let html = '';
+  
+  for (const [unitId, data] of Object.entries(lessonData)) {
+    html += `<div class="unit${unitId==='unit1'?' active':''}" id="${unitId}">`;
+    html += `<div class="unit-header">`;
+    html += `<img src="${data.illust}" alt="${data.title}" onerror="this.style.display='none'">`;
+    html += `<h2>${data.title}</h2>`;
+    html += `<div class="ko-title">${data.koTitle}</div>`;
+    html += `</div>`;
+    
+    // Sections
+    data.sections.forEach((sec, si) => {
+      const secNum = si + 1;
+      html += `<div class="section">`;
+      html += `<div class="section-header">`;
+      html += `<div class="section-num">${sec.num}</div>`;
+      html += `<div class="section-title">${sec.title}</div>`;
+      html += `<div class="section-task">${sec.task}</div>`;
+      html += `</div>`;
+      
+      // Grammar
+      html += `<div class="grammar-block">`;
+      html += `<h4>📖 语法</h4>`;
+      sec.grammar.forEach(g => {
+        html += `<div class="grammar-item">`;
+        html += `<div class="grammar-point">${g.point}</div>`;
+        html += `<div class="grammar-explain">${g.explain}</div>`;
+        html += `<ul class="grammar-examples">`;
+        g.examples.forEach(ex => {
+          html += `<li><button class="speaker-btn" onclick="playBtn(this,'${ex.replace(/'/g,"\'")}')">🔊</button><span>${ex}</span></li>`;
+        });
+        html += `</ul></div>`;
+      });
+      html += `</div>`;
+      
+      // Dialogue
+      html += `<div class="dialogue-block">`;
+      html += `<h4>💬 课文 <a href="${data.bilibili[String(secNum)] || '#'}" target="_blank" class="bilibili-link">🎧 B站课文朗读</a></h4>`;
+      sec.dialogue.forEach(d => {
+        html += `<div class="dialogue-line">`;
+        html += `<span class="dialogue-speaker">${d.speaker}</span>`;
+        html += `<span class="dialogue-text">${d.text}</span>`;
+        html += `<button class="speaker-btn" onclick="playBtn(this,'${d.text.replace(/'/g,"\'")}')">🔊</button>`;
+        html += `</div>`;
+      });
+      html += `</div>`;
+      
+      // Mini vocab
+      html += `<div class="vocab-mini">`;
+      html += `<h4>📝 本小节重点单词</h4>`;
+      html += `<div class="vocab-mini-grid">`;
+      sec.vocab.forEach(v => {
+        html += `<div class="vocab-mini-item">`;
+        html += `<span class="ko" style="color:var(--green);font-weight:600;">${v.ko}</span>`;
+        html += `<span class="zh" style="color:var(--muted);font-size:0.78rem;">${v.zh}</span>`;
+        html += `<button class="speaker-btn" onclick="playBtn(this,'${v.ko.replace(/'/g,"\'")}')" style="width:22px;height:22px;font-size:0.65rem;">🔊</button>`;
+        html += `</div>`;
+      });
+      html += `</div></div>`;
+      html += `</div>`; // close section
+    });
+    
+    // Full vocabulary
+    html += `<div class="vocab-full">`;
+    html += `<h3>📚 ${data.title} 全部词汇总览</h3>`;
+    html += `<div class="vocab-grid">`;
+    data.allVocab.forEach(v => {
+      html += `<div class="vocab-item">`;
+      html += `<button class="speaker-btn" onclick="playBtn(this,'${v.ko.replace(/'/g,"\'")}')" style="width:22px;height:22px;font-size:0.65rem;">🔊</button>`;
+      html += `<span class="ko">${v.ko}</span>`;
+      html += `<span class="zh">${v.zh}</span>`;
+      html += `</div>`;
+    });
+    html += `</div></div>`;
+    
+    html += `</div>`; // close unit
+  }
+  
+  container.innerHTML = html;
+}
+
+// Initialize
+renderAll();
+</script>
 </body>
 </html>
