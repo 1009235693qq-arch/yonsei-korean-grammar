@@ -120,31 +120,46 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
 </div>
 <script>
 // ===========================================
-// PRONUNCIATION: Web Speech API
+// PRONUNCIATION: Google TTS + Web Speech API dual engine
 // ===========================================
-let currentUtterance = null;
-function speakWord(text) {
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'ko-KR';
-    u.rate = 0.85;
-    currentUtterance = u;
-    window.speechSynthesis.speak(u);
-    return true;
-  }
-  return false;
-}
+let currentAudio = null;
 function playBtn(btn, text) {
+  // Stop any currently playing audio
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); }
+
+  // Highlight button
   const allBtns = document.querySelectorAll('.speaker-btn.playing');
   allBtns.forEach(b => b.classList.remove('playing'));
   btn.classList.add('playing');
-  const ok = speakWord(text);
-  if (ok) {
-    setTimeout(() => btn.classList.remove('playing'), 1500);
-  } else {
-    btn.classList.remove('playing');
-  }
+
+  const encoded = encodeURIComponent(text);
+
+  // Primary: Google TTS audio (works on all devices)
+  const audio = new Audio();
+  audio.src = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ko&q=' + encoded;
+  currentAudio = audio;
+
+  audio.play().then(function() {
+    // Success! Audio is playing
+    audio.onended = function() { btn.classList.remove('playing'); };
+  }).catch(function() {
+    // Google TTS failed, try Web Speech API fallback
+    currentAudio = null;
+    if ('speechSynthesis' in window) {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'ko-KR';
+      u.rate = 0.85;
+      u.onend = function() { btn.classList.remove('playing'); };
+      u.onerror = function() { btn.classList.remove('playing'); };
+      window.speechSynthesis.speak(u);
+    } else {
+      btn.classList.remove('playing');
+    }
+  });
+
+  // Safety timeout
+  setTimeout(function() { btn.classList.remove('playing'); }, 3000);
 }
 
 // ===========================================
