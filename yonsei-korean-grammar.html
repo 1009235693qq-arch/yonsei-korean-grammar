@@ -403,19 +403,34 @@ function showResults(unitId) {
     resultEl.innerHTML = html;
 }
 
-// Pronunciation - Web Speech API primary (no external dependencies)
-// Works reliably on all modern browsers including mobile Safari & Chrome
-let pronounceTimer = null;
+// Pronunciation - Hybrid: Web Speech API + Audio fallback
+// Web Speech API works on most devices; Audio fallback for browsers that block it
+let currentAudio = null;
+let speechTimeout = null;
 
 function playWord(word) {
-    // Cancel any previous speech
+    // Stop everything
+    stopAllSpeech();
+
+    // Try Web Speech API first
+    tryWebSpeech(word);
+}
+
+function stopAllSpeech() {
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
     }
-    clearTimeout(pronounceTimer);
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.remove();
+        currentAudio = null;
+    }
+    clearTimeout(speechTimeout);
+}
 
+function tryWebSpeech(word) {
     if (!('speechSynthesis' in window)) {
-        alert('您的浏览器不支持语音合成，请使用 Chrome 或 Safari。');
+        fallbackAudio(word);
         return;
     }
 
@@ -428,19 +443,39 @@ function playWord(word) {
     // Try to pick Korean voice
     const voices = speechSynthesis.getVoices();
     const koVoice = voices.find(v => v.lang.startsWith('ko'));
-    if (koVoice) {
-        utter.voice = koVoice;
-    }
+    if (koVoice) utter.voice = koVoice;
 
-    // Chrome bug workaround: speech can get stuck after long idle
-    // Pause-resume cycle resets the internal state
+    let started = false;
+    utter.onstart = function() { started = true; };
+    utter.onerror = function(e) {
+        if (!started && e.error !== 'canceled') {
+            fallbackAudio(word);
+        }
+    };
+
+    // Chrome bug workaround: pause-resume to reset internal state
     speechSynthesis.pause();
     speechSynthesis.resume();
+    speechSynthesis.speak(utter);
 
-    // Speak with a short delay to ensure the cancel() takes effect
-    pronounceTimer = setTimeout(() => {
-        speechSynthesis.speak(utter);
-    }, 50);
+    // If speech doesn't start within 2s, fallback to audio
+    speechTimeout = setTimeout(function() {
+        if (!started) {
+            speechSynthesis.cancel();
+            fallbackAudio(word);
+        }
+    }, 2000);
+}
+
+function fallbackAudio(word) {
+    const encoded = encodeURIComponent(word);
+    currentAudio = new Audio();
+    currentAudio.preload = 'auto';
+    currentAudio.src = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ko&q=' + encoded;
+    currentAudio.play().catch(function() {
+        // Google TTS also failed - nothing more we can do
+        currentAudio = null;
+    });
 }
 </script>
 </head>
