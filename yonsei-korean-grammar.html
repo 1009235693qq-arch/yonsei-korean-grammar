@@ -400,77 +400,44 @@ function showResults(unitId) {
     resultEl.innerHTML = html;
 }
 
-// Pronunciation - Multi-fallback TTS engine
-// Mobile-first approach: play audio directly from user gesture, then fallback
-let currentAudio = null;
+// Pronunciation - Web Speech API primary (no external dependencies)
+// Works reliably on all modern browsers including mobile Safari & Chrome
+let pronounceTimer = null;
 
 function playWord(word) {
-    // Stop any currently playing audio
-    if (currentAudio) {
-        currentAudio.pause();
-        currentAudio = null;
-    }
-    // Also stop Web Speech API
+    // Cancel any previous speech
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
     }
+    clearTimeout(pronounceTimer);
 
-    const encoded = encodeURIComponent(word);
-    
-    // Create audio element and play immediately (from user gesture context)
-    const audio = new Audio();
-    audio.preload = 'auto';
-    
-    // Try Youdao first (best quality for Korean)
-    audio.src = 'https://dict.youdao.com/dictvoice?audio=' + encoded + '&le=ko';
-    currentAudio = audio;
-    
-    audio.play().then(() => {
-        // Success! Audio is playing
-    }).catch(() => {
-        // Youdao failed, try Sogou
-        const audio2 = new Audio();
-        audio2.preload = 'auto';
-        audio2.src = 'https://fanyi.sogou.com/reventondc/synthesis?text=' + encoded + '&speed=1&lang=ko-KR&from=translateweb&speaker=6';
-        currentAudio = audio2;
-        audio2.play().catch(() => {
-            // Sogou failed, try Google
-            const audio3 = new Audio();
-            audio3.preload = 'auto';
-            audio3.src = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ko&q=' + encoded;
-            currentAudio = audio3;
-            audio3.play().catch(() => {
-                // All audio URLs failed, try Web Speech API
-                currentAudio = null;
-                tryWebSpeech(word);
-            });
-        });
-    });
-}
+    if (!('speechSynthesis' in window)) {
+        alert('您的浏览器不支持语音合成，请使用 Chrome 或 Safari。');
+        return;
+    }
 
-function tryWebSpeech(word) {
-    if (!('speechSynthesis' in window)) return;
-    
-    const u = new SpeechSynthesisUtterance(word);
-    u.lang = 'ko-KR';
-    u.rate = 0.85;
-    u.pitch = 1;
-    u.volume = 1;
-    
+    const utter = new SpeechSynthesisUtterance(word);
+    utter.lang = 'ko-KR';
+    utter.rate = 0.85;
+    utter.pitch = 1;
+    utter.volume = 1;
+
+    // Try to pick Korean voice
     const voices = speechSynthesis.getVoices();
     const koVoice = voices.find(v => v.lang.startsWith('ko'));
-    if (koVoice) u.voice = koVoice;
-    
-    if (voices.length === 0) {
-        speechSynthesis.onvoiceschanged = () => {
-            const v2 = speechSynthesis.getVoices();
-            const kv = v2.find(v => v.lang.startsWith('ko'));
-            if (kv) u.voice = kv;
-            window.speechSynthesis.speak(u);
-        };
-    } else {
-        window.speechSynthesis.speak(u);
+    if (koVoice) {
+        utter.voice = koVoice;
     }
+
+    // Chrome bug workaround: speech can get stuck after long idle
+    // Pause-resume cycle resets the internal state
+    speechSynthesis.pause();
+    speechSynthesis.resume();
+
+    // Speak with a short delay to ensure the cancel() takes effect
+    pronounceTimer = setTimeout(() => {
+        speechSynthesis.speak(utter);
+    }, 50);
 }
 </script>
 </head>
