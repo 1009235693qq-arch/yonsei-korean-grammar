@@ -122,7 +122,7 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
 </div>
 <script>
 // ===========================================
-// PRONUNCIATION: Google TTS + Web Speech API dual engine
+// PRONUNCIATION: Youdao TTS → Web Speech API → Google TTS triple fallback
 // ===========================================
 let currentAudio = null;
 function playBtn(btn, text) {
@@ -135,33 +135,68 @@ function playBtn(btn, text) {
   allBtns.forEach(b => b.classList.remove('playing'));
   btn.classList.add('playing');
 
-  const encoded = encodeURIComponent(text);
+  function cleanup() { btn.classList.remove('playing'); }
 
-  // Primary: Google TTS audio (works on all devices)
-  const audio = new Audio();
-  audio.src = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ko&q=' + encoded;
+  var encoded = encodeURIComponent(text);
+
+  // Step 1: Youdao TTS (Chinese server, best Korean quality, works in China)
+  tryTTS(
+    'https://dict.youdao.com/dictvoice?audio=' + encoded + '&le=ko',
+    // Step 2: Web Speech API (works on desktop Chrome)
+    function() { tryWebSpeech(text, cleanup); },
+    cleanup
+  );
+}
+
+function tryTTS(url, onFail, onDone) {
+  var audio = new Audio();
+  audio.src = url;
   currentAudio = audio;
-
-  audio.play().then(function() {
-    // Success! Audio is playing
-    audio.onended = function() { btn.classList.remove('playing'); };
-  }).catch(function() {
-    // Google TTS failed, try Web Speech API fallback
+  audio.onended = onDone;
+  audio.onerror = function() {
     currentAudio = null;
-    if ('speechSynthesis' in window) {
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'ko-KR';
-      u.rate = 0.85;
-      u.onend = function() { btn.classList.remove('playing'); };
-      u.onerror = function() { btn.classList.remove('playing'); };
-      window.speechSynthesis.speak(u);
-    } else {
-      btn.classList.remove('playing');
+    onFail();
+  };
+  var playPromise = audio.play();
+  if (playPromise) {
+    playPromise.catch(function() {
+      currentAudio = null;
+      onFail();
+    });
+  }
+  // Safety timeout: 4 seconds
+  setTimeout(function() {
+    if (currentAudio === audio && !audio.ended) {
+      currentAudio = null;
+      onDone();
     }
-  });
+  }, 4000);
+}
 
-  // Safety timeout
-  setTimeout(function() { btn.classList.remove('playing'); }, 3000);
+function tryWebSpeech(text, onDone) {
+  if (!('speechSynthesis' in window)) {
+    // No Web Speech API, try Google TTS as last resort
+    tryTTS(
+      'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ko&q=' + encodeURIComponent(text),
+      onDone,
+      onDone
+    );
+    return;
+  }
+  window.speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ko-KR';
+  u.rate = 0.85;
+  u.onend = onDone;
+  u.onerror = function() {
+    // Web Speech failed, try Google TTS
+    tryTTS(
+      'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ko&q=' + encodeURIComponent(text),
+      onDone,
+      onDone
+    );
+  };
+  window.speechSynthesis.speak(u);
 }
 
 // ===========================================
