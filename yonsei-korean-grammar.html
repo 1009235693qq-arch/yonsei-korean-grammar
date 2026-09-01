@@ -122,81 +122,78 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
 </div>
 <script>
 // ===========================================
-// PRONUNCIATION: Youdao TTS → Web Speech API → Google TTS triple fallback
+// PRONUNCIATION: DOM Audio Element (Youdao TTS) + Web Speech fallback
 // ===========================================
-let currentAudio = null;
 function playBtn(btn, text) {
-  // Stop any currently playing audio
-  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-  if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); }
-
-  // Highlight button
-  const allBtns = document.querySelectorAll('.speaker-btn.playing');
-  allBtns.forEach(b => b.classList.remove('playing'));
+  // Stop any existing audio
+  stopAllAudio();
   btn.classList.add('playing');
-
-  function cleanup() { btn.classList.remove('playing'); }
-
-  var encoded = encodeURIComponent(text);
-
-  // Step 1: Youdao TTS (Chinese server, best Korean quality, works in China)
-  tryTTS(
-    'https://dict.youdao.com/dictvoice?audio=' + encoded + '&le=ko',
-    // Step 2: Web Speech API (works on desktop Chrome)
-    function() { tryWebSpeech(text, cleanup); },
-    cleanup
-  );
+  
+  var audio = document.createElement('audio');
+  audio.style.display = 'none';
+  audio.src = 'https://dict.youdao.com/dictvoice?audio=' + encodeURIComponent(text) + '&le=ko';
+  document.body.appendChild(audio);
+  
+  audio.onended = function() {
+    btn.classList.remove('playing');
+    document.body.removeChild(audio);
+  };
+  audio.onerror = function() {
+    document.body.removeChild(audio);
+    // Fallback: Web Speech API
+    tryWebSpeech(text, function() { btn.classList.remove('playing'); });
+  };
+  
+  audio.load();
+  audio.play().catch(function() {
+    document.body.removeChild(audio);
+    tryWebSpeech(text, function() { btn.classList.remove('playing'); });
+  });
+  
+  // Safety timeout
+  setTimeout(function() { btn.classList.remove('playing'); }, 5000);
 }
 
-function tryTTS(url, onFail, onDone) {
-  var audio = new Audio();
-  audio.src = url;
-  currentAudio = audio;
-  audio.onended = onDone;
-  audio.onerror = function() {
-    currentAudio = null;
-    onFail();
-  };
-  var playPromise = audio.play();
-  if (playPromise) {
-    playPromise.catch(function() {
-      currentAudio = null;
-      onFail();
-    });
-  }
-  // Safety timeout: 4 seconds
-  setTimeout(function() {
-    if (currentAudio === audio && !audio.ended) {
-      currentAudio = null;
-      onDone();
-    }
-  }, 4000);
+function stopAllAudio() {
+  var audios = document.querySelectorAll('audio');
+  audios.forEach(function(a) {
+    a.pause();
+    if (a.parentNode) a.parentNode.removeChild(a);
+  });
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
 }
 
 function tryWebSpeech(text, onDone) {
-  if (!('speechSynthesis' in window)) {
-    // No Web Speech API, try Google TTS as last resort
-    tryTTS(
-      'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ko&q=' + encodeURIComponent(text),
-      onDone,
-      onDone
-    );
-    return;
-  }
+  if (!('speechSynthesis' in window)) { onDone(); return; }
   window.speechSynthesis.cancel();
   var u = new SpeechSynthesisUtterance(text);
   u.lang = 'ko-KR';
   u.rate = 0.85;
+  // Try to use Korean voice if available
+  var voices = window.speechSynthesis.getVoices();
+  if (voices.length === 0) {
+    // Voices not loaded yet, wait for them
+    window.speechSynthesis.onvoiceschanged = function() {
+      var v = window.speechSynthesis.getVoices().filter(function(x) { return x.lang.indexOf('ko') === 0; });
+      if (v.length > 0) u.voice = v[0];
+      window.speechSynthesis.speak(u);
+    };
+  } else {
+    var koVoice = voices.filter(function(x) { return x.lang.indexOf('ko') === 0; });
+    if (koVoice.length > 0) u.voice = koVoice[0];
+    window.speechSynthesis.speak(u);
+  }
   u.onend = onDone;
-  u.onerror = function() {
-    // Web Speech failed, try Google TTS
-    tryTTS(
-      'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ko&q=' + encodeURIComponent(text),
-      onDone,
-      onDone
-    );
+  u.onerror = onDone;
+  setTimeout(onDone, 5000);
+}
+
+// Preload voices on page load
+if ('speechSynthesis' in window) {
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged = function() {
+    window.speechSynthesis.getVoices();
   };
-  window.speechSynthesis.speak(u);
 }
 
 // ===========================================
